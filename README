@@ -1,0 +1,5 @@
+This is based off of the program setup of CSE186's project.
+
+Inside this folder run `npm install` (npm = node package manager, node = javascript's runtime environment) to install the correct javascript libraries.
+
+In the frontend folder, run `npm start` to start up the node server. It should open in a browser, otherwise go to `localhost:3000` in a browser to access the app. The page should update as your code changes.

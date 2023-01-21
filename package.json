@@ -1,0 +1,24 @@
+{
+  "name": "cse186-assignment8",
+  "version": "2.0.0",
+  "description": "CSE186 Assignment 8",
+  "author": "David Harrison <dcharris@ucsc.edu>",
+  "license": "UNLICENSED",
+  "repository": "none",
+  "devDependencies": {
+    "bestzip": "*"
+  },
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && npm start",
+    "install-e2e": "cd e2e && npm install",
+    "start": "(npm run start-backend) & (npm run start-frontend)",
+    "zip": "bestzip Assignment8.Submission.zip e2e/tests/* frontend/src/* backend/sql/* backend/src/* backend/api/*",
+    "postinstall": "(npm run install-backend) && (npm run install-frontend) && (npm run install-e2e)"
+  },
+  "dependencies": {
+    "@mui/joy": "^5.0.0-alpha.37"
+  }
+}

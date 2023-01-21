@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify API Test</title>
+</head>
+<body>
+    <div id="container">
+        <label for="searchQuery">Thing to search for</label>
+        <input id="searchQuery"/>
+        <button id="searchButton">search</button>
+    </div>
+
+    <script src="app.js" type="text/javascript"></script>
+    <script>
+        function printSearch(search) {
+            for (track of search.tracks.items) {
+                console.log(track);
+            }
+        }
+
+        function search(token, query) {
+            APIController.getSearch(token, query).then(function(search) {
+                printSearch(search);
+            });
+        }
+
+        APIController.getToken().then(function(token) {
+            console.log(token);
+            document.getElementById("searchButton").addEventListener("click", () => {
+                search(token, document.getElementById("searchQuery").value);
+            });
+        });
+    </script>
+</body>
+</html>
