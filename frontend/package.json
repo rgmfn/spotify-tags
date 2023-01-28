@@ -1,8 +1,7 @@
 {
-  "name": "cse186-assignment8-frontend",
+  "name": "spotifytags-frontend",
   "version": "2.0.0",
-  "description": "CSE186 Assignment 8 - Frontend",
-  "author": "David Harrison <dcharris@ucsc.edu>",
+  "description": "SpotifyTags - Frontend",
   "license": "UNLICENSED",
   "repository": "none",
   "dependencies": {

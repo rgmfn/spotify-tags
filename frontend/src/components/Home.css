@@ -1,0 +1,112 @@
+:root {
+    /* nightfox */
+    --bg-color: #192330;
+    --text-color: #aeafb0;
+    --border-color: #39506d;
+    --selected-color: #29394f;
+    --red: #c94f6d;
+    --green: #81b29a;
+    --yellow: #dbc074;
+    --blue: #719cd6;
+    --purple: #9d79d6;
+    --cyan: #63cdcf;
+    --orange: #f4a261;
+    --pink: #d67ad2;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Gotham Circular, Verdana, Arial, sans-serif;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+tr {
+    border-style: none none solid none;
+    border-color: var(--border-color);
+}
+
+tr:hover {
+    background-color: var(--selected-color);
+}
+
+.imgCol {
+    height: 50px;
+    width: 70px;
+}
+
+.songImg {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+}
+
+.nameCol {
+    width: 25%;
+}
+
+.artistCol {
+    width: 15%;
+}
+
+.albumCol {
+    width: 15%;
+}
+
+.tagCol {
+    width: 40%;
+}
+
+.songName, .artistName, .albumName {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 80%;
+}
+
+.redTag {
+    background-color: var(--red);
+}
+
+.greenTag {
+    background-color: var(--green);
+}
+
+.blueTag {
+    background-color: var(--blue);
+}
+
+.tagName {
+    color: var(--bg-color);
+    width: 100%;
+    display: inline;
+    border-radius: 3px;
+    margin-right: 10px;
+    padding: 3px;
+}
+
+/* Testing borders {{{ */
+/* shows the boundaries of different elements */
+/* .songName, .artistName, .albumName { */
+/*     border: 2px solid green; */
+/* } */
+
+/* td { */
+/*     border: 2px solid red; */
+/* } */
+
+/* tr { */
+/*     border: 2px solid blue; */
+/* } */
+/* }}} */

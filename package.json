@@ -1,8 +1,7 @@
 {
-  "name": "cse186-assignment8",
+  "name": "spotifytags",
   "version": "2.0.0",
-  "description": "CSE186 Assignment 8",
-  "author": "David Harrison <dcharris@ucsc.edu>",
+  "description": "CSE115 SpotifyTags",
   "license": "UNLICENSED",
   "repository": "none",
   "devDependencies": {
