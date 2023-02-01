@@ -26,12 +26,15 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    position: sticky;
-    top: 0;
 }
 
 #search {
     width: 100%;
+}
+
+#top-half {
+    position: sticky;
+    top: 0;
 }
 
 .imgContainer {
