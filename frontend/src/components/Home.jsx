@@ -63,8 +63,16 @@ function Home() {
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  // used to keep track of the current playing status 'isPlaying'
+  const handleClick = () => {
+    setIsPlaying(!isPlaying);
+    // code to play or pause music here
+    // called when the button is clicked,triggers the play or pause of the music
+  };
+
   return (
-    <table>
+    <><table>
       <tbody
         // tbody = table body
       >
@@ -84,8 +92,7 @@ function Home() {
                   <img
                     src={song.album.images[0].url}
                     alt={'[' + song.album.name + ' img]'}
-                    className="songImg"
-                  />
+                    className="songImg" />
                 </div>
               </td>
               <td className="nameCol">
@@ -117,7 +124,11 @@ function Home() {
             </tr>
           ))}
       </tbody>
-    </table>
+    </table><div className="play-button-container">
+      <button className="play-button" onClick={handleClick}>
+        {isPlaying ? 'Pause' : 'Play'}
+      </button>
+    </div></>
   );
 }
 
