@@ -85,7 +85,7 @@ function Home() {
 
     if (!refreshToken && hash) {
       refreshToken = hash.substring(1).split('&').find((elem) =>
-      elem.startsWith('refresh_token')).split('=')[1];
+        elem.startsWith('refresh_token')).split('=')[1];
     }
 
     setRefreshToken(refreshToken);
@@ -107,9 +107,9 @@ function Home() {
   React.useEffect(() => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
-      setLibrary(result.tracks.items);
-    });
-  }, [accessToken]);
+        setLibrary(result.tracks.items);
+      });
+  }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
@@ -122,11 +122,19 @@ function Home() {
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  // used to keep track of the current playing status 'isPlaying'
+  const handleClick = () => {
+    setIsPlaying(!isPlaying);
+    // code to play or pause music here
+    // called when the button is clicked,triggers the play or pause of the music
+  };
+
   const refreshList = () => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
-      setLibrary(result.tracks.items);
-    });
+        setLibrary(result.tracks.items);
+      });
   };
   const logout = () => {
     setAccessToken('');
@@ -189,22 +197,24 @@ ${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPES}`
                 </td>
                 <td className="tagCol">
                   <div className="tagName redTag">
-                  Tag 1
+                    Tag 1
                   </div>
                   <div className="tagName greenTag">
-                  Tag 2
+                    Tag 2
                   </div>
                   <div className="tagName blueTag">
-                  Tag 3
-                </div>
-              </td>
-            </tr>
-          ))}
-      </tbody>
-    </table><div className="play-button-container">
-      <button className="play-button" onClick={handleClick}>
-        {isPlaying ? 'Pause' : 'Play'}
-      </button>
+                    Tag 3
+                  </div>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      <div className="play-button-container">
+        <button className="play-button" onClick={handleClick}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
+      </div>
     </div>
   );
 }
