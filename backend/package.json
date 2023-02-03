@@ -1,56 +1,18 @@
 {
-  "name": "spotifytags-backend",
-  "version": "2.0.0",
-  "description": "SpotifyTags - Backend",
-  "license": "UNLICENSED",
-  "repository": "none",
-  "devDependencies": {
-    "eslint": "*",
-    "eslint-config-google": "*",
-    "jest": "*",
-    "nodemon": "*",
-    "supertest": "*"
-  },
-  "dependencies": {
-    "bcrypt": "*",
-    "body-parser": "*",
-    "cors": "*",
-    "dotenv": "*",
-    "express": "*",
-    "express-openapi-validator": "*",
-    "express-session": "*",
-    "js-yaml": "*",
-    "jsonwebtoken": "*",
-    "pg": "*",
-    "swagger-ui-express": "*"
-  },
-  "jest": {
-    "testTimeout": 60000,
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!src/server.js"
-    ],
-    "testMatch": [
-      "**/?(*.)+(spec|test).[jt]s?(x)"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "google"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 12
-    },
-    "rules": {
-      "indent": [
-        "warn",
-        2
-      ]
-    }
-  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon src/server.js",
-    "test": "jest --runInBand --coverage --verbose --forceExit",
-    "lint": "./node_modules/.bin/eslint . --ext .js"
+    "start": "nodemon src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "request": "^2.88.2"
   }
 }
