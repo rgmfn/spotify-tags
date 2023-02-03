@@ -196,12 +196,15 @@ ${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPES}`
                   </div>
                   <div className="tagName blueTag">
                   Tag 3
-                  </div>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+                </div>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table><div className="play-button-container">
+      <button className="play-button" onClick={handleClick}>
+        {isPlaying ? 'Pause' : 'Play'}
+      </button>
     </div>
   );
 }

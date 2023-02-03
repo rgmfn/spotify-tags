@@ -1,6 +1,7 @@
 :root {
     /* nightfox */
     --bg-color: #192330;
+    --darker-bg-color: #131a24;
     --text-color: #aeafb0;
     --border-color: #39506d;
     --selected-color: #29394f;
@@ -18,6 +19,22 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: Gotham Circular, Verdana, Arial, sans-serif;
+}
+
+#top-bar {
+    background-color: var(--darker-bg-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#search {
+    width: 100%;
+}
+
+#top-half {
+    position: sticky;
+    top: 0;
 }
 
 .imgContainer {
@@ -115,18 +132,3 @@ tr:hover {
     margin-right: 10px;
     padding: 3px;
 }
-
-/* Testing borders {{{ */
-/* shows the boundaries of different elements */
-/* .songName, .artistName, .albumName { */
-/*     border: 2px solid green; */
-/* } */
-
-/* td { */
-/*     border: 2px solid red; */
-/* } */
-
-/* tr { */
-/*     border: 2px solid blue; */
-/* } */
-/* }}} */
