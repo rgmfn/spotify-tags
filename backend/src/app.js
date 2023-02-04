@@ -87,22 +87,6 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        // res.send({
-        //   'access_token': access_token,
-        //   'refresh_token': refresh_token
-        // });
-
-        // var options = {
-        //   url: 'https://api.spotify.com/v1/me',
-        //   headers: { 'Authorization': 'Bearer ' + access_token },
-        //   json: true
-        // };
-
-        // // use the access token to access the Spotify Web API
-        // request.get(options, function(error, response, body) {
-        //   console.log(body);
-        // });
-
         // we can also pass the token to the browser to make requests from there
         res.redirect('http://localhost:3000/#' +
           querystring.stringify({
@@ -139,11 +123,6 @@ app.get('/refresh_token', function(req, res) {
       res.send({
         'access_token': access_token
       });
-
-      // res.redirect('http://localhost:3000/#' +
-      //     querystring.stringify({
-      //       access_token: access_token
-      //     }));
     }
   });
 });
