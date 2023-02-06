@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,12 +6,16 @@
 <body>
     <h1>Spotify Web Playback SDK Quick Start</h1>
     <button id="togglePlay">Toggle Play</button>
+    <button id="startSong">Start Song</button>
 
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
         window.onSpotifyWebPlaybackSDKReady = () => {
             // for temporary token go to https://developer.spotify.com/documentation/web-playback-sdk/quick-start/
-            const token = 'BQAEqfVxwTcfjiNWVOSRcrvSLgPC63iLrlfJp_rlZ7K-rL4oprMqj4u8V-Or5CE5QyP9wdFdNaLaDYry1bkUORIkCPA_alUnSKDEdzUqI0P8hDdcb_4kJKYU7dj7jb3GC4YzKRdboiYTyKv0eIVo6oh2-HnaqzxYoubn-eNHwA0FW-ci726lQRmAR5toY4Fq';
+            const token = 'BQBIuxXxIwJgKIqCfkvmLj6S3A2QQRQDHBukisDnFM5IGsprSVlrwi7Z2i_2aC7BRGSUsyOXruXdW6hXGPrc3muprIDuJCTWbRHE6S92gra3iZRl0aHr74LSmKF0VZBuHazMKsxk648VyEcs98xXuyiJxzcoWzkl_8LWMKNaTaOZGhEvMMaRPXkUuzyCef8VNw';
+
+            const spotify_uri = 'spotify:track:2dQLCY968AyWKwXQ5MFgyN';
+            let deviceID = null;
 
             const player = new Spotify.Player({
                 name: 'Spotify Test App',
@@ -23,6 +26,7 @@
             // Ready
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
+                deviceID = device_id; // sort of saving it to state
             });
 
             // Not Ready
@@ -44,6 +48,22 @@
 
             document.getElementById('togglePlay').onclick = function() {
               player.togglePlay();
+            };
+
+            document.getElementById('startSong').onclick = function() {
+                if (!deviceID) {
+                    console.log('no device connected yet');
+                    return;
+                }
+
+                fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ uris: [spotify_uri] }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
             };
 
             player.connect();
