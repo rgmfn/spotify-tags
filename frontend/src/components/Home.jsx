@@ -43,7 +43,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
-  const [trackID, setTrackID] = React.useState('');
+  const [trackURI, setTrackURI] = React.useState('');
 
 
   React.useEffect(() => {
@@ -86,8 +86,8 @@ function Home() {
     // called when clicking on a song
     // event stores the thing that was clicked on
     // console.log(event);
-    console.log(`clicked song ${event.currentTarget.id}`);
-    setTrackID(event.currentTarget.id);
+    console.log(`clicked song w/ id: ${event.currentTarget.id}`);
+    setTrackURI(event.currentTarget.id);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
@@ -122,15 +122,14 @@ function Home() {
         clickedOnSong={clickedOnSong}
       />
       <div className="play-button-container">
-        <button className="play-button" onClick={handleClick}>
+        <button id="play-button" className="play-button" onClick={handleClick}>
           {isPlaying ? 'Pause' : 'Play'}
         </button>
       </div>
-
       <div>
         <Player 
           accessToken={accessToken}
-          trackID={trackID}/>
+          trackURI={trackURI}/>
       </div>
     </div>
   );
