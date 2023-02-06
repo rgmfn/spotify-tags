@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Home.css';
 import Library from './Library.jsx';
+import SongCard from './SongCard.jsx';
 
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
@@ -42,6 +43,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
+  const [songIDToView, setSongIDToView] = React.useState(null);
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -86,6 +88,7 @@ function Home() {
     console.log(`clicked song ${event.currentTarget.id}`);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
+    setSongIDToView(event.currentTarget.id);
   });
 
   const handleClick = () => {
@@ -117,6 +120,11 @@ function Home() {
       <Library
         library={library}
         clickedOnSong={clickedOnSong}
+      />
+      <SongCard
+        accessToken={accessToken}
+        songID={songIDToView}
+        setSongID={setSongIDToView}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
