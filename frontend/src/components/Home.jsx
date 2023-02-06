@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Home.css';
 import Library from './Library.jsx';
+import Player from './Player.jsx';
 
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
@@ -42,6 +43,8 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
+  const [trackID, setTrackID] = React.useState('');
+
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -84,6 +87,7 @@ function Home() {
     // event stores the thing that was clicked on
     // console.log(event);
     console.log(`clicked song ${event.currentTarget.id}`);
+    setTrackID(event.currentTarget.id);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
@@ -108,7 +112,6 @@ function Home() {
 
   return (
     <div className="App">
-
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
@@ -122,6 +125,12 @@ function Home() {
         <button className="play-button" onClick={handleClick}>
           {isPlaying ? 'Pause' : 'Play'}
         </button>
+      </div>
+
+      <div>
+        <Player 
+          accessToken={accessToken}
+          trackID={trackID}/>
       </div>
     </div>
   );
