@@ -11,6 +11,20 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   return refreshJson.access_token;
 };
 
+const fakeTags = [
+  {name: 'Tag1', color: '#c94f6d'},
+  {name: 'Tag2', color: '#81b29a'},
+  {name: 'Tag3', color: '#719cd6'},
+];
+
+const insertTestingTags = (songs) => {
+  for (const song of songs) {
+    song.tags = fakeTags;
+  }
+
+  return songs;
+};
+
 const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
@@ -27,9 +41,52 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
     });
   }
 
+  let data = await result.json();
+  // console.log(accessToken);
+  // console.log(data);
+  data = insertTestingTags(data);
+
+  return data;
+};
+
+const emptySong = {
+  'album': {'images': [{'url': ''}]},
+  'artists': [{'name': ''}],
+  'available_markets': [],
+  'disc_number': 0,
+  'duration_ms': 0,
+  'explicit': true,
+  'external_ids': {},
+  'external_urls': {},
+  'href': '',
+  'id': '',
+  'is_local': false,
+  'name': '',
+  'popularity': 0,
+  'preview_url': '',
+  'track_number': 0,
+  'type': '',
+  'uri': '',
+  'tags': [{'name': '', 'color': ''}],
+};
+
+const getSong = async (accessToken, id) => {
+  if (!id) {
+    return emptySong;
+  }
+
+  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+    // http get request to api.spotify.com/v1/search
+    method: 'GET',
+    headers: {'Authorization': 'Bearer ' + accessToken},
+  });
+
+  if (!result.ok) {
+    return emptySong;
+  }
+
   const data = await result.json();
-  console.log(accessToken);
-  console.log(data);
+  data.tags = fakeTags;
   return data;
 };
 
@@ -43,7 +100,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
-  const [songIDToView, setSongIDToView] = React.useState(null);
+  const [songToView, setSongToView] = React.useState(emptySong);
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -88,7 +145,7 @@ function Home() {
     console.log(`clicked song ${event.currentTarget.id}`);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
-    setSongIDToView(event.currentTarget.id);
+    setSongToView(getSong(event.currentTarget.id));
   });
 
   const handleClick = () => {
@@ -122,9 +179,7 @@ function Home() {
         clickedOnSong={clickedOnSong}
       />
       <SongCard
-        accessToken={accessToken}
-        songID={songIDToView}
-        setSongID={setSongIDToView}
+        song={songToView}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>

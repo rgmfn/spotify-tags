@@ -21,6 +21,7 @@ body {
 }
 
 #songcard-container {
+    /* TODO do this dynamically? */
     width: 500px;
     height: 600px;
 }
