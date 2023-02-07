@@ -12,13 +12,109 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
 };
 
 const fakeTags = [
-  {name: 'Tag1', color: '#c94f6d'},
-  {name: 'Tag2', color: '#81b29a'},
-  {name: 'Tag3', color: '#719cd6'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
 ];
 
 const insertTestingTags = (songs) => {
-  for (const song of songs) {
+  for (const song of songs.tracks.items) {
     song.tags = fakeTags;
   }
 
@@ -42,10 +138,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   }
 
   let data = await result.json();
-  // console.log(accessToken);
-  // console.log(data);
   data = insertTestingTags(data);
-
   return data;
 };
 
@@ -70,25 +163,26 @@ const emptySong = {
   'tags': [{'name': '', 'color': ''}],
 };
 
-const getSong = async (accessToken, id) => {
-  if (!id) {
-    return emptySong;
-  }
+// needed for making songcard show up
+// const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
+//   if (!id) {
+//     return emptySong;
+//   }
 
-  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-    // http get request to api.spotify.com/v1/search
-    method: 'GET',
-    headers: {'Authorization': 'Bearer ' + accessToken},
-  });
+//   const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+//     // http get request to api.spotify.com/v1/search
+//     method: 'GET',
+//     headers: {'Authorization': 'Bearer ' + accessToken},
+//   });
 
-  if (!result.ok) {
-    return emptySong;
-  }
+//   if (!result.ok) {
+//     return emptySong;
+//   }
 
-  const data = await result.json();
-  data.tags = fakeTags;
-  return data;
-};
+//   const data = await result.json();
+//   data.tags = fakeTags;
+//   return data;
+// };
 
 /**
  * @return {object} JSX
@@ -145,13 +239,23 @@ function Home() {
     console.log(`clicked song ${event.currentTarget.id}`);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
-    setSongToView(getSong(event.currentTarget.id));
   });
+
+  // for when clicking on a song in the list of songs on spotify or in library
+  // getSong(accessToken, refreshToken,
+  //   setAccessToken, event.currentTarget.id).then((song) => {
+  //   setSongToView(song);
+  // });
+
 
   const handleClick = () => {
     setIsPlaying(!isPlaying);
     // code to play or pause music here
     // called when the button is clicked,triggers the play or pause of the music
+  };
+
+  const closeCard = () => {
+    setSongToView(emptySong);
   };
 
   const refreshList = () => {
@@ -180,6 +284,7 @@ function Home() {
       />
       <SongCard
         song={songToView}
+        closeCard={closeCard}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>

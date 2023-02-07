@@ -45,15 +45,14 @@ function Library({library, clickedOnSong}) {
                 </div>
               </td>
               <td className="tagCol">
-                <div className="tagName redTag">
-                  Tag 1
-                </div>
-                <div className="tagName greenTag">
-                  Tag 2
-                </div>
-                <div className="tagName blueTag">
-                  Tag 3
-                </div>
+                {song.tags.map((tag) => (
+                  <div
+                    style={{backgroundColor: tag.color}}
+                    className="tagName"
+                  >
+                    {tag.name}
+                  </div>
+                ))}
               </td>
             </tr>
           ))}

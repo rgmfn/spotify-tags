@@ -24,12 +24,16 @@ const spotifyTagsTheme = {
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'dark', // makes the background appear lighter
     primary: {
       main: spotifyTagsTheme.red,
     },
     text: {
       primary: spotifyTagsTheme.textColor,
+    },
+    background: {
+      paper: '#192330',
+      default: '#192330',
     },
   },
 });
@@ -37,20 +41,18 @@ const darkTheme = createTheme({
 /**
  * @return {object} JSX
  */
-function SongCard({song}) {
+function SongCard({song, closeCard}) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
         open={Boolean(song.id)}
-        // onClose={}
+        onClose={closeCard}
         anchorReference='none'
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        // anchorReference='anchorPosition'
-        // anchorPosition={{top: '50%', left: '50%'}}
       >
         <div id="songcard-container">
           <div id="top-half">
@@ -83,15 +85,17 @@ function SongCard({song}) {
           </div>
           <hr id="divider"/>
           <div id="bottom-half">
-            {/* TODO make these happen dynamically, stored in song obj */}
-            {song.tags.map((tag) => (
-              <div
-                style={{backgroundColor: tag.color}}
-                className="tagName"
-              >
-                {tag.name}
-              </div>
-            ))}
+            <div id="tags-container">
+              {/* TODO make these happen dynamically, stored in song obj */}
+              {song.tags.map((tag) => (
+                <div
+                  style={{backgroundColor: tag.color}}
+                  className="tagName"
+                >
+                  {tag.name}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </Popover>
