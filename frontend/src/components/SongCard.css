@@ -21,6 +21,7 @@ body {
 }
 
 #songcard-container {
+    /* TODO do this dynamically? */
     width: 500px;
     height: 600px;
 }
@@ -40,10 +41,10 @@ body {
 
 .tagName {
     color: var(--bg-color);
-    width: 100%;
+    width: fit-content;
     display: inline;
     border-radius: 3px;
-    margin-right: 10px;
+    margin: 5px;
     padding: 3px;
 }
 
@@ -86,11 +87,20 @@ body {
 
 #divider {
     width: 80%;
-    color: var(--border-color);
+    color: var(--selected-color);
     margin-bottom: 20px;
 }
 
 #bottom-half {
     height: 50%;
+    width: 95%;
     margin: 10px;
+    /* border: 2px solid red; */
+    overflow: auto;
+}
+
+#tags-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }

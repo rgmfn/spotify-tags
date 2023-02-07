@@ -86,6 +86,7 @@ tr:hover {
 
 .tagCol {
     width: 40%;
+    overflow: hidden;
 }
 
 .songName, .artistName, .albumName {
@@ -109,6 +110,7 @@ tr:hover {
 
 .tagName {
     color: var(--bg-color);
+    /* background-color: var(--tag-color); */
     width: 100%;
     display: inline;
     border-radius: 3px;

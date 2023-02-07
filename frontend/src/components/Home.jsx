@@ -11,6 +11,116 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   return refreshJson.access_token;
 };
 
+const fakeTags = [
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'classical', color: '#dbc074'},
+  {name: 'jazz', color: '#c94f6d'},
+  {name: 'funk', color: '#81b29a'},
+  {name: 'punk', color: '#719cd6'},
+  {name: 'instrumental', color: '#9d79d6'},
+  {name: 'folk', color: '#63cdcf'},
+  {name: 'rock', color: '#f4a261'},
+  {name: 'metal', color: '#d67ad2'},
+  {name: 'metal', color: '#d67ad2'},
+];
+
+const insertTestingTags = (songs) => {
+  for (const song of songs.tracks.items) {
+    song.tags = fakeTags;
+  }
+
+  return songs;
+};
+
 const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
@@ -27,11 +137,52 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
     });
   }
 
-  const data = await result.json();
-  console.log(accessToken);
-  console.log(data);
+  let data = await result.json();
+  data = insertTestingTags(data);
   return data;
 };
+
+const emptySong = {
+  'album': {'images': [{'url': ''}]},
+  'artists': [{'name': ''}],
+  'available_markets': [],
+  'disc_number': 0,
+  'duration_ms': 0,
+  'explicit': true,
+  'external_ids': {},
+  'external_urls': {},
+  'href': '',
+  'id': '',
+  'is_local': false,
+  'name': '',
+  'popularity': 0,
+  'preview_url': '',
+  'track_number': 0,
+  'type': '',
+  'uri': '',
+  'tags': [{'name': '', 'color': ''}],
+};
+
+// needed for making songcard show up
+// const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
+//   if (!id) {
+//     return emptySong;
+//   }
+
+//   const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+//     // http get request to api.spotify.com/v1/search
+//     method: 'GET',
+//     headers: {'Authorization': 'Bearer ' + accessToken},
+//   });
+
+//   if (!result.ok) {
+//     return emptySong;
+//   }
+
+//   const data = await result.json();
+//   data.tags = fakeTags;
+//   return data;
+// };
 
 /**
  * @return {object} JSX
@@ -43,7 +194,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
-  const [songIDToView, setSongIDToView] = React.useState(null);
+  const [songToView, setSongToView] = React.useState(emptySong);
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -88,13 +239,23 @@ function Home() {
     console.log(`clicked song ${event.currentTarget.id}`);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
-    setSongIDToView(event.currentTarget.id);
   });
+
+  // for when clicking on a song in the list of songs on spotify or in library
+  // getSong(accessToken, refreshToken,
+  //   setAccessToken, event.currentTarget.id).then((song) => {
+  //   setSongToView(song);
+  // });
+
 
   const handleClick = () => {
     setIsPlaying(!isPlaying);
     // code to play or pause music here
     // called when the button is clicked,triggers the play or pause of the music
+  };
+
+  const closeCard = () => {
+    setSongToView(emptySong);
   };
 
   const refreshList = () => {
@@ -122,9 +283,8 @@ function Home() {
         clickedOnSong={clickedOnSong}
       />
       <SongCard
-        accessToken={accessToken}
-        songID={songIDToView}
-        setSongID={setSongIDToView}
+        song={songToView}
+        closeCard={closeCard}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>

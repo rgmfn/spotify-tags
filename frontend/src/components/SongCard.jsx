@@ -6,26 +6,6 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 import './SongCard.css';
 
-const emptySong = {
-  'album': {'images': [{'url': ''}]},
-  'artists': [''],
-  'available_markets': [],
-  'disc_number': -1,
-  'duration_ms': -1,
-  'explicit': true,
-  'external_ids': {},
-  'external_urls': {},
-  'href': '',
-  'id': '',
-  'is_local': false,
-  'name': 'Loading...',
-  'popularity': -1,
-  'preview_url': '',
-  'track_number': -1,
-  'type': '',
-  'uri': '',
-};
-
 const spotifyTagsTheme = {
   // gotten from Home.css
   bgColor: '#192330',
@@ -44,64 +24,35 @@ const spotifyTagsTheme = {
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'dark', // makes the background appear lighter
     primary: {
       main: spotifyTagsTheme.red,
     },
     text: {
       primary: spotifyTagsTheme.textColor,
     },
+    background: {
+      paper: '#192330',
+      default: '#192330',
+    },
   },
 });
-
-const getSong = async (accessToken, id) => {
-  if (!id) {
-    console.log('no song to display');
-    return emptySong;
-  }
-
-  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-    // http get request to api.spotify.com/v1/search
-    method: 'GET',
-    headers: {'Authorization': 'Bearer ' + accessToken},
-  });
-
-  const data = await result.json();
-  // console.log(data);
-  return data;
-};
 
 /**
  * @return {object} JSX
  */
-function SongCard({accessToken, songID, setSongID}) {
-  const [song, setSong] = React.useState(emptySong);
-
-  const close = () => {
-    setSongID(null);
-    setSong(emptySong);
-    console.log('song card closed');
-  };
-
-  React.useEffect(() => {
-    getSong(accessToken, songID).then((song) => {
-      setSong(song);
-    });
-  }, [accessToken, songID]);
-
+function SongCard({song, closeCard}) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
-        open={Boolean(songID)}
-        onClose={close}
+        open={Boolean(song.id)}
+        onClose={closeCard}
         anchorReference='none'
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        // anchorReference='anchorPosition'
-        // anchorPosition={{top: '50%', left: '50%'}}
       >
         <div id="songcard-container">
           <div id="top-half">
@@ -134,15 +85,16 @@ function SongCard({accessToken, songID, setSongID}) {
           </div>
           <hr id="divider"/>
           <div id="bottom-half">
-            {/* TODO make these happen dynamically, stored in song obj */}
-            <div className="tagName redTag">
-              Tag 1
-            </div>
-            <div className="tagName greenTag">
-              Tag 2
-            </div>
-            <div className="tagName blueTag">
-              Tag 3
+            <div id="tags-container">
+              {/* TODO make these happen dynamically, stored in song obj */}
+              {song.tags.map((tag) => (
+                <div
+                  style={{backgroundColor: tag.color}}
+                  className="tagName"
+                >
+                  {tag.name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
