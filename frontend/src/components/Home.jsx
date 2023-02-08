@@ -290,7 +290,7 @@ function Home() {
         closeCard={closeCard}
       />
       <SearchResults
-        searchQuery={'test'}
+        searchQuery={''}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
