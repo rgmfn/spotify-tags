@@ -3,6 +3,7 @@ import React from 'react';
 import './Home.css';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
+import SearchResults from './SearchResults.jsx';
 
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
@@ -287,6 +288,9 @@ function Home() {
       <SongCard
         song={songToView}
         closeCard={closeCard}
+      />
+      <SearchResults
+        searchQuery={'test'}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
