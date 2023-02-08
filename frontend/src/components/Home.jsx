@@ -163,26 +163,25 @@ const emptySong = {
   'tags': [{'name': '', 'color': ''}],
 };
 
-// needed for making songcard show up
-// const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
-//   if (!id) {
-//     return emptySong;
-//   }
+const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
+  if (!id) {
+    return emptySong;
+  }
 
-//   const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-//     // http get request to api.spotify.com/v1/search
-//     method: 'GET',
-//     headers: {'Authorization': 'Bearer ' + accessToken},
-//   });
+  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+    // http get request to api.spotify.com/v1/search
+    method: 'GET',
+    headers: {'Authorization': 'Bearer ' + accessToken},
+  });
 
-//   if (!result.ok) {
-//     return emptySong;
-//   }
+  if (!result.ok) {
+    return emptySong;
+  }
 
-//   const data = await result.json();
-//   data.tags = fakeTags;
-//   return data;
-// };
+  const data = await result.json();
+  data.tags = fakeTags;
+  return data;
+};
 
 /**
  * @return {object} JSX
@@ -241,12 +240,14 @@ function Home() {
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
-  // for when clicking on a song in the list of songs on spotify or in library
-  // getSong(accessToken, refreshToken,
-  //   setAccessToken, event.currentTarget.id).then((song) => {
-  //   setSongToView(song);
-  // });
-
+  const clickedOnTags = ((event) => {
+    if (event.currentTarget.parentNode.id) {
+      getSong(accessToken, refreshToken,
+        setAccessToken, event.currentTarget.parentNode.id).then((song) => {
+        setSongToView(song);
+      });
+    }
+  });
 
   const handleClick = () => {
     setIsPlaying(!isPlaying);
@@ -281,6 +282,7 @@ function Home() {
       <Library
         library={library}
         clickedOnSong={clickedOnSong}
+        clickedOnTags={clickedOnTags}
       />
       <SongCard
         song={songToView}

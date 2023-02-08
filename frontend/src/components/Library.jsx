@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * @return {object} JSX
  */
-function Library({library, clickedOnSong}) {
+function Library({library, clickedOnSong, clickedOnTags}) {
   return (
     <table>
       <tbody
@@ -44,7 +44,10 @@ function Library({library, clickedOnSong}) {
                   {song.album.name}
                 </div>
               </td>
-              <td className="tagCol">
+              <td
+                className="tagCol"
+                onClick={clickedOnTags}
+              >
                 {song.tags.map((tag) => (
                   <div
                     style={{backgroundColor: tag.color}}
