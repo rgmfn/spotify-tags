@@ -11,7 +11,7 @@ import './SearchResults.css';
 /**
  * @return {object} JSX
  */
-function SearchResults({searchQuery}) {
+function SearchResults(props) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
