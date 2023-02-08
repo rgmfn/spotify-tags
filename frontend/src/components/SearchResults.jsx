@@ -25,7 +25,10 @@ function SearchResults({searchQuery}) {
       >
         <div id="results-container">
           <SpotifyResults />
-          <LibraryResults />
+          <LibraryResults
+            searchQuery={props.searchQuery}
+            library={props.library}
+          />
         </div>
       </Popover>
     </ThemeProvider>
