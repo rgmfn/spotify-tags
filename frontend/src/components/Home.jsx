@@ -291,6 +291,7 @@ function Home() {
       />
       <SearchResults
         searchQuery={''}
+        library={library}
       />
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
