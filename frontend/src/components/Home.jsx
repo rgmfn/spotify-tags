@@ -4,6 +4,8 @@ import './Home.css';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import ParseExpression from './Parser.jsx';
+import ValidateExpression from './ValidateExpression';
 
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
@@ -195,6 +197,13 @@ function Home() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
+  // const expression = [
+  // {name: 'classical', color: '#660000'},
+  // {name: 'OR', color: '#888888'},
+  // {name: 'piano', color: '#00ff00'},
+  // {name: 'pop', color: '#888888'},
+  // {name: 'pop', color: '#888888'},
+  // ];
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -293,6 +302,33 @@ function Home() {
         searchQuery={''}
         library={library}
       />
+      {
+        (<ValidateExpression
+        expression={[
+          {name: 'AND', color: '#660000'},
+          {name: 'OR', color: '#888888'},
+          {name: 'piano', color: '#00ff00'},
+          {name: 'pop', color: '#888888'},
+          {name: 'pop', color: '#888888'},
+          ]}
+        />) &&
+        <ParseExpression
+          expression={[
+            {name: 'classical', color: '#660000'},
+            {name: 'OR', color: '#888888'},
+            {name: 'piano', color: '#00ff00'},
+            {name: 'pop', color: '#888888'},
+            {name: 'pop', color: '#888888'},
+            ]}
+          song={
+            {name: 'let it go',
+            tag:
+              [{name: 'classical', color: '#660000'},
+              {name: 'instrumental', color: '#00ff00'},
+              {name: 'pop', color: '#660000'}]}
+          }
+        />
+      }
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
           {isPlaying ? 'Pause' : 'Play'}
