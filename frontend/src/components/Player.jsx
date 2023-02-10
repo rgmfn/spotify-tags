@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
-function Player(props) {
+/**
+ * 
+ * 
+ * Creates a Spotify Web Player that plays songs.
+ */
+function Player({accessToken, trackURI}) {
+    const [deviceID, setDeviceID] = React.useState([]);
+    const token = 'BQCeHhb-EMDCuWW9m2scXbBiP08vILm9yqjb71OQma7OREmSitQRBDPusCrIFaSCs00zhxa8MSG_w5bq6AoUXEvjo6P9z--uosxpZjzsDXWSAvIVrBxlMoDdQNZ8-_xaAO5bRDzi_pvaPYsDn3_nzpqf-tSPl8p6GB8HyPxGX_DtGQAgzFSkFJlnqjKUK365JlhW';
+
+    useEffect(() => {
+        console.log(`Player: trackURI: ${trackURI}`);
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [trackURI] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+    }, [trackURI]);
 
     useEffect(() => {
 
@@ -12,11 +31,6 @@ function Player(props) {
 
         window.onSpotifyWebPlaybackSDKReady = () => {
 
-            // token is a temporary Access Token; go here to replace token: https://developer.spotify.com/documentation/web-playback-sdk/quick-start/#
-            const token = 'BQDzDZQgpIaO75xJff0PFbjEqNYY5puc9xXv4OogrkUPiDpTYcrU1Vuvl2AU__wxbCeCmKfWxAPcEfHa3oYXKc0a5TqvIsACTa1L0pQmVUEHEDyBjFsxjwZVZFFGjIMWAgDajnKrfeLrxgWv6TcRRP_4AJEPPEVmOhNKpXC0eXatqLp9aCBA69J2NL7oyQdMYpwq';
-            const spotifyURI = 'spotify:track:6sxptembJVty4sNtcPMAVz';
-            let deviceID = null;
-
             const player = new window.Spotify.Player({
                 name: 'Spotify Tags Web Player',
                 getOAuthToken: cb => { cb(token); },
@@ -24,13 +38,11 @@ function Player(props) {
             });
 
             player.addListener('ready', ({ device_id }) => {
-                //setDeviceID(deviceID);
-                deviceID = device_id;
+                setDeviceID(device_id);
                 console.log('Ready with Device ID', device_id);
             });
 
             player.addListener('not_ready', ({ device_id }) => {
-                setDeviceID(deviceID);
                 console.log('Device ID has gone offline', device_id);
             });
 
@@ -46,33 +58,24 @@ function Player(props) {
                 console.error(message);
             });
 
-            // when Dustin's button is clicked, a track starts playing on the Home page
-            document.getElementById('play-button').onclick = function() {
-   
-                console.log("button is pressed!!");
-                player.togglePlay();
-
-                if (deviceID == undefined) {
-                    console.log('no device connected yet');
-                    return;
-                }
-
-                fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
-                    method: 'PUT',
-                    body: JSON.stringify({ uris: [spotifyURI] }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                });
-            }
-
             player.connect().then(success => {
                 if (success) {
                   console.log('The Web Playback SDK successfully connected to Spotify!');
                 }
             });
 
+            // when Play/ Pause button is clicked, a track starts playing on the Home page
+            document.getElementById('play-button').onclick = () => {
+   
+                console.log("Player: button is pressed");
+
+                if (deviceID == undefined) {
+                    console.log('no device connected yet');
+                    return;
+                }
+
+                player.togglePlay()
+            }
         };
     }, []);
 }

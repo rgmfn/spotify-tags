@@ -17,6 +17,7 @@ function Library({library, clickedOnSong}) {
               onClick={clickedOnSong}
               id={song.id} // sets row id to Spotify ID of song
               key={song.id}
+              title={song.uri}
             >
               <td className="imgCol"
               // td = table data (data cell)

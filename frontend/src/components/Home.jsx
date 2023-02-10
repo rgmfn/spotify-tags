@@ -85,10 +85,10 @@ function Home() {
   const clickedOnSong = ((event) => {
     // called when clicking on a song
     // event stores the thing that was clicked on
-    // console.log(event);
-    console.log(`clicked song w/ id: ${event.currentTarget.id}`);
-    setTrackURI(event.currentTarget.id);
-    // above event.currentTarget.id is the Spotify ID of the song
+    console.log(event.currentTarget);
+    console.log(`Home: clicked song's uri: ${event.currentTarget.title}`);
+    setTrackURI(event.currentTarget.title);
+    // above event.currentTarget.title is the Spotify URI of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
