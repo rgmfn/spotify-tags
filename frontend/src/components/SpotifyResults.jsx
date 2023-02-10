@@ -21,7 +21,6 @@ function SpotifyResults({searchQuery, accessToken,
   React.useEffect(() => {
     getSearch(accessToken, refreshToken, setAccessToken,
       refreshTokenFunc, searchQuery).then((results) => {
-      console.log(results);
       setSongList(results.tracks.items);
       setNextSongsURL(results.tracks.next);
     });
