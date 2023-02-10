@@ -38,3 +38,7 @@
     padding: 10px;
     background-color: var(--bg-color);
 }
+
+#more-results {
+    text-align: center;
+}
