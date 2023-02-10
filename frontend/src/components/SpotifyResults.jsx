@@ -40,7 +40,6 @@ function SpotifyResults({searchQuery, accessToken,
           {searchResults.map((result) => (
             <tr
               id={result.id}
-              uri={result.uri}
               onClick={clickedOnSong}
             >
               <td className="search-img-col">
