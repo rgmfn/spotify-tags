@@ -81,7 +81,7 @@ function Home() {
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery] = React.useState('sobs cool');
+  const [searchQuery] = React.useState('');
 
   React.useEffect(() => {
     const hash = window.location.hash;
