@@ -3,6 +3,7 @@ import {createTheme} from '@mui/material/styles';
 const spotifyTagsTheme = {
   // gotten from Home.css
   bgColor: '#192330',
+  bgColorLighter: '#383c4c',
   textColor: '#aeafb0',
   borderColor: '#39506d',
   selectedColor: '#29394f',
@@ -18,7 +19,6 @@ const spotifyTagsTheme = {
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark', // makes the background appear lighter
     primary: {
       main: spotifyTagsTheme.red,
     },
@@ -26,8 +26,8 @@ const darkTheme = createTheme({
       primary: spotifyTagsTheme.textColor,
     },
     background: {
-      paper: '#192330',
-      default: '#192330',
+      paper: spotifyTagsTheme.bgColorLighter,
+      default: spotifyTagsTheme.bgColorLighter,
     },
   },
 });
