@@ -2,8 +2,8 @@ import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 
 const getSearch = async (accessToken, refreshToken, setAccessToken,
-  refreshTokenFunc, query) => {
-  let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=25`, {
+  refreshTokenFunc, query, numResults=25) => {
+  let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=${numResults}`, {
     // http get request to api.spotify.com/v1/search
     method: 'GET',
     headers: {'Authorization': 'Bearer ' + accessToken},
@@ -11,8 +11,29 @@ const getSearch = async (accessToken, refreshToken, setAccessToken,
 
   if (!result.ok) {
     accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
-    result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=25`, {
+    result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=${numResults}`, {
     // http get request to api.spotify.com/v1/search
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    });
+  }
+
+  const data = await result.json();
+  return data;
+};
+
+const getSearchByURL = async (accessToken, refreshToken, setAccessToken,
+  refreshTokenFunc, url) => {
+  let result = await fetch(url, {
+    // http get request to api.spotify.com/v1/search
+    method: 'GET',
+    headers: {'Authorization': 'Bearer ' + accessToken},
+  });
+
+  if (!result.ok) {
+    accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
+    result = await fetch(url, {
+      // http get request to api.spotify.com/v1/search
       method: 'GET',
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
@@ -49,4 +70,4 @@ const getSong = async (accessToken, refreshToken, setAccessToken,
 };
 
 
-export {getSearch, getSong};
+export {getSearch, getSearchByURL, getSong};
