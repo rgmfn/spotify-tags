@@ -1,0 +1,202 @@
+openapi: '3.0.3'
+
+info:
+  description: spotifytags backend
+  version: 0.1.0
+  title: spotifytags backend
+
+servers:
+  - url: http://localhost:3010/v0
+
+paths:
+  /songs:
+    get:
+      parameters:
+      - name: userid
+        in: query
+        description: whose songs
+        schema:
+          type: string
+        required: true
+      description: Returns all songs for a user
+      responses:
+        200:
+          description: songs response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSongs'
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /listTags:
+    get:
+      parameters:
+      - name: spotifyid
+        in: query
+        description: song
+        schema:
+          type: string
+        required: true
+      - name: userid
+        in: query
+        description: user
+        schema:
+          type: string
+        required: true
+      description: Returns all tags for a specific song and user
+      responses:
+        200:
+          description: listTags response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongTags'
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tagList:
+    get:
+      parameters:
+      - name: userid
+        in: query
+        description: user
+        schema:
+          type: string
+        required: true
+      description: Returns all tags for a specific song and user
+      responses:
+        200:
+          description: tagList response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/allTags'
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+  /tagsPost:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userid:
+                  type: string
+                  description: userid
+                spotifyid:
+                  type: string
+                  description: spotifyid
+                tags:
+                  type: object
+                  description: tags
+                  properties:
+                    tags:
+                      type: array
+                      items:
+                        type: string
+      responses:
+        200:
+          description: completed insert
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
+
+
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+    UserSongs:
+      type: object
+      additionalProperties: false
+      properties:
+        userid:
+          type: string
+        songs:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Song'
+      required:
+        - userid
+        - songs
+    Song:
+      type: object
+      additionalProperties: false
+      properties:
+        spotifyid:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - spotifyid
+        - tags
+    SongTags:
+      type: object
+      additionalProperties: false
+      properties:
+        spotifyid:
+          type: string
+        userid:
+          type: string
+        listTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/tag'
+      required:
+        - spotifyid
+        - userid
+        - listTags
+    tag:
+      type: object
+      additionalProperties: false
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - tags
+    allTags:
+      type: object
+      additionalProperties: false
+      properties:
+        userid:
+          type: string
+        tagList:
+          type: array
+          items:
+            type: string
+      required:
+        - userid
+        - tagList
+              
+      
+    
