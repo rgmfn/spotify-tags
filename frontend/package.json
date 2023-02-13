@@ -73,6 +73,6 @@
   },
   "options": {
     "allowedHosts": ["localhost", ".localhost"],
-    "proxy": "http://localhost:3010"
+    "proxy": "https://localhost:3010"
   }
 }
