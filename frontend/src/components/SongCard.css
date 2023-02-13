@@ -1,25 +1,3 @@
-:root {
-    /* nightfox */
-    --bg-color: #192330;
-    --text-color: #aeafb0;
-    --border-color: #39506d;
-    --selected-color: #29394f;
-    --red: #c94f6d;
-    --green: #81b29a;
-    --yellow: #dbc074;
-    --blue: #719cd6;
-    --purple: #9d79d6;
-    --cyan: #63cdcf;
-    --orange: #f4a261;
-    --pink: #d67ad2;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: Gotham Circular, Verdana, Arial, sans-serif;
-}
-
 #songcard-container {
     /* TODO do this dynamically? */
     width: 500px;

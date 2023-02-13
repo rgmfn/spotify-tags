@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './Home.css';
+import TopBar from './TopBar';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
@@ -162,6 +163,7 @@ function Home() {
   return (
     <div className="App">
 
+      <TopBar />
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
@@ -175,6 +177,9 @@ function Home() {
       />}
       <SongCard
         song={songToView}
+        setSongToView={setSongToView}
+        library={library}
+        setLibrary={setLibrary}
         closeCard={closeCard}
       />
       {Boolean(searchQuery) && <SearchResults

@@ -10,7 +10,23 @@ import {darkTheme} from './darkTheme.js';
 /**
  * @return {object} JSX
  */
-function SongCard({song, closeCard}) {
+function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
+  const clickedOnTag = ((event) => {
+    const newTags = song.tags.filter((tag) =>
+      tag.name !== event.currentTarget.textContent,
+    );
+    const newLibrary = library.map((newSong) => {
+      if (newSong.id === song.id) {
+        newSong.tags = newTags;
+        setSongToView(newSong);
+        return newSong;
+      } else {
+        return newSong;
+      }
+    });
+    setLibrary(newLibrary);
+  });
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
@@ -60,6 +76,7 @@ function SongCard({song, closeCard}) {
                 <div
                   style={{backgroundColor: tag.color}}
                   className="tagName"
+                  onClick={clickedOnTag}
                 >
                   {tag.name}
                 </div>
