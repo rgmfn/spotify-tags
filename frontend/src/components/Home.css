@@ -1,6 +1,7 @@
 :root {
     /* nightfox */
     --bg-color: #192330;
+    --bg-color-lighter: #383c4c;
     --text-color: #aeafb0;
     --border-color: #39506d;
     --selected-color: #29394f;
@@ -30,6 +31,7 @@ table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    overflow-y: auto;
 }
 
 tr {

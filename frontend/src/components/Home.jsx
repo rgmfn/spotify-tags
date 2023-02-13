@@ -5,114 +5,15 @@ import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 
+import {emptySong} from './emptySong.js';
+import {fakeTags} from './fakeTags.js';
+
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
   const refreshJson = await refresh.json();
   setAccessToken(refreshJson.access_token);
   return refreshJson.access_token;
 };
-
-const fakeTags = [
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-];
 
 const insertTestingTags = (songs) => {
   for (const song of songs.tracks.items) {
@@ -143,40 +44,24 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   return data;
 };
 
-const emptySong = {
-  'album': {'images': [{'url': ''}]},
-  'artists': [{'name': ''}],
-  'available_markets': [],
-  'disc_number': 0,
-  'duration_ms': 0,
-  'explicit': true,
-  'external_ids': {},
-  'external_urls': {},
-  'href': '',
-  'id': '',
-  'is_local': false,
-  'name': '',
-  'popularity': 0,
-  'preview_url': '',
-  'track_number': 0,
-  'type': '',
-  'uri': '',
-  'tags': [{'name': '', 'color': ''}],
-};
-
 const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
   if (!id) {
     return emptySong;
   }
 
-  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+  let result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
     // http get request to api.spotify.com/v1/search
     method: 'GET',
     headers: {'Authorization': 'Bearer ' + accessToken},
   });
 
   if (!result.ok) {
-    return emptySong;
+    accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
+    result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+      // http get request to api.spotify.com/v1/search
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    });
   }
 
   const data = await result.json();
@@ -195,6 +80,8 @@ function Home() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
+  // const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery] = React.useState('');
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -280,19 +167,26 @@ function Home() {
           `http://localhost:3010/login`
         }>Login to Spotify</a>: <button onClick={logout}>Logout</button>}
       <button onClick={refreshList}>Refresh List</button>
-      <Library
+      {!Boolean(searchQuery) && <Library
+        hidden={Boolean(searchQuery)}
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
-      />
+      />}
       <SongCard
         song={songToView}
         closeCard={closeCard}
       />
-      <SearchResults
-        searchQuery={''}
+      {Boolean(searchQuery) && <SearchResults
+        // hidden={Boolean(searchQuery)}
+        searchQuery={searchQuery}
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        refreshToken={refreshToken}
+        refreshTokenFunc={refreshTokenFunc}
         library={library}
-      />
+        setSongToView={setSongToView}
+      />}
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
           {isPlaying ? 'Pause' : 'Play'}

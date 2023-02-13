@@ -85,7 +85,7 @@ body {
     height: 40%;
 }
 
-#divider {
+.divider {
     width: 80%;
     color: var(--selected-color);
     margin-bottom: 20px;

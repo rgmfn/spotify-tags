@@ -52,7 +52,7 @@ function SongCard({song, closeCard}) {
               />
             </div>
           </div>
-          <hr id="divider"/>
+          <hr className="divider"/>
           <div id="bottom-half">
             <div id="tags-container">
               {/* TODO make these happen dynamically, stored in song obj */}

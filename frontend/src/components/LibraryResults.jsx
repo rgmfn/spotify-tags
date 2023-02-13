@@ -5,18 +5,7 @@ import React from 'react';
  */
 function LibraryResults({searchQuery, library}) {
   return (
-    <div>
-      <table>
-        <tr>
-          <td>LibraryResults</td>
-        </tr>
-        <tr>
-          <td>songImg</td>
-          <td>SpotifySong</td>
-          <td>SpotifyArtist</td>
-          <td>SpotifyAlbum</td>
-        </tr>
-      </table>
+    <div className="search-results">
     </div>
   );
 };
