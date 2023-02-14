@@ -45,31 +45,6 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   return data;
 };
 
-// const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
-//   if (!id) {
-//     return emptySong;
-//   }
-
-//   let result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-//     // http get request to api.spotify.com/v1/search
-//     method: 'GET',
-//     headers: {'Authorization': 'Bearer ' + accessToken},
-//   });
-
-//   if (!result.ok) {
-//     accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
-//     result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-//       // http get request to api.spotify.com/v1/search
-//       method: 'GET',
-//       headers: {'Authorization': 'Bearer ' + accessToken},
-//     });
-//   }
-
-//   const data = await result.json();
-//   data.tags = fakeTags;
-//   return data;
-// };
-
 /**
  * @return {object} JSX
  */
@@ -131,24 +106,11 @@ function Home() {
 
   const clickedOnTags = ((event) => {
     if (event.currentTarget.parentNode.id) {
-      // console.log(event.currentTarget.parentNode.id);
       const song = library.find((libSong) =>
         libSong.id === event.currentTarget.parentNode.id, emptySong,
       );
-      // console.log(song);
       setSongToView(song);
     }
-    // console.log(library); {{{
-    // const song = library.find((libSong) =>
-    //   libSong.id = event.currentTarget.parentNode.id,
-    // );
-    // console.log(library);
-    // console.log(song);
-    // if (song) {
-    //   setSongToView(song);
-    // } else {
-    //   setSongToView(emptySong);
-    // } }}}
   });
 
   const handleClick = () => {
