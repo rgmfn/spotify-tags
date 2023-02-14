@@ -2,6 +2,7 @@
     /* nightfox */
     --bg-color: #192330;
     --bg-color-lighter: #383c4c;
+    --bg-color-darker: #131a24;
     --text-color: #aeafb0;
     --border-color: #39506d;
     --selected-color: #29394f;
@@ -96,18 +97,6 @@ tr:hover {
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 80%;
-}
-
-.redTag {
-    background-color: var(--red);
-}
-
-.greenTag {
-    background-color: var(--green);
-}
-
-.blueTag {
-    background-color: var(--blue);
 }
 
 .tagName {

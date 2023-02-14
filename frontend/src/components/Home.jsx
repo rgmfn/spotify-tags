@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './Home.css';
+import TopBar from './TopBar';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
@@ -44,30 +45,30 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   return data;
 };
 
-const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
-  if (!id) {
-    return emptySong;
-  }
+// const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
+//   if (!id) {
+//     return emptySong;
+//   }
 
-  let result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-    // http get request to api.spotify.com/v1/search
-    method: 'GET',
-    headers: {'Authorization': 'Bearer ' + accessToken},
-  });
+//   let result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+//     // http get request to api.spotify.com/v1/search
+//     method: 'GET',
+//     headers: {'Authorization': 'Bearer ' + accessToken},
+//   });
 
-  if (!result.ok) {
-    accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
-    result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-      // http get request to api.spotify.com/v1/search
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + accessToken},
-    });
-  }
+//   if (!result.ok) {
+//     accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
+//     result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+//       // http get request to api.spotify.com/v1/search
+//       method: 'GET',
+//       headers: {'Authorization': 'Bearer ' + accessToken},
+//     });
+//   }
 
-  const data = await result.json();
-  data.tags = fakeTags;
-  return data;
-};
+//   const data = await result.json();
+//   data.tags = fakeTags;
+//   return data;
+// };
 
 /**
  * @return {object} JSX
@@ -130,11 +131,24 @@ function Home() {
 
   const clickedOnTags = ((event) => {
     if (event.currentTarget.parentNode.id) {
-      getSong(accessToken, refreshToken,
-        setAccessToken, event.currentTarget.parentNode.id).then((song) => {
-        setSongToView(song);
-      });
+      // console.log(event.currentTarget.parentNode.id);
+      const song = library.find((libSong) =>
+        libSong.id === event.currentTarget.parentNode.id, emptySong,
+      );
+      // console.log(song);
+      setSongToView(song);
     }
+    // console.log(library); {{{
+    // const song = library.find((libSong) =>
+    //   libSong.id = event.currentTarget.parentNode.id,
+    // );
+    // console.log(library);
+    // console.log(song);
+    // if (song) {
+    //   setSongToView(song);
+    // } else {
+    //   setSongToView(emptySong);
+    // } }}}
   });
 
   const handleClick = () => {
@@ -162,6 +176,7 @@ function Home() {
   return (
     <div className="App">
 
+      <TopBar />
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
@@ -175,6 +190,9 @@ function Home() {
       />}
       <SongCard
         song={songToView}
+        setSongToView={setSongToView}
+        library={library}
+        setLibrary={setLibrary}
         closeCard={closeCard}
       />
       {Boolean(searchQuery) && <SearchResults
