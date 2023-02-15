@@ -44,5 +44,9 @@
         2
       ]
     }
+  },
+  "options": {
+    "allowedHosts": ["localhost", ".localhost"],
+    "proxy": "https://localhost:3010/"
   }
 }

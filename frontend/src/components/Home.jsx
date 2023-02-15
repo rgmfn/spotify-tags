@@ -3,6 +3,7 @@ import React from 'react';
 import './Home.css';
 import TopBar from './TopBar';
 import Library from './Library.jsx';
+import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 
@@ -69,8 +70,11 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
+  
+  console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
+  console.log(data);
   data = insertTestingTags(data);
   return data;
 };
@@ -83,6 +87,7 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
+  const [trackURI, setTrackURI] = React.useState('');
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
@@ -139,8 +144,11 @@ function Home() {
    *                         clicked on
    */
   const clickedOnSong = ((event) => {
-    console.log(`clicked song ${event.currentTarget.id}`);
-    // above event.currentTarget.id is the Spotify ID of the song
+    console.log(`Home: clicked on track`);
+    console.log(`   trackURI: ${event.currentTarget.title}`);
+    setTrackURI(event.currentTarget.title);
+    // called when clicking on a song
+    // event stores the thing that was clicked on
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -162,17 +170,6 @@ function Home() {
       setSongToView(song);
     }
   });
-
-  /**
-   * Called when clicking on the pause/play button.
-   *
-   * Toggles the playing state of the SpotifySDKPlayer.
-   */
-  const clickedOnPlayPause = () => {
-    setIsPlaying(!isPlaying);
-    // code to play or pause music here
-    // called when the button is clicked,triggers the play or pause of the music
-  };
 
   /**
    * Called when clicking outside of the SongCard.
@@ -207,7 +204,6 @@ function Home() {
 
   return (
     <div className="App">
-
       <TopBar />
       {!accessToken ?
         <a href={ // login button
@@ -228,6 +224,9 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
+      { (accessToken !== '') && <Player
+        accessToken={accessToken}
+        trackURI={trackURI}/> }
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
@@ -238,11 +237,6 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <div className="play-button-container">
-        <button className="play-button" onClick={clickedOnPlayPause}>
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-      </div>
     </div>
   );
 }
