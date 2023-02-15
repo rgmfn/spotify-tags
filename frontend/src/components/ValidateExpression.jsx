@@ -10,7 +10,7 @@ const Operations = {
  * @param {object} expression 
  * @return {object}
  */
-function ValidateExpression({expression}) {
+function ValidateExpression(expression) {
   console.log('Validating');
 
   for (let i=0; i<expression.length; i++) {
@@ -19,12 +19,7 @@ function ValidateExpression({expression}) {
 
     if (i % 2 == 0) { // on even tags
       if (operandTag){ // the tag should not be an operand
-        return (
-          <h2 id='error message'>
-            Error: Invalid Expression.{'\n'}
-            Operand must be between tags.
-          </h2>
-        );
+        return false;
       }
     }
     // check if expression is imcomplete

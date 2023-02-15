@@ -15,7 +15,7 @@ function SearchResults(props) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
-        open={Boolean(searchQuery)}
+        open={Boolean(props.searchQuery)}
         anchorReference='none'
         style={{
           display: 'flex',

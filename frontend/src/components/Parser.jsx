@@ -8,15 +8,15 @@ const Operations = {
 /**
  * @param {string} tagName
  * @param {object} song
- * @param {object} song.tag
+ * @param {object} song.tags
  * @return {object}
  */
 function isTagInSong(tagName, song) {
 
   console.log('check Tag searching for: '+ tagName);
-
-  for (let i=0; i<song.tag.length; i++) { // for all tags in the song
-    if (song.tag[i].name === tagName) { // if there's a match
+  console.log(song.tags);
+  for (let i=0; i<song.tags.length; i++) { // for all tags in the song
+    if (song.tags[i].name === tagName) { // if there's a match
       console.log('tag found: '+ tagName);
       return true;
     }
@@ -28,9 +28,12 @@ function isTagInSong(tagName, song) {
 /**
  * @return {object}
  */
-function ParseExpression({expression, song}) {
+function ParseExpression(song, expression) {
   let out = null; // output value, will be updated as we go
   let currOp = Operations.START; // current operation to execute between tags
+  console.log(song);
+  console.log(expression);
+  if (expression === null) return null;
 
   // for all the tags in expression
   for (let i=0; i<expression.length; i++) {
@@ -48,11 +51,7 @@ function ParseExpression({expression, song}) {
       out = out && !isTagInSong(tagName, song);
     }
   }
-  return(
-    <h2
-      id = "parser result"
-    >result is: {out ? 'true': 'false'}</h2>
-  );
+  return out;
 }
 
 export default ParseExpression;

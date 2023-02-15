@@ -4,7 +4,6 @@ import './Home.css';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
-import ParseExpression from './Parser.jsx';
 import ValidateExpression from './ValidateExpression';
 
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
@@ -23,97 +22,97 @@ const fakeTags = [
   {name: 'folk', color: '#63cdcf'},
   {name: 'rock', color: '#f4a261'},
   {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-  {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'classical', color: '#dbc074'},
+//   {name: 'jazz', color: '#c94f6d'},
+//   {name: 'funk', color: '#81b29a'},
+//   {name: 'punk', color: '#719cd6'},
+//   {name: 'instrumental', color: '#9d79d6'},
+//   {name: 'folk', color: '#63cdcf'},
+//   {name: 'rock', color: '#f4a261'},
+//   {name: 'metal', color: '#d67ad2'},
+//   {name: 'metal', color: '#d67ad2'},
 ];
 
 const insertTestingTags = (songs) => {
@@ -197,13 +196,13 @@ function Home() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
-  // const expression = [
-  // {name: 'classical', color: '#660000'},
-  // {name: 'OR', color: '#888888'},
-  // {name: 'piano', color: '#00ff00'},
-  // {name: 'pop', color: '#888888'},
-  // {name: 'pop', color: '#888888'},
-  // ];
+  const expression = [{name: 'classical', color: '#660000'},
+  {name: 'OR', color: '#888888'},
+  {name: 'funk', color: '#00ff00'},
+  {name: 'AND', color: '#888888'},
+  {name: 'instrumental', color: '#00ff00'},
+  ];
+  const isvalidExpression = ValidateExpression(expression);
 
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -293,6 +292,7 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
+        currExpression = {expression}
       />
       <SongCard
         song={songToView}
@@ -302,33 +302,6 @@ function Home() {
         searchQuery={''}
         library={library}
       />
-      {
-        (<ValidateExpression
-        expression={[
-          {name: 'AND', color: '#660000'},
-          {name: 'OR', color: '#888888'},
-          {name: 'piano', color: '#00ff00'},
-          {name: 'pop', color: '#888888'},
-          {name: 'pop', color: '#888888'},
-          ]}
-        />) &&
-        <ParseExpression
-          expression={[
-            {name: 'classical', color: '#660000'},
-            {name: 'OR', color: '#888888'},
-            {name: 'piano', color: '#00ff00'},
-            {name: 'pop', color: '#888888'},
-            {name: 'pop', color: '#888888'},
-            ]}
-          song={
-            {name: 'let it go',
-            tag:
-              [{name: 'classical', color: '#660000'},
-              {name: 'instrumental', color: '#00ff00'},
-              {name: 'pop', color: '#660000'}]}
-          }
-        />
-      }
       <div className="play-button-container">
         <button className="play-button" onClick={handleClick}>
           {isPlaying ? 'Pause' : 'Play'}
