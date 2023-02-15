@@ -5,6 +5,7 @@ import TopBar from './TopBar';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import SearchBar from './SearchBar.js';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
@@ -87,7 +88,7 @@ function Home() {
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   /**
    * TODO
@@ -209,6 +210,12 @@ function Home() {
     <div className="App">
 
       <TopBar />
+      <div className="searchbar">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      </div>
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`

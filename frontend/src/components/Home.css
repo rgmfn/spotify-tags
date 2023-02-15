@@ -49,6 +49,13 @@ tr:hover {
     width: 70px;
 }
 
+.searchbar {
+    margin: auto;
+    position: sticky;
+    top: 55px;
+    background-color: var(--bg-color);
+}
+
 .play-button-container {
     background-color: var(--bg-color);
     display: flex;
