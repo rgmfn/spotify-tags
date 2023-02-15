@@ -41,9 +41,8 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
-  const [songClicked, setSongClicked] = React.useState(false); 
   const [trackID, setTrackID] = React.useState('');
-  const [trackURI, setTrackURI] = React.useState(undefined);
+  const [trackURI, setTrackURI] = React.useState('');
 
 
   React.useEffect(() => {
@@ -83,16 +82,15 @@ function Home() {
   // called twice, once at page startup, another when we get the token
 
   const clickedOnSong = ((event) => {
+    console.log(`Home: clicked on track`);
+    console.log(`   trackID: ${event.currentTarget.id}`);
+    setTrackID(event.currentTarget.id);
+
+    console.log(`   trackURI: ${event.currentTarget.title}`);
+    setTrackURI(event.currentTarget.title);
     // called when clicking on a song
     // event stores the thing that was clicked on
-    //console.log(`Home: clicked song's id: ${event.currentTarget.id}`);
-    setTrackID(event.currentTarget.id);
-    // above event.currentTarget.id is the Spotify ID of the song
-    console.log(`Home: clicked song's uri: ${event.currentTarget.title}`);
-    setTrackURI(event.currentTarget.title);
-    // above event.currentTarget.title is the Spotify URI of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
-    setSongClicked(true);
   });
 
   const refreshList = () => {
@@ -118,12 +116,9 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
       />
-      <div className="Player">
-        <Player 
-          accessToken={accessToken}
-          trackURI={trackURI}
-          songClicked={songClicked}/>
-      </div>
+      { (accessToken !== '') && <Player
+        accessToken={accessToken}
+        trackURI={trackURI}/> }
     </div>
   );
 }

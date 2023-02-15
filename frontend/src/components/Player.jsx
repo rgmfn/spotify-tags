@@ -1,98 +1,113 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import './Home.css';
 
 /**
- * 
- * 
- * Creates a Spotify Web Player that plays songs.
+ * @return {object} JSX
  */
-function Player({accessToken, trackURI, songClicked}) {
-    const [isPlaying, setIsPlaying] = React.useState(false);
-    // used to keep track of the current playing status 'isPlaying'
-    const [deviceID, setDeviceID] = React.useState(undefined);
-    const [player, setPlayer] = React.useState(undefined);
-    const token = 'BQB_XmU6vpCQlEz0Zq39rDAWm1Ou5rfTC1Q4RwzsgDus2giP_ViFZqFirOs56_omN4vQTrSbD9F17gFD7f6ENNeOGRspBjlqcm2la8KoYfXQMgE1EW8GJioDkkNHUsZ31-fMGIqkXqfSuAcL9c02mgSODVG1ard0S_I95HkVM-RsPmQBQnnuRrRZ3IP4xhu9tOxl';
+function Player({accessToken, trackURI}) {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [deviceID, setDeviceID] = React.useState(undefined);
+  const [player, setPlayer] = React.useState(undefined);
 
-    useEffect(() => {
+  // sets up web player to stream music
+  React.useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://sdk.scdn.co/spotify-player.js';
+    script.async = true;
 
-        const script = document.createElement('script');
-        script.src = 'https://sdk.scdn.co/spotify-player.js';
-        script.async = true;
-        
-        document.body.appendChild(script);
+    document.body.appendChild(script);
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      // initializes player instance of Web Playback SDK
+      const player = new window.Spotify.Player({
+        name: 'Spotify Tags Web Player',
+        getOAuthToken: (cb) => {
+          cb(accessToken);
+        },
+        volume: 0.5,
+      });
 
-            const player = new window.Spotify.Player({
-                name: 'Spotify Tags Web Player',
-                getOAuthToken: cb => { cb(accessToken); },
-                volume: 0.5
-            });
+      setPlayer(player);
 
-            setPlayer(player);
+      // connects web player to listening device
+      player.addListener('ready', ({device_id}) => {
+        setDeviceID(device_id);
+        console.log('Ready with deviceID', device_id);
+      });
 
-            player.addListener('ready', ({ device_id }) => {
-                setDeviceID(device_id);
-                console.log('Ready with device_id', device_id);
-            });
+      player.addListener('not_ready', ({device_id}) => {
+        console.log('deviceID has gone offline', device_id);
+      });
 
-            player.addListener('not_ready', ({ device_id }) => {
-                console.log('Device ID has gone offline', device_id);
-            });
+      player.addListener('initialization_error', ({message}) => {
+        console.error(message);
+      });
 
-            player.addListener('initialization_error', ({ message }) => { 
-                console.error(message);
-            });
-          
-            player.addListener('authentication_error', ({ message }) => {
-                console.error(message);
-            });
-          
-            player.addListener('account_error', ({ message }) => {
-                console.error(message);
-            });
+      player.addListener('authentication_error', ({message}) => {
+        console.error(message);
+      });
 
-            player.connect().then(success => {
-                if (success) {
-                  console.log('The Web Playback SDK successfully connected to Spotify!');
-                }
-            });
+      player.addListener('account_error', ({message}) => {
+        console.error(message);
+      });
+
+      // connects web player instance to Spotify w/ credentials given
+      // during initialization above
+      player.connect().then((success) => {
+        if (success) {
+          console.log('The Web Playback SDK successfully connected to Spotify!');
         }
-    }, [accessToken]);
-
-    useEffect(() => {
-        console.log(`Player: play this song`)
-
-        if ((typeof(deviceID) != undefined) && songClicked) { 
-            console.log(`   trackURI: ${trackURI}`);
-            console.log(`   deviceID: ${deviceID}`); 
-            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
-                method: 'PUT',
-                body: JSON.stringify({ uris: [trackURI] }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                },
-            });
-            setIsPlaying(true);
-        }
-    }, [trackURI]);
-
-    const handleClick = () => {
-        console.log(`Player: accessToken: ${accessToken}`);
-        setIsPlaying(!isPlaying);
-        player.togglePlay();
-        // called when the button is clicked,triggers the play or pause of the music
+      });
     };
+  }, [accessToken]);
 
-    return(
-        <div className="play-button-container">
-            <button id="play-button" className="play-button" onClick={handleClick}>
-                {isPlaying ? 'Pause' : 'Play'}
+  // if web player is ready & song is clicked on, song plays in browser
+  React.useEffect(() => {
+    if ((typeof(deviceID) != undefined) && trackURI !== '') {
+      console.log(`Player: play clicked song`);
+      console.log(`   trackURI: ${trackURI}`);
+      console.log(`   deviceID: ${deviceID}`);
+
+      // HTTP request to initially play music
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+        method: 'PUT',
+        body: JSON.stringify({uris: [trackURI]}),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      setIsPlaying(true);
+    }
+  }, [trackURI]);
+
+  // called when the "play/ pause" button is clicked,
+  // triggers the play or pause of the music
+  const handleClick = () => {
+    setIsPlaying(!isPlaying);
+
+    player.togglePlay().then(() => {
+      console.log('Toggled playback!');
+    });
+  };
+
+  return (
+    <>
+      <div className="container">
+        <div className="main-wrapper">
+          <div className="play-button-container">
+            <button
+              id="play-button"
+              className="play-button"
+              onClick={handleClick}>
+              {isPlaying ? 'Pause' : 'Play'}
             </button>
+          </div>
         </div>
-    );
+      </div>
+    </>
+  );
 }
 
 
