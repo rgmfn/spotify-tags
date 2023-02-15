@@ -9,6 +9,13 @@ import SearchResults from './SearchResults.jsx';
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 
+/**
+ * Gets a new access token using the refresh token.
+ *
+ * @param {string} refreshToken
+ * @param {function} setAccessToken
+ * @return {string}
+ */
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
   const refreshJson = await refresh.json();
@@ -16,6 +23,16 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   return refreshJson.access_token;
 };
 
+/**
+ * Inserts the testing tags from './fakeTags.js' into the given list of
+ * songs (spotify song objects). Returns the new array of tagged songs.
+ *
+ * Used for testing purposes until we can get the tags for songs from the
+ * database.
+ *
+ * @param {array} songs
+ * @return {array}
+ */
 const insertTestingTags = (songs) => {
   for (const song of songs.tracks.items) {
     song.tags = fakeTags;
@@ -24,6 +41,19 @@ const insertTestingTags = (songs) => {
   return songs;
 };
 
+/**
+ * Gets a list of songs from spotify that fits the given query.
+ *
+ * If the fetch fails, it gets a new access token and tries again.
+ *
+ * Used for testing to generate a fake library until we can get the library
+ * from the database.
+ *
+ * @param {string} accessToken
+ * @param {string} refreshToken
+ * @param {function} setAccessToken
+ * @param {string} query
+ */
 const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
@@ -32,7 +62,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   });
 
   if (!result.ok) {
-    accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
+    accessToken = refreshTokenFunc(refreshToken, setAccessToken);
     result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
       method: 'GET',
@@ -59,6 +89,9 @@ function Home() {
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery] = React.useState('');
 
+  /**
+   * TODO
+   */
   React.useEffect(() => {
     const hash = window.location.hash;
     let accessToken = window.localStorage.getItem('accessToken');
@@ -86,6 +119,10 @@ function Home() {
   }, []);
 
 
+  /**
+   * When the refreshToken or accessToken change, reset the library using
+   * the temporary getSearch method.
+   */
   React.useEffect(() => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
@@ -95,15 +132,28 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  /**
+   * Called when clicking on a <tr> representing a song in the library.
+   *
+   * @param {object} event - contains things like the element that was
+   *                         clicked on
+   */
   const clickedOnSong = ((event) => {
-    // called when clicking on a song
-    // event stores the thing that was clicked on
-    // console.log(event);
     console.log(`clicked song ${event.currentTarget.id}`);
     // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
+  /**
+   * Called when clicking on the tags column of a <tr> representing a song.
+   *
+   * Gets the song from the current library that has the same id as the
+   * song/row clicked on. Sets songToView to that song (makes that song
+   * be displayed in SongCard).
+   *
+   * @param {object} event - contains things like the element that was
+   *                         clicked on
+   */
   const clickedOnTags = ((event) => {
     if (event.currentTarget.parentNode.id) {
       const song = library.find((libSong) =>
@@ -113,22 +163,42 @@ function Home() {
     }
   });
 
-  const handleClick = () => {
+  /**
+   * Called when clicking on the pause/play button.
+   *
+   * Toggles the playing state of the SpotifySDKPlayer.
+   */
+  const clickedOnPlayPause = () => {
     setIsPlaying(!isPlaying);
     // code to play or pause music here
     // called when the button is clicked,triggers the play or pause of the music
   };
 
+  /**
+   * Called when clicking outside of the SongCard.
+   *
+   * Sets songToView to an empty song object (makes the SongCard go away).
+   */
   const closeCard = () => {
     setSongToView(emptySong);
   };
 
+  /**
+   * Called when clicking on the 'Refresh List' button.
+   *
+   * Refreshes the library of songs displayed using the temporary getSearch
+   * method.
+   */
   const refreshList = () => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
         setLibrary(result.tracks.items);
       });
   };
+
+  /**
+   * TODO
+   */
   const logout = () => {
     setAccessToken('');
     setRefreshToken('');
@@ -145,6 +215,7 @@ function Home() {
         }>Login to Spotify</a>: <button onClick={logout}>Logout</button>}
       <button onClick={refreshList}>Refresh List</button>
       {!Boolean(searchQuery) && <Library
+        // ^ displays library if there is no searchQuery
         hidden={Boolean(searchQuery)}
         library={library}
         clickedOnSong={clickedOnSong}
@@ -158,7 +229,7 @@ function Home() {
         closeCard={closeCard}
       />
       {Boolean(searchQuery) && <SearchResults
-        // hidden={Boolean(searchQuery)}
+        // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
         accessToken={accessToken}
         setAccessToken={setAccessToken}
@@ -168,7 +239,7 @@ function Home() {
         setSongToView={setSongToView}
       />}
       <div className="play-button-container">
-        <button className="play-button" onClick={handleClick}>
+        <button className="play-button" onClick={clickedOnPlayPause}>
           {isPlaying ? 'Pause' : 'Play'}
         </button>
       </div>

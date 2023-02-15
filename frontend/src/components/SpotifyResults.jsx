@@ -3,21 +3,20 @@ import React from 'react';
 import {emptySong} from './emptySong.js';
 import {getSong, getSearchByURL, getSearch} from './httpCalls.js';
 
-// const emptyResults = {
-//   tracks: {
-//     items: [],
-//   },
-// };
-
 /**
  * @return {object} JSX
  */
 function SpotifyResults({searchQuery, accessToken,
   setAccessToken, refreshToken, refreshTokenFunc, setSongToView}) {
   const [songList, setSongList] = React.useState([emptySong]);
-  // const [searchResults, setSearchResults] = React.useState([emptyResults]);
   const [nextSongsURL, setNextSongsURL] = React.useState([]);
+  // nextSongsURL used for tracking the next group of songs when clicking
+  //    to get for more songs at the bottom of the search results
 
+  /**
+   * When the searchQuery changes, use getSearch to get a list of search
+   * results from spotify fitting the new searchQuery.
+   */
   React.useEffect(() => {
     getSearch(accessToken, refreshToken, setAccessToken,
       refreshTokenFunc, searchQuery).then((results) => {
@@ -27,6 +26,14 @@ function SpotifyResults({searchQuery, accessToken,
   }, [searchQuery, accessToken, setAccessToken,
     refreshToken, refreshTokenFunc]);
 
+  /**
+   * Called when clicking on a <tr> representing a song.
+   *
+   * Gets the song object corresponding to that row/song and sets it to
+   * display in a SongCard (by setting songToView).
+   *
+   * @param {object} event
+   */
   const clickedOnSong = ((event) => {
     if (event.currentTarget.id) {
       getSong(accessToken, refreshToken, setAccessToken,
@@ -36,6 +43,13 @@ function SpotifyResults({searchQuery, accessToken,
     }
   });
 
+  /**
+   * Called when clicking 'More results...' at the bottom of the results.
+   *
+   * Gets the next list of songs (using nextSongsURL) from Spotify fitting the
+   * searchQuery. Adds that next list of songs to the current list of displayed
+   * songs.
+   */
   const clickedMoreResults = (() => {
     getSearchByURL(accessToken, refreshToken, setAccessToken,
       refreshTokenFunc, nextSongsURL).then((results) => {
