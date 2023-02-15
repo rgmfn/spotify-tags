@@ -1,6 +1,11 @@
 import React from 'react';
 
 /**
+ * @param {array} library
+ * @param {function} clickedOnSong - in Home.jsx, when clicking on a <tr>
+ *                                   representing a song
+ * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
+ *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
 function Library({library, clickedOnSong, clickedOnTags}) {

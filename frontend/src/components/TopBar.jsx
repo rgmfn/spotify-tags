@@ -3,6 +3,10 @@ import React from 'react';
 import Expression from './Expression.jsx';
 import './TopBar.css';
 
+/*
+ * Used for the displaying the expression until expression building is
+ * implemented.
+ */
 const fakeExpression = [
   {name: 'classical', color: '#c94f6d'},
   {name: 'AND', color: '#888888'},
@@ -12,6 +16,8 @@ const fakeExpression = [
 ];
 
 /**
+ * @param {array} expression - not passed in yet, will probably be passed in
+ *                             from Home.jsx once you can build expressions
  * @return {object} JSX
  */
 function TopBar() {

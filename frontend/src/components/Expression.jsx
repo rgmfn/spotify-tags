@@ -3,6 +3,8 @@ import React from 'react';
 import './Expression.css';
 
 /**
+ * @param {array} expression - array of tag objects representing the current
+ *                             expression
  * @return {object} JSX
  */
 function Expression({expression}) {
