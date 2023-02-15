@@ -1,4 +1,7 @@
 /**
+ * When going to a path on the website that doesn't exist
+ * (i.e. localhost:3000/doesntexist).
+ *
  * @return {object} JSX
  */
 function NotFound() {

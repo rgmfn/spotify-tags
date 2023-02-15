@@ -1,9 +1,14 @@
 import React from 'react';
 
 /**
+ * @param {array} library
+ * @param {function} clickedOnSong - in Home.jsx, when clicking on a <tr>
+ *                                   representing a song
+ * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
+ *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
-function Library({library, clickedOnSong}) {
+function Library({library, clickedOnSong, clickedOnTags}) {
   return (
     <table>
       <tbody
@@ -45,16 +50,18 @@ function Library({library, clickedOnSong}) {
                   {song.album.name}
                 </div>
               </td>
-              <td className="tagCol">
-                <div className="tagName redTag">
-                  Tag 1
-                </div>
-                <div className="tagName greenTag">
-                  Tag 2
-                </div>
-                <div className="tagName blueTag">
-                  Tag 3
-                </div>
+              <td
+                className="tagCol"
+                onClick={clickedOnTags}
+              >
+                {song.tags.map((tag) => (
+                  <div
+                    style={{backgroundColor: tag.color}}
+                    className="tagName"
+                  >
+                    {tag.name}
+                  </div>
+                ))}
               </td>
             </tr>
           ))}

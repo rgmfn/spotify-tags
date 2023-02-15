@@ -1,6 +1,8 @@
 :root {
     /* nightfox */
     --bg-color: #192330;
+    --bg-color-lighter: #383c4c;
+    --bg-color-darker: #131a24;
     --text-color: #aeafb0;
     --border-color: #39506d;
     --selected-color: #29394f;
@@ -30,6 +32,7 @@ table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    overflow-y: auto;
 }
 
 tr {
@@ -66,6 +69,7 @@ tr:hover {
 
 .tagCol {
     width: 40%;
+    overflow: hidden;
 }
 
 .songName, .artistName, .albumName {
@@ -75,20 +79,9 @@ tr:hover {
     width: 80%;
 }
 
-.redTag {
-    background-color: var(--red);
-}
-
-.greenTag {
-    background-color: var(--green);
-}
-
-.blueTag {
-    background-color: var(--blue);
-}
-
 .tagName {
     color: var(--bg-color);
+    /* background-color: var(--tag-color); */
     width: 100%;
     display: inline;
     border-radius: 3px;

@@ -1,0 +1,8 @@
+#top-bar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: var(--bg-color);
+}
