@@ -153,9 +153,25 @@ function Home() {
         setLibrary(result.tracks.items);
       });
   };
-  const logout = () => {
+  const logout = async () => {
     setAccessToken('');
     setRefreshToken('');
+    // tempSongs will be replaced with list of real user's songs
+    const tempSongs =
+    [{userid: 'test', spotifyid: 'test', tags: ['tag1', 'tag2']}];
+    for (const song of tempSongs) {
+      await fetch(`http://localhost:3010/v0/tagsPost`, {
+        // http get request to api.spotify.com/v1/search
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {userid: song.userid, spotifyid: song.spotifyid,
+             tags: {tags: song.tags}}),
+      });
+    }
+
     window.localStorage.removeItem('accessToken');
   };
 

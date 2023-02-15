@@ -57,16 +57,8 @@ exports.allTags = async (userid) => {
     const {rows} = await pool.query(query);
     const ret = {userid: rows[0].userid, tagList: []};
     
-    //iterating through the nested arrays to extract the distinct tags for each user
-    tempArr = [...new Set(rows.map(row => row.tags.tags))];
-    for (let i = 0; i < tempArr.length; i++){
-      for (let j = 0; j < tempArr[i].length; j++){
-        if (ret.tagList.includes(tempArr[i][j])){
-        } else {
-          ret.tagList.push(tempArr[i][j]);
-        }
-      }
-    }
+    // aggregate and get rid of duplicate tags
+    ret.tagList = [...new Set([].concat(...rows.map(row => row.tags.tags)))];
     return ret;
 };
 
