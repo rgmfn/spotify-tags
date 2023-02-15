@@ -28,7 +28,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   }
 
   const data = await result.json();
-  console.log(accessToken);
+  console.log(`accessToken: ${accessToken}`);
   console.log(data);
   return data;
 };
@@ -41,9 +41,9 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  // used to keep track of the current playing status 'isPlaying'
-  const [trackURI, setTrackURI] = React.useState('');
+  const [songClicked, setSongClicked] = React.useState(false); 
+  const [trackID, setTrackID] = React.useState('');
+  const [trackURI, setTrackURI] = React.useState(undefined);
 
 
   React.useEffect(() => {
@@ -85,18 +85,15 @@ function Home() {
   const clickedOnSong = ((event) => {
     // called when clicking on a song
     // event stores the thing that was clicked on
-    console.log(event.currentTarget);
+    //console.log(`Home: clicked song's id: ${event.currentTarget.id}`);
+    setTrackID(event.currentTarget.id);
+    // above event.currentTarget.id is the Spotify ID of the song
     console.log(`Home: clicked song's uri: ${event.currentTarget.title}`);
     setTrackURI(event.currentTarget.title);
     // above event.currentTarget.title is the Spotify URI of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
+    setSongClicked(true);
   });
-
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
-    // code to play or pause music here
-    // called when the button is clicked,triggers the play or pause of the music
-  };
 
   const refreshList = () => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
@@ -121,15 +118,11 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
       />
-      <div className="play-button-container">
-        <button id="play-button" className="play-button" onClick={handleClick}>
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-      </div>
-      <div>
+      <div className="Player">
         <Player 
           accessToken={accessToken}
-          trackURI={trackURI}/>
+          trackURI={trackURI}
+          songClicked={songClicked}/>
       </div>
     </div>
   );
