@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './Home.css';
+import './Player.css';
 
 /**
  * @return {object} JSX
@@ -96,12 +96,36 @@ function Player({accessToken, trackURI}) {
     <>
       <div className="container">
         <div className="main-wrapper">
-          <div className="play-button-container">
+          <div className="stream-buttons-container">
+            <button
+              id="prev-button"
+              className="prev-button"
+              onClick={() => {
+                player.previousTrack().then(() => {
+                  console.log('Set to previous track!');
+                  console.log(`    trackURI: ${trackURI}`);
+                });
+              }}>
+              {'Prev'}
+            </button>
+
             <button
               id="play-button"
               className="play-button"
-              onClick={handleClick}>
+              onClick={ handleClick }>
               {isPlaying ? 'Pause' : 'Play'}
+            </button>
+
+            <button
+              id="next-button"
+              className="next-button"
+              onClick={() => {
+                player.nextTrack().then(() => {
+                  console.log('Skipped to next track!');
+                  console.log(`    trackURI: ${trackURI}`);
+                });
+              }}>
+              {'Next'}
             </button>
           </div>
         </div>
