@@ -2,3 +2,43 @@
     display: flex;
     flex-direction: row;
 }
+
+.search-results {
+    height: 95vh; /* 95% of view height (screen height) */
+    overflow-y: auto;
+}
+
+.search-img-col {
+    width: 35px;
+    height: 30px;
+}
+
+.search-img {
+    width: 30px;
+    height: 30px;
+}
+
+.search-name-col {
+    width: 40%;
+}
+
+.search-artist-col {
+    width: 30%;
+}
+
+.search-album-col {
+    width: 30%;
+}
+
+.results-title {
+    font-size: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    background-color: var(--bg-color);
+}
+
+#more-results {
+    text-align: center;
+}

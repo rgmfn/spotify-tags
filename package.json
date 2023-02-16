@@ -17,5 +17,9 @@
   },
   "dependencies": {
     "@mui/joy": "^5.0.0-alpha.37"
+  },
+  "options": {
+    "allowedHosts": ["localhost", ".localhost"],
+    "proxy": "https://localhost:3010/"
   }
 }

@@ -4,6 +4,11 @@ import React from 'react';
 import ParseExpression from './Parser.jsx';
 
 /**
+ * @param {array} library
+ * @param {function} clickedOnSong - in Home.jsx, when clicking on a <tr>
+ *                                   representing a song
+ * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
+ *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
 function Library({library, clickedOnSong, clickedOnTags, currExpression}) {
@@ -36,6 +41,7 @@ function Library({library, clickedOnSong, clickedOnTags, currExpression}) {
               onClick={clickedOnSong}
               id={song.id} // sets row id to Spotify ID of song
               key={song.id}
+              title={song.uri}
             >
               <td className="imgCol"
               // td = table data (data cell)

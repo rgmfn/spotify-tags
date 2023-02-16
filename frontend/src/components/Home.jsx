@@ -1,11 +1,23 @@
 import React from 'react';
 
 import './Home.css';
+import TopBar from './TopBar';
 import Library from './Library.jsx';
+import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import ValidateExpression from './ValidateExpression';
 
+import {emptySong} from './emptySong.js';
+import {fakeTags} from './fakeTags.js';
+
+/**
+ * Gets a new access token using the refresh token.
+ *
+ * @param {string} refreshToken
+ * @param {function} setAccessToken
+ * @return {string}
+ */
 const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refresh = await fetch('http://localhost:3010/refresh_token?refresh_token=' + refreshToken);
   const refreshJson = await refresh.json();
@@ -13,108 +25,16 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   return refreshJson.access_token;
 };
 
-const fakeTags = [
-  {name: 'classical', color: '#dbc074'},
-  {name: 'jazz', color: '#c94f6d'},
-  {name: 'funk', color: '#81b29a'},
-  {name: 'punk', color: '#719cd6'},
-  {name: 'instrumental', color: '#9d79d6'},
-  {name: 'folk', color: '#63cdcf'},
-  {name: 'rock', color: '#f4a261'},
-  {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'classical', color: '#dbc074'},
-//   {name: 'jazz', color: '#c94f6d'},
-//   {name: 'funk', color: '#81b29a'},
-//   {name: 'punk', color: '#719cd6'},
-//   {name: 'instrumental', color: '#9d79d6'},
-//   {name: 'folk', color: '#63cdcf'},
-//   {name: 'rock', color: '#f4a261'},
-//   {name: 'metal', color: '#d67ad2'},
-//   {name: 'metal', color: '#d67ad2'},
-];
-
+/**
+ * Inserts the testing tags from './fakeTags.js' into the given list of
+ * songs (spotify song objects). Returns the new array of tagged songs.
+ *
+ * Used for testing purposes until we can get the tags for songs from the
+ * database.
+ *
+ * @param {array} songs
+ * @return {array}
+ */
 const insertTestingTags = (songs) => {
   for (const song of songs.tracks.items) {
     song.tags = fakeTags;
@@ -123,6 +43,19 @@ const insertTestingTags = (songs) => {
   return songs;
 };
 
+/**
+ * Gets a list of songs from spotify that fits the given query.
+ *
+ * If the fetch fails, it gets a new access token and tries again.
+ *
+ * Used for testing to generate a fake library until we can get the library
+ * from the database.
+ *
+ * @param {string} accessToken
+ * @param {string} refreshToken
+ * @param {function} setAccessToken
+ * @param {string} query
+ */
 const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
@@ -131,57 +64,19 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   });
 
   if (!result.ok) {
-    accessToken = await refreshTokenFunc(refreshToken, setAccessToken);
+    accessToken = refreshTokenFunc(refreshToken, setAccessToken);
     result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
     // http get request to api.spotify.com/v1/search
       method: 'GET',
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
+  
+  console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
+  console.log(data);
   data = insertTestingTags(data);
-  return data;
-};
-
-const emptySong = {
-  'album': {'images': [{'url': ''}]},
-  'artists': [{'name': ''}],
-  'available_markets': [],
-  'disc_number': 0,
-  'duration_ms': 0,
-  'explicit': true,
-  'external_ids': {},
-  'external_urls': {},
-  'href': '',
-  'id': '',
-  'is_local': false,
-  'name': '',
-  'popularity': 0,
-  'preview_url': '',
-  'track_number': 0,
-  'type': '',
-  'uri': '',
-  'tags': [{'name': '', 'color': ''}],
-};
-
-const getSong = async (accessToken, refreshToken, setAccessToken, id) => {
-  if (!id) {
-    return emptySong;
-  }
-
-  const result = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-    // http get request to api.spotify.com/v1/search
-    method: 'GET',
-    headers: {'Authorization': 'Bearer ' + accessToken},
-  });
-
-  if (!result.ok) {
-    return emptySong;
-  }
-
-  const data = await result.json();
-  data.tags = fakeTags;
   return data;
 };
 
@@ -193,17 +88,16 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
+  const [trackURI, setTrackURI] = React.useState('');
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
-  const expression = [{name: 'classical', color: '#660000'},
-  {name: 'OR', color: '#888888'},
-  {name: 'funk', color: '#00ff00'},
-  {name: 'AND', color: '#888888'},
-  {name: 'instrumental', color: '#00ff00'},
-  ];
-  const isvalidExpression = ValidateExpression(expression);
+  // const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery] = React.useState('');
 
+  /**
+   * TODO
+   */
   React.useEffect(() => {
     const hash = window.location.hash;
     let accessToken = window.localStorage.getItem('accessToken');
@@ -231,6 +125,10 @@ function Home() {
   }, []);
 
 
+  /**
+   * When the refreshToken or accessToken change, reset the library using
+   * the temporary getSearch method.
+   */
   React.useEffect(() => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
@@ -240,40 +138,65 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  /**
+   * Called when clicking on a <tr> representing a song in the library.
+   *
+   * @param {object} event - contains things like the element that was
+   *                         clicked on
+   */
   const clickedOnSong = ((event) => {
+    console.log(`Home: clicked on track`);
+    console.log(`   trackURI: ${event.currentTarget.title}`);
+    setTrackURI(event.currentTarget.title);
     // called when clicking on a song
     // event stores the thing that was clicked on
-    // console.log(event);
-    console.log(`clicked song ${event.currentTarget.id}`);
-    // above event.currentTarget.id is the Spotify ID of the song
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
+  /**
+   * Called when clicking on the tags column of a <tr> representing a song.
+   *
+   * Gets the song from the current library that has the same id as the
+   * song/row clicked on. Sets songToView to that song (makes that song
+   * be displayed in SongCard).
+   *
+   * @param {object} event - contains things like the element that was
+   *                         clicked on
+   */
   const clickedOnTags = ((event) => {
     if (event.currentTarget.parentNode.id) {
-      getSong(accessToken, refreshToken,
-        setAccessToken, event.currentTarget.parentNode.id).then((song) => {
-        setSongToView(song);
-      });
+      const song = library.find((libSong) =>
+        libSong.id === event.currentTarget.parentNode.id, emptySong,
+      );
+      setSongToView(song);
     }
   });
 
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
-    // code to play or pause music here
-    // called when the button is clicked,triggers the play or pause of the music
-  };
-
+  /**
+   * Called when clicking outside of the SongCard.
+   *
+   * Sets songToView to an empty song object (makes the SongCard go away).
+   */
   const closeCard = () => {
     setSongToView(emptySong);
   };
 
+  /**
+   * Called when clicking on the 'Refresh List' button.
+   *
+   * Refreshes the library of songs displayed using the temporary getSearch
+   * method.
+   */
   const refreshList = () => {
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
         setLibrary(result.tracks.items);
       });
   };
+
+  /**
+   * TODO
+   */
   const logout = () => {
     setAccessToken('');
     setRefreshToken('');
@@ -282,31 +205,39 @@ function Home() {
 
   return (
     <div className="App">
-
+      <TopBar />
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
         }>Login to Spotify</a>: <button onClick={logout}>Logout</button>}
       <button onClick={refreshList}>Refresh List</button>
-      <Library
+      {!Boolean(searchQuery) && <Library
+        // ^ displays library if there is no searchQuery
+        hidden={Boolean(searchQuery)}
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
-        currExpression = {expression}
-      />
+      />}
       <SongCard
         song={songToView}
+        setSongToView={setSongToView}
+        library={library}
+        setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      <SearchResults
-        searchQuery={''}
+      { (accessToken !== '') && <Player
+        accessToken={accessToken}
+        trackURI={trackURI}/> }
+      {Boolean(searchQuery) && <SearchResults
+        // ^ displays library if there is a searchQuery
+        searchQuery={searchQuery}
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        refreshToken={refreshToken}
+        refreshTokenFunc={refreshTokenFunc}
         library={library}
-      />
-      <div className="play-button-container">
-        <button className="play-button" onClick={handleClick}>
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-      </div>
+        setSongToView={setSongToView}
+      />}
     </div>
   );
 }

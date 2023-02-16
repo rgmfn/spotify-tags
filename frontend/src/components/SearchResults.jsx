@@ -1,37 +1,31 @@
 import React from 'react';
-import Popover from '@mui/material/Popover';
-import {ThemeProvider} from '@mui/material/styles';
 
-import {darkTheme} from './darkTheme.js';
 import SpotifyResults from './SpotifyResults.jsx';
 import LibraryResults from './LibraryResults.jsx';
 
 import './SearchResults.css';
 
 /**
+ * @param {object} props
  * @return {object} JSX
  */
 function SearchResults(props) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Popover
-        open={Boolean(props.searchQuery)}
-        anchorReference='none'
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <div id="results-container">
-          <SpotifyResults />
-          <LibraryResults
-            searchQuery={props.searchQuery}
-            library={props.library}
-          />
-        </div>
-      </Popover>
-    </ThemeProvider>
+    <div id="results-container">
+      <LibraryResults
+        library={props.library}
+        searchQuery={props.searchQuery}
+        setSongToView={props.setSongToView}
+      />
+      <SpotifyResults
+        searchQuery={props.searchQuery}
+        accessToken={props.accessToken}
+        setAccessToken={props.setAccessToken}
+        refreshToken={props.refreshToken}
+        refreshTokenFunc={props.refreshTokenFunc}
+        setSongToView={props.setSongToView}
+      />
+    </div>
   );
 };
 

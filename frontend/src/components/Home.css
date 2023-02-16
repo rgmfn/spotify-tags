@@ -1,6 +1,8 @@
 :root {
     /* nightfox */
     --bg-color: #192330;
+    --bg-color-lighter: #383c4c;
+    --bg-color-darker: #131a24;
     --text-color: #aeafb0;
     --border-color: #39506d;
     --selected-color: #29394f;
@@ -30,6 +32,7 @@ table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    overflow-y: auto;
 }
 
 tr {
@@ -44,26 +47,6 @@ tr:hover {
 .imgCol {
     height: 50px;
     width: 70px;
-}
-
-.play-button-container {
-    background-color: var(--bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-}
-.play-button {
-    background-color: var(--text-color);
-    color: var(black);
-    font-size: large;
-    padding: 32px 32px;
-    border-radius: 50%;
-    border: none;
-}
-
-.play-button:hover {
-    background-color: var(--blue);
 }
 
 .songImg {
@@ -94,18 +77,6 @@ tr:hover {
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 80%;
-}
-
-.redTag {
-    background-color: var(--red);
-}
-
-.greenTag {
-    background-color: var(--green);
-}
-
-.blueTag {
-    background-color: var(--blue);
 }
 
 .tagName {
