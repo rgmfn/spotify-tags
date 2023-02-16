@@ -1,4 +1,4 @@
-import { experimentalStyled } from '@mui/material';
+import {experimentalStyled} from '@mui/material';
 import React from 'react';
 
 import ParseExpression from './Parser.jsx';
@@ -11,7 +11,7 @@ import ParseExpression from './Parser.jsx';
  *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
-function Library({library, clickedOnSong, clickedOnTags, currExpression}) {
+function Library({library, clickedOnSong, clickedOnTags, expression}) {
 
   let updatedLib = [];
   // the library we will store songs that adhere to the expression.
@@ -19,11 +19,11 @@ function Library({library, clickedOnSong, clickedOnTags, currExpression}) {
   // store all songs that match expression criteria
   // might need a check to see if expression is empty 
   // (aka we are not searching for anything atm)
-  if (library.length > 0){
-    updatedLib = library.filter(function(song){
-      return ParseExpression(song, currExpression);
+  if (library.length > 0) {
+    updatedLib = library.filter(function(song) {
+      return ParseExpression(song, expression);
     });
-    console.log("matches  " + updatedLib);
+    console.log("matches " + updatedLib);
   }
 
   return (
@@ -32,7 +32,7 @@ function Library({library, clickedOnSong, clickedOnTags, currExpression}) {
       // tbody = table body
       >
         {library.length === 0 ?
-          <tr><td>Loading...</td></tr> : updatedLib.length === 0 ? 
+          <tr><td>Loading...</td></tr> : updatedLib.length === 0 ?
           // render 'Loading...' if the library isn't loaded
           <tr><td>No match found.</td></tr> : updatedLib.map((song) => (
           // render 'No match found.' if the new library is now empty

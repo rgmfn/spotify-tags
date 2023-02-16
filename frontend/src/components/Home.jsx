@@ -94,6 +94,13 @@ function Home() {
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery] = React.useState('');
+  const fakeExpression = [
+    {name: 'classical', color: '#c94f6d'},
+    {name: 'AND', color: '#888888'},
+    {name: 'instrumental', color: '#81b29a'},
+    {name: 'BUT NOT', color: '#888888'},
+    {name: 'guitar', color: '#719cd6'},
+  ];
 
   /**
    * TODO
@@ -217,6 +224,7 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
+        expression={fakeExpression}
       />}
       <SongCard
         song={songToView}
