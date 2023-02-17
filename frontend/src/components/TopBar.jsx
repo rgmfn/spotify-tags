@@ -16,15 +16,17 @@ const fakeExpression = [
 ];
 
 /**
- * @param {array} expression - not passed in yet, will probably be passed in
- *                             from Home.jsx once you can build expressions
+ * @param {*} props
+ *
  * @return {object} JSX
  */
-function TopBar() {
+function TopBar(props) {
+  props.setExpression(fakeExpression);
   return (
     <div id="top-bar">
       <Expression
-        expression={fakeExpression}
+        expression={props.expression}
+        setExpression={props.setExpression}
       />
     </div>
   );

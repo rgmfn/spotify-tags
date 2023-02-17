@@ -89,6 +89,7 @@ function Home() {
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [expression, setExpression] = React.useState([]);
 
   /**
    * TODO
@@ -209,7 +210,10 @@ function Home() {
   return (
     <div className="App">
 
-      <TopBar />
+      <TopBar
+        expression={expression}
+        setExpression={setExpression}
+      />
       <div className="searchbar">
         <SearchBar
           searchQuery={searchQuery}

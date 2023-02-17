@@ -4,23 +4,21 @@ import './Expression.css';
 
 /**
  * @param {array} expression - array of tag objects representing the current
- *                             expression
+ * @param {array} setExpression - sets the expression
  * @return {object} JSX
  */
-function Expression({expression}) {
-  // New state to update the expression as tags are filtered.
-  const [newExpression, setExpression] = React.useState(expression);
+function Expression({expression, setExpression}) {
   // Removes tags from the expression when they are clicked.
   const removeExpression = ((event) => {
-    setExpression(newExpression.filter((tag) =>
+    setExpression(expression.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
     ));
   });
   return (
     <div id="expression-container">
       <div id="expression">
-        {newExpression.length === 0 ? 'Click to build expression...' :
-          newExpression.map((tag) => (
+        {expression.length === 0 ? 'Click to build expression...' :
+          expression.map((tag) => (
             <div
               style={{backgroundColor: tag.color}}
               className="tagName"
