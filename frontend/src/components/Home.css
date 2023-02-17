@@ -49,6 +49,33 @@ tr:hover {
     width: 70px;
 }
 
+.searchbar {
+    margin: auto;
+    position: sticky;
+    top: 55px;
+    background-color: var(--bg-color);
+}
+
+.play-button-container {
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+.play-button {
+    background-color: var(--text-color);
+    color: var(black);
+    font-size: large;
+    padding: 32px 32px;
+    border-radius: 50%;
+    border: none;
+}
+
+.play-button:hover {
+    background-color: var(--blue);
+}
+
 .songImg {
     height: 40px;
     width: 40px;
