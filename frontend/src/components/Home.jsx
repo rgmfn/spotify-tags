@@ -6,7 +6,7 @@ import Library from './Library.jsx';
 import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
-import ValidateExpression from './ValidateExpression';
+import SearchBar from './SearchBar.js';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
@@ -93,7 +93,7 @@ function Home() {
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
     {name: 'AND', color: '#888888'},
@@ -101,6 +101,7 @@ function Home() {
     {name: 'BUT NOT', color: '#888888'},
     {name: 'guitar', color: '#719cd6'},
   ];
+  const [expression, setExpression] = React.useState(fakeExpression);
 
   /**
    * TODO
@@ -212,7 +213,17 @@ function Home() {
 
   return (
     <div className="App">
-      <TopBar />
+
+      <TopBar
+        expression={expression}
+        setExpression={setExpression}
+      />
+      <div className="searchbar">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      </div>
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
