@@ -92,7 +92,7 @@ function Home() {
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery] = React.useState('');
+  const [searchQuery] = React.useState('test');
 
   /**
    * TODO
