@@ -31,7 +31,7 @@ app.use(
 // routes go here
 // e.g: app.get('/v0/mail', mail.getAll);
 app.get('/v0/songs', songs.getAll);
-app.get('/v0/listTags', songs.getTags);
+app.get('/v0/single', songs.getTags);
 app.post('/v0/tagsPost', songs.postTags);
 app.get('/v0/tagList', songs.getAllTags);
 

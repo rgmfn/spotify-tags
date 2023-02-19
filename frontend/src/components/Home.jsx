@@ -156,10 +156,16 @@ function Home() {
   const logout = async () => {
     setAccessToken('');
     setRefreshToken('');
-    // tempSongs will be replaced with list of real user's songs
-    const tempSongs =
-    [{userid: 'test', spotifyid: 'test', tags: ['tag1', 'tag2']}];
-    for (const song of tempSongs) {
+
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+        method: 'GET',
+        headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    const userid = userInfo.id;
+
+    // store each song in the library to db
+    for (const song of library) {
       await fetch(`http://localhost:3010/v0/tagsPost`, {
         // http get request to api.spotify.com/v1/search
         method: 'POST',
@@ -167,8 +173,8 @@ function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(
-          {userid: song.userid, spotifyid: song.spotifyid,
-             tags: {tags: song.tags}}),
+          {userid: userid, spotifyid: song.id,
+            tags: song.tags}),
       });
     }
 

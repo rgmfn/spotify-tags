@@ -33,7 +33,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /listTags:
+  /single:
     get:
       parameters:
       - name: spotifyid
@@ -48,14 +48,14 @@ paths:
         schema:
           type: string
         required: true
-      description: Returns all tags for a specific song and user
+      description: Returns all tags for a specific user's song
       responses:
         200:
-          description: listTags response
+          description: single song response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SongTags'
+                $ref: '#/components/schemas/SingleSong'
         default:
           description: Unexpected Error
           content:
@@ -72,14 +72,14 @@ paths:
         schema:
           type: string
         required: true
-      description: Returns all tags for a specific song and user
+      description: Returns all tags for a user
       responses:
         200:
           description: tagList response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/allTags'
+                $ref: '#/components/schemas/AllTags'
         default:
           description: Unexpected Error
           content:
@@ -93,22 +93,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                userid:
-                  type: string
-                  description: userid
-                spotifyid:
-                  type: string
-                  description: spotifyid
-                tags:
-                  type: object
-                  description: tags
-                  properties:
-                    tags:
-                      type: array
-                      items:
-                        type: string
+              $ref: '#/components/schemas/SingleSong'
       responses:
         200:
           description: completed insert
@@ -154,11 +139,11 @@ components:
         tags:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Tag'
       required:
         - spotifyid
         - tags
-    SongTags:
+    SingleSong:
       type: object
       additionalProperties: false
       properties:
@@ -166,37 +151,37 @@ components:
           type: string
         userid:
           type: string
-        listTags:
-          type: array
-          items:
-            $ref: '#/components/schemas/tag'
-      required:
-        - spotifyid
-        - userid
-        - listTags
-    tag:
-      type: object
-      additionalProperties: false
-      properties:
         tags:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Tag'
       required:
+        - spotifyid
+        - userid
         - tags
-    allTags:
+    AllTags:
       type: object
       additionalProperties: false
       properties:
         userid:
           type: string
-        tagList:
+        tags:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Tag'
       required:
         - userid
-        - tagList
-              
-      
+        - tags
+    Tag:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+      required:
+        - name
+        - color
+
     

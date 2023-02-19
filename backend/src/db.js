@@ -34,14 +34,7 @@ exports.selectTags = async (spotifyid, userid) => {
         values: [spotifyid, userid]
     };
     const {rows} = await pool.query(query);
-    const ret = {userid: rows[0].userid, spotifyid: rows[0].spotifyid, listTags: []};
-    for (const row of rows){
-        let tag = {};
-        tag.tags = row.tags.tags;
-        ret.listTags.push(tag);
-    }
-    
-    //ret.listTags = rows.tags;
+    const ret = {userid: rows[0].userid, spotifyid: rows[0].spotifyid, tags: rows[0].tags.tags};
     return ret;
 };
 
@@ -55,10 +48,11 @@ exports.allTags = async (userid) => {
         values: [userid]
     };
     const {rows} = await pool.query(query);
-    const ret = {userid: rows[0].userid, tagList: []};
+    const ret = {userid: rows[0].userid, tags: []};
     
     // aggregate and get rid of duplicate tags
-    ret.tagList = [...new Set([].concat(...rows.map(row => row.tags.tags)))];
+    ret.tags = [...new Set([].concat(...rows.map(row => row.tags.tags.map(tag => JSON.stringify(tag)))))];
+    ret.tags = ret.tags.map(tag => JSON.parse(tag));
     return ret;
 };
 
@@ -67,7 +61,7 @@ exports.insertTags = async (userid, spotifyid, tags) => {
   const select = 'INSERT INTO songs(userid, spotifyid, tags) VALUES ($1, $2, $3)';
   const query = {
       text: select,
-      values: [userid, spotifyid, tags]
+      values: [userid, spotifyid, {tags: tags}]
   };
   await pool.query(query);
   return;

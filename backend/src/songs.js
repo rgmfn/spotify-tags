@@ -21,11 +21,11 @@ exports.getTags = async(req, res) => {
 };
 
 exports.postTags = async(req,res) => {
-  console.log('posttags')
     try {
       await db.insertTags(req.body.userid, req.body.spotifyid, req.body.tags);
       res.status(200).send();
     } catch(err){
+      console.log(err);
       res.status(500).send();
     }
 };
