@@ -100,6 +100,8 @@ function Home() {
     {name: 'instrumental', color: '#81b29a'},
     {name: 'BUT NOT', color: '#888888'},
     {name: 'guitar', color: '#719cd6'},
+    {name: 'AND', color: '#888888'},
+    {name: 'jazz', color: '#719cd6'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
 
@@ -145,6 +147,13 @@ function Home() {
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
+
+  /**
+   * When the expression is changed, re-render it
+   */
+  React.useEffect(() => {
+    setExpression(expression);
+  }, [expression]);
 
   /**
    * Called when clicking on a <tr> representing a song in the library.
@@ -235,7 +244,7 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
-        expression={fakeExpression}
+        expression={expression}
       />}
       <SongCard
         song={songToView}

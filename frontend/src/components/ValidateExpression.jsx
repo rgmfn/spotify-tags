@@ -13,13 +13,27 @@ const Operations = {
 function ValidateExpression(expression) {
   console.log('Validating');
 
+  let butnotTag = false;
   for (let i=0; i<expression.length; i++) {
+    console.log("butnotTag: " + butnotTag);
     const tagName = expression[i].name;
     let operandTag = Object.values(Operations).includes(tagName.toLowerCase());
+    console.log(operandTag);
 
     if (i % 2 == 0) { // on even tags
       if (operandTag){ // the tag should not be an operand
         return false;
+      }
+    } else {
+      if (!operandTag)
+        return false;
+    }
+    if (tagName.toLowerCase() === Operations.BUT_NOT) {
+      if (butnotTag) { // there can't be two but not tags
+        return false;
+      }
+      else {
+        butnotTag = true;
       }
     }
     // check if expression is imcomplete
