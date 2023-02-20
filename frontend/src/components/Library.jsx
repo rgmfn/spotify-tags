@@ -2,6 +2,7 @@ import {experimentalStyled} from '@mui/material';
 import React from 'react';
 
 import ParseExpression from './Parser.jsx';
+import ValidateExpression from './ValidateExpression';
 
 /**
  * @param {array} library
@@ -16,10 +17,12 @@ function Library({library, clickedOnSong, clickedOnTags, expression}) {
   let updatedLib = [];
   // the library we will store songs that adhere to the expression.
 
+  var validExpression = ValidateExpression(expression);
+
   // store all songs that match expression criteria
   // might need a check to see if expression is empty 
   // (aka we are not searching for anything atm)
-  if (library.length > 0) {
+  if (validExpression && library.length > 0) {
     updatedLib = library.filter(function(song) {
       return ParseExpression(song, expression);
     });

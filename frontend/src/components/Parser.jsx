@@ -30,9 +30,8 @@ function ParseExpression(song, expression) {
   let out = null; // output value, will be updated as we go
   let butnotOut = null; // output to use once but not tag has been seen
   let currOp = Operations.START; // current operation to execute between tags
-  //console.log(song);
-  //console.log(expression);
   if (expression === null) return null;
+  //console.log(expression);
 
   // for all the tags in expression
   for (let i=0; i<expression.length; i++) {
