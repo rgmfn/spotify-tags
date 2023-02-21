@@ -149,13 +149,6 @@ function Home() {
   // called twice, once at page startup, another when we get the token
 
   /**
-   * When the expression is changed, re-render it
-   */
-  React.useEffect(() => {
-    setExpression(expression);
-  }, [expression]);
-
-  /**
    * Called when clicking on a <tr> representing a song in the library.
    *
    * @param {object} event - contains things like the element that was
