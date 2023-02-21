@@ -2,15 +2,20 @@ import React from 'react';
 
 import './Player.css';
 
-/**
+/** 
+ * @param {state} accessToken
+ * @param {state} trackURI 
+ * @param {state} library 
  * @return {object} JSX
  */
-function Player({accessToken, trackURI}) {
+function Player({accessToken, trackURI, library}) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [player, setPlayer] = React.useState(undefined);
 
-  // sets up web player to stream music
+  /**
+   * Sets up web player to stream music.
+   */
   React.useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://sdk.scdn.co/spotify-player.js';
@@ -62,17 +67,35 @@ function Player({accessToken, trackURI}) {
     };
   }, [accessToken]);
 
-  // if web player is ready & song is clicked on, song plays in browser
+  /**
+   * If web player is connected to device & song is clicked on, 
+   * an array of track uris from all library songs is passed to 
+   * play on device. The first song that is played is the 
+   * clicked song by user. 
+   */
   React.useEffect(() => {
-    if ((typeof(deviceID) != undefined) && trackURI !== '') {
-      console.log(`Player: play clicked song`);
-      console.log(`   trackURI: ${trackURI}`);
-      console.log(`   deviceID: ${deviceID}`);
+    if ((typeof(deviceID) != undefined) && (trackURI !== '')) {
+
+      let playlist = [];
+      library.map((song) => { 
+        playlist = [...playlist, song.uri];
+      });
+        
+      // console.log(`Player: play clicked song`);
+      // console.log(`   trackURI: ${trackURI}`);
+      // console.log(`   deviceID: ${deviceID}`);
+      // console.log(`   playlist:`);
+      // playlist.map((uri) => 
+      //   console.log(`           ${uri}`)
+      // );
 
       // HTTP request to initially play music
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
         method: 'PUT',
-        body: JSON.stringify({uris: [trackURI]}),
+        body: JSON.stringify({
+          uris: playlist,
+          offset: {position: playlist.indexOf(trackURI)} 
+        }),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`,
@@ -82,14 +105,15 @@ function Player({accessToken, trackURI}) {
     }
   }, [trackURI]);
 
-  // called when the "play/ pause" button is clicked,
-  // triggers the play or pause of the music
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
-
+  /**
+   * Called when clicking on the pause/play button. 
+   * Toggles the playing state of the SpotifySDKPlayer.
+   */
+  const clickedOnPlayPause = () => {
     player.togglePlay().then(() => {
       console.log('Toggled playback!');
     });
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -103,7 +127,6 @@ function Player({accessToken, trackURI}) {
               onClick={() => {
                 player.previousTrack().then(() => {
                   console.log('Set to previous track!');
-                  console.log(`    trackURI: ${trackURI}`);
                 });
               }}>
               {'Prev'}
@@ -112,7 +135,7 @@ function Player({accessToken, trackURI}) {
             <button
               id="play-button"
               className="play-button"
-              onClick={ handleClick }>
+              onClick={ clickedOnPlayPause }>
               {isPlaying ? 'Pause' : 'Play'}
             </button>
 
@@ -122,7 +145,6 @@ function Player({accessToken, trackURI}) {
               onClick={() => {
                 player.nextTrack().then(() => {
                   console.log('Skipped to next track!');
-                  console.log(`    trackURI: ${trackURI}`);
                 });
               }}>
               {'Next'}

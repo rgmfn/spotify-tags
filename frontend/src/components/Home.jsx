@@ -74,7 +74,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(data);
+  //console.log(` data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -88,8 +88,6 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [trackURI, setTrackURI] = React.useState('');
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery] = React.useState('');
@@ -147,8 +145,6 @@ function Home() {
     console.log(`Home: clicked on track`);
     console.log(`   trackURI: ${event.currentTarget.title}`);
     setTrackURI(event.currentTarget.title);
-    // called when clicking on a song
-    // event stores the thing that was clicked on
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -224,9 +220,12 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      { (accessToken !== '') && <Player
+      {(accessToken !== '') && <Player
+        // ^ sets up web player if there is a accessToken
         accessToken={accessToken}
-        trackURI={trackURI}/> }
+        trackURI={trackURI}
+        library={library}
+      />}   
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
