@@ -1,4 +1,8 @@
+import {experimentalStyled} from '@mui/material';
 import React from 'react';
+
+import ParseExpression from './Parser.jsx';
+import ValidateExpression from './ValidateExpression';
 
 /**
  * @param {array} library
@@ -8,15 +12,33 @@ import React from 'react';
  *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
-function Library({library, clickedOnSong, clickedOnTags}) {
+function Library({library, clickedOnSong, clickedOnTags, expression}) {
+
+  let updatedLib = [];
+  // the library we will store songs that adhere to the expression.
+
+  var validExpression = ValidateExpression(expression);
+
+  // store all songs that match expression criteria
+  // might need a check to see if expression is empty 
+  // (aka we are not searching for anything atm)
+  if (validExpression && library.length > 0) {
+    updatedLib = library.filter(function(song) {
+      return ParseExpression(song, expression);
+    });
+    console.log("matches " + updatedLib);
+  }
+
   return (
     <table>
       <tbody
       // tbody = table body
       >
         {library.length === 0 ?
-          <tr><td>Loading...</td></tr> : library.map((song) => (
+          <tr><td>Loading...</td></tr> : updatedLib.length === 0 ?
           // render 'Loading...' if the library isn't loaded
+          <tr><td>No match found.</td></tr> : updatedLib.map((song) => (
+          // render 'No match found.' if the new library is now empty
             <tr
             // tr = table row
               onClick={clickedOnSong}

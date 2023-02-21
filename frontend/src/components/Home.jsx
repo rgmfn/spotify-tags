@@ -100,6 +100,8 @@ function Home() {
     {name: 'instrumental', color: '#81b29a'},
     {name: 'BUT NOT', color: '#888888'},
     {name: 'guitar', color: '#719cd6'},
+    {name: 'AND', color: '#888888'},
+    {name: 'jazz', color: '#719cd6'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
 
@@ -235,6 +237,7 @@ function Home() {
         library={library}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
+        expression={expression}
       />}
       <SongCard
         song={songToView}
