@@ -8,9 +8,37 @@ import './SongCard.css';
 import {darkTheme} from './darkTheme.js';
 
 /**
+ * @param {object} song - the song being viewed in the SongCard, if there is
+ *                        none, the SongCard does not show up
+ * @param {function} setSongToView - sets the song being viewed in the SongCard,
+ *                                   set to emptySong to make SongCard go away
+ * @param {array} library - the current song library
+ * @param {function} setLibrary - sets the current song library
+ * @param {function} closeCard - called when clicking off of the SongCard
  * @return {object} JSX
  */
-function SongCard({song, closeCard}) {
+function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
+  /**
+   * @param {object} event - event.currentTarget.textContent holds the
+   *                         name of the tag to be removed
+   * Removes the tag clicked from the song and from that song in the library.
+   */
+  const clickedOnTag = ((event) => {
+    const newTags = song.tags.filter((tag) =>
+      tag.name !== event.currentTarget.textContent,
+    );
+    const newLibrary = library.map((newSong) => {
+      if (newSong.id === song.id) {
+        newSong.tags = newTags;
+        setSongToView(newSong);
+        return newSong;
+      } else {
+        return newSong;
+      }
+    });
+    setLibrary(newLibrary);
+  });
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
@@ -55,11 +83,11 @@ function SongCard({song, closeCard}) {
           <hr className="divider"/>
           <div id="bottom-half">
             <div id="tags-container">
-              {/* TODO make these happen dynamically, stored in song obj */}
               {song.tags.map((tag) => (
                 <div
                   style={{backgroundColor: tag.color}}
                   className="tagName"
+                  onClick={clickedOnTag}
                 >
                   {tag.name}
                 </div>

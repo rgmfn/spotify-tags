@@ -17,6 +17,9 @@ const spotifyTagsTheme = {
   pink: '#d67ad2',
 };
 
+/*
+ * Creates a theme that is used to change the color pallete of Popovers.
+ */
 const darkTheme = createTheme({
   palette: {
     primary: {
