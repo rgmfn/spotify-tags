@@ -204,12 +204,32 @@ function Home() {
       });
   };
 
-  /**
-   * TODO
-   */
-  const logout = () => {
+  const logout = async () => {
+
     setAccessToken('');
     setRefreshToken('');
+
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+        method: 'GET',
+        headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    const userid = userInfo.id;
+
+    // store each song in the library to db
+    for (const song of library) {
+      await fetch(`http://localhost:3010/v0/tagsPost`, {
+        // http get request to api.spotify.com/v1/search
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {userid: userid, spotifyid: song.id,
+            tags: song.tags}),
+      });
+    }
+
     window.localStorage.removeItem('accessToken');
   };
 

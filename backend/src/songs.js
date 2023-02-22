@@ -25,6 +25,7 @@ exports.postTags = async(req,res) => {
       await db.insertTags(req.body.userid, req.body.spotifyid, req.body.tags);
       res.status(200).send();
     } catch(err){
+      console.log(err);
       res.status(500).send();
     }
 };
