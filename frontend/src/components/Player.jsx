@@ -2,6 +2,21 @@ import React from 'react';
 
 import './Player.css';
 
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import IconButton from '@mui/material/IconButton';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    secondary: {
+      main: '#39506d',
+    },
+  },
+});
+
 /**
  * @return {object} JSX
  */
@@ -94,42 +109,49 @@ function Player({accessToken, trackURI}) {
 
   return (
     <>
-      <div className="container">
-        <div className="main-wrapper">
-          <div className="stream-buttons-container">
-            <button
-              id="prev-button"
-              className="prev-button"
-              onClick={() => {
-                player.previousTrack().then(() => {
-                  console.log('Set to previous track!');
-                  console.log(`    trackURI: ${trackURI}`);
-                });
-              }}>
-              {'Prev'}
-            </button>
+      <ThemeProvider theme={theme}>
+        <div className="container">
+          <div className="main-wrapper">
+            <div className="stream-buttons-container">
+              <IconButton
+                id="prev-button"
+                className="prev-button"
+                color='secondary'
+                onClick={() => {
+                  player.previousTrack().then(() => {
+                    console.log('Set to previous track!');
+                    console.log(`    trackURI: ${trackURI}`);
+                  });
+                }}>
+                <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
+              </IconButton>
 
-            <button
-              id="play-button"
-              className="play-button"
-              onClick={ handleClick }>
-              {isPlaying ? 'Pause' : 'Play'}
-            </button>
+              <IconButton
+                id="play-button"
+                className="play-button"
+                color='secondary'
+                onClick={ handleClick }>
+                {isPlaying ?
+                  <PauseIcon style={{fontSize: 50}} color='secondary'/>:
+                  <PlayArrowIcon style={{fontSize: 50}} color='secondary'/>}
+              </IconButton>
 
-            <button
-              id="next-button"
-              className="next-button"
-              onClick={() => {
-                player.nextTrack().then(() => {
-                  console.log('Skipped to next track!');
-                  console.log(`    trackURI: ${trackURI}`);
-                });
-              }}>
-              {'Next'}
-            </button>
+              <IconButton
+                id="next-button"
+                className="next-button"
+                color='secondary'
+                onClick={() => {
+                  player.nextTrack().then(() => {
+                    console.log('Skipped to next track!');
+                    console.log(`    trackURI: ${trackURI}`);
+                  });
+                }}>
+                <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
+              </IconButton>
+            </div>
           </div>
         </div>
-      </div>
+      </ThemeProvider>
     </>
   );
 }
