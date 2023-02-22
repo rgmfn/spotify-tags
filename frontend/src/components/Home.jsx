@@ -70,11 +70,10 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
-  
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  //console.log(` data: ${data}`);
+  console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -87,7 +86,7 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
-  const [trackURI, setTrackURI] = React.useState('');
+  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery] = React.useState('');
@@ -143,8 +142,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   trackURI: ${event.currentTarget.title}`);
-    setTrackURI(event.currentTarget.title);
+    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
+    setClickedTrackURI(event.currentTarget.title);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -223,9 +222,9 @@ function Home() {
       {(accessToken !== '') && <Player
         // ^ sets up web player if there is a accessToken
         accessToken={accessToken}
-        trackURI={trackURI}
+        clickedTrackURI={clickedTrackURI}
         library={library}
-      />}   
+      />}
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}

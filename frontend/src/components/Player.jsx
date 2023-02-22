@@ -2,13 +2,13 @@ import React from 'react';
 
 import './Player.css';
 
-/** 
+/**
  * @param {state} accessToken
- * @param {state} trackURI 
- * @param {state} library 
+ * @param {state} clickedTrackURI
+ * @param {state} library
  * @return {object} JSX
  */
-function Player({accessToken, trackURI, library}) {
+function Player({accessToken, clickedTrackURI, library}) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [player, setPlayer] = React.useState(undefined);
@@ -61,40 +61,40 @@ function Player({accessToken, trackURI, library}) {
       // during initialization above
       player.connect().then((success) => {
         if (success) {
-          console.log('The Web Playback SDK successfully connected to Spotify!');
+          console.log('The Web Playback SDK successfully ' +
+                      'connected to Spotify!');
         }
       });
     };
   }, [accessToken]);
 
   /**
-   * If web player is connected to device & song is clicked on, 
-   * an array of track uris from all library songs is passed to 
-   * play on device. The first song that is played is the 
-   * clicked song by user. 
+   * If web player is connected to device & song is clicked on,
+   * an array of track uris from all library songs is passed to
+   * play on device. The first song that is played is the
+   * clicked song by user.
    */
   React.useEffect(() => {
-    if ((typeof(deviceID) != undefined) && (trackURI !== '')) {
+    if ((typeof(deviceID) != undefined) && (clickedTrackURI !== '')) {
+      console.log(`Player: play clicked song`);
 
+      // creates list of uris (playlist) from list of songs (library)
       let playlist = [];
-      library.map((song) => { 
+      library.map((song) => {
         playlist = [...playlist, song.uri];
       });
-        
-      // console.log(`Player: play clicked song`);
-      // console.log(`   trackURI: ${trackURI}`);
-      // console.log(`   deviceID: ${deviceID}`);
-      // console.log(`   playlist:`);
-      // playlist.map((uri) => 
-      //   console.log(`           ${uri}`)
-      // );
+      console.log(`   playlist:`);
+      playlist.map((uri) =>
+        console.log(`     ${uri}`),
+      );
 
       // HTTP request to initially play music
+      // plays songs in playlist starting with clicked song
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
         method: 'PUT',
         body: JSON.stringify({
           uris: playlist,
-          offset: {position: playlist.indexOf(trackURI)} 
+          offset: {position: playlist.indexOf(clickedTrackURI)},
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -103,10 +103,10 @@ function Player({accessToken, trackURI, library}) {
       });
       setIsPlaying(true);
     }
-  }, [trackURI]);
+  }, [clickedTrackURI]);
 
   /**
-   * Called when clicking on the pause/play button. 
+   * Called when clicking on the pause/play button.
    * Toggles the playing state of the SpotifySDKPlayer.
    */
   const clickedOnPlayPause = () => {
