@@ -2,8 +2,8 @@ import React from 'react';
 
 import './Player.css';
 
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
@@ -132,8 +132,8 @@ function Player({accessToken, trackURI}) {
                 color='secondary'
                 onClick={ handleClick }>
                 {isPlaying ?
-                  <PauseIcon style={{fontSize: 50}} color='secondary'/>:
-                  <PlayArrowIcon style={{fontSize: 50}} color='secondary'/>}
+                  <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
+                  <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
               </IconButton>
 
               <IconButton
