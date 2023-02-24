@@ -46,11 +46,13 @@ function Player({accessToken, trackURI}) {
       setPlayer(player);
 
       // connects web player to listening device
+      // eslint-disable-next-line camelcase
       player.addListener('ready', ({device_id}) => {
         setDeviceID(device_id);
         console.log('Ready with deviceID', device_id);
       });
 
+      // eslint-disable-next-line camelcase
       player.addListener('not_ready', ({device_id}) => {
         console.log('deviceID has gone offline', device_id);
       });
@@ -71,6 +73,7 @@ function Player({accessToken, trackURI}) {
       // during initialization above
       player.connect().then((success) => {
         if (success) {
+          // eslint-disable-next-line max-len
           console.log('The Web Playback SDK successfully connected to Spotify!');
         }
       });
@@ -110,46 +113,42 @@ function Player({accessToken, trackURI}) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <div className="container">
-          <div className="main-wrapper">
-            <div className="stream-buttons-container">
-              <IconButton
-                id="prev-button"
-                className="prev-button"
-                color='secondary'
-                onClick={() => {
-                  player.previousTrack().then(() => {
-                    console.log('Set to previous track!');
-                    console.log(`    trackURI: ${trackURI}`);
-                  });
-                }}>
-                <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
-              </IconButton>
+        <div className="stream-buttons-container">
+          <IconButton
+            id="prev-button"
+            className="prev-button"
+            color='secondary'
+            onClick={() => {
+              player.previousTrack().then(() => {
+                console.log('Set to previous track!');
+                console.log(`    trackURI: ${trackURI}`);
+              });
+            }}>
+            <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
+          </IconButton>
 
-              <IconButton
-                id="play-button"
-                className="play-button"
-                color='secondary'
-                onClick={ handleClick }>
-                {isPlaying ?
-                  <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
-                  <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
-              </IconButton>
+          <IconButton
+            id="play-button"
+            className="play-button"
+            color='secondary'
+            onClick={ handleClick }>
+            {isPlaying ?
+              <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
+              <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
+          </IconButton>
 
-              <IconButton
-                id="next-button"
-                className="next-button"
-                color='secondary'
-                onClick={() => {
-                  player.nextTrack().then(() => {
-                    console.log('Skipped to next track!');
-                    console.log(`    trackURI: ${trackURI}`);
-                  });
-                }}>
-                <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
-              </IconButton>
-            </div>
-          </div>
+          <IconButton
+            id="next-button"
+            className="next-button"
+            color='secondary'
+            onClick={() => {
+              player.nextTrack().then(() => {
+                console.log('Skipped to next track!');
+                console.log(`    trackURI: ${trackURI}`);
+              });
+            }}>
+            <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
+          </IconButton>
         </div>
       </ThemeProvider>
     </>

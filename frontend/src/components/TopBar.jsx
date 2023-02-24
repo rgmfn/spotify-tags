@@ -17,6 +17,7 @@ import './TopBar.css';
 function TopBar(props) {
   return (
     <div id="top-bar">
+      <div />
       <Expression
         expression={props.expression}
         setExpression={props.setExpression}

@@ -3,7 +3,6 @@ import React from 'react';
 import './Home.css';
 import TopBar from './TopBar';
 import Library from './Library.jsx';
-import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
@@ -90,7 +89,6 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
   const [trackURI, setTrackURI] = React.useState('');
-  const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
   // const [searchQuery, setSearchQuery] = React.useState('');
@@ -215,8 +213,8 @@ function Home() {
 
     // get current user info
     const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-        method: 'GET',
-        headers: {'Authorization': 'Bearer ' + accessToken},
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
 
