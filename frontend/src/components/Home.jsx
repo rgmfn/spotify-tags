@@ -71,7 +71,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
-  
+
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
@@ -88,6 +88,7 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
+  const [updatedLib, setUpdatedLib] = React.useState([]);
   const [trackURI, setTrackURI] = React.useState('');
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
@@ -148,6 +149,9 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  // React.useEffect(() => {
+
+  // }, [updatedLib])
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
@@ -205,7 +209,7 @@ function Home() {
   };
 
   const logout = async () => {
-
+    // tokens
     setAccessToken('');
     setRefreshToken('');
 
@@ -255,6 +259,8 @@ function Home() {
         // ^ displays library if there is no searchQuery
         hidden={Boolean(searchQuery)}
         library={library}
+        updatedLib={updatedLib}
+        setUpdatedLib={setUpdatedLib}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
         expression={expression}
