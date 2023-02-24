@@ -243,6 +243,8 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
+        accessToken={accessToken}
+        trackURI={trackURI}
       />
       <div className="searchbar">
         <SearchBar
@@ -272,9 +274,6 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      { (accessToken !== '') && <Player
-        accessToken={accessToken}
-        trackURI={trackURI}/> }
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
