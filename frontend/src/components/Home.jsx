@@ -6,7 +6,9 @@ import Library from './Library.jsx';
 import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
+
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
@@ -71,7 +73,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
-  
+
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
@@ -205,14 +207,13 @@ function Home() {
   };
 
   const logout = async () => {
-
     setAccessToken('');
     setRefreshToken('');
 
     // get current user info
     const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-        method: 'GET',
-        headers: {'Authorization': 'Bearer ' + accessToken},
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
 
@@ -279,6 +280,7 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
+      <SortModal/>
     </div>
   );
 }

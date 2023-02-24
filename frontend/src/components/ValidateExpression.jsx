@@ -1,13 +1,13 @@
 const Operations = {
-    START: 'start',
-    AND: 'and', // AND tag
-    OR: 'or', // OR tag
-    BUT_NOT: 'but not', // BUT NOT tag
-  };
-  
+  START: 'start',
+  AND: 'and', // AND tag
+  OR: 'or', // OR tag
+  BUT_NOT: 'but not', // BUT NOT tag
+};
+
 /**
- * 
- * @param {object} expression 
+ *
+ * @param {object} expression
  * @return {object}
  */
 function ValidateExpression(expression) {
@@ -15,24 +15,24 @@ function ValidateExpression(expression) {
 
   let butnotTag = false;
   for (let i=0; i<expression.length; i++) {
-    console.log("butnotTag: " + butnotTag);
+    console.log('butnotTag: ' + butnotTag);
     const tagName = expression[i].name;
-    let operandTag = Object.values(Operations).includes(tagName.toLowerCase());
+    const operandTag = Object.values(Operations).includes(tagName.toLowerCase());
     console.log(operandTag);
 
     if (i % 2 == 0) { // on even tags
-      if (operandTag){ // the tag should not be an operand
+      if (operandTag) { // the tag should not be an operand
         return false;
       }
     } else {
-      if (!operandTag)
+      if (!operandTag) {
         return false;
+      }
     }
     if (tagName.toLowerCase() === Operations.BUT_NOT) {
       if (butnotTag) { // there can't be two but not tags
         return false;
-      }
-      else {
+      } else {
         butnotTag = true;
       }
     }
@@ -48,7 +48,7 @@ function ValidateExpression(expression) {
     /**
      * check if operand tag is formated correctly,
      * not needed since tags are put into expression from
-     * existing tags. 
+     * existing tags.
      */
     // else { // Invalid Operation
     //   return(
@@ -58,7 +58,6 @@ function ValidateExpression(expression) {
     //     </h2>
     //   );
     // }
-
   }
   return true;
 }

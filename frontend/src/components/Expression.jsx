@@ -9,7 +9,7 @@ import ValidateExpression from './ValidateExpression';
  * @return {object} JSX
  */
 function Expression({expression, setExpression}) {
-  var validExpression = ValidateExpression(expression);
+  const validExpression = ValidateExpression(expression);
 
   // Removes tags from the expression when they are clicked.
   const removeExpression = ((event) => {
@@ -20,7 +20,7 @@ function Expression({expression, setExpression}) {
 
   return (
     <div id="expression-container">
-      <div 
+      <div
         id="expression"
         style={{backgroundColor: validExpression ? '': '#c94f6d'}}
       >
