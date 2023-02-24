@@ -7,7 +7,7 @@ import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
-
+import songSort from './sort_songs';
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 
@@ -71,7 +71,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
-  
+
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
@@ -148,6 +148,28 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  /**
+   * creating a new object for each attribute we want to sort
+   * in order to have the same depths for all
+   */
+  const mapped = library.map(function(el, i) {
+    return {
+      index: i,
+      track_name: el.name.toLowerCase(),
+      artist_name: el.artists[0].name.toLowerCase(),
+      album_name: el.album.name.toLowerCase(),
+      releaseDate: el.album.release_date.toLowerCase(),
+      song_length: el.duration_ms,
+      popularity_song: el.popularity,
+    };
+  });
+
+  const sortedTracks = mapped.sort(songSort(false,
+    'artist_name', 'popularity_song'));
+  const result = sortedTracks.map(function(el) {
+      return library[el.index];
+  });
+  console.log(result);
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
