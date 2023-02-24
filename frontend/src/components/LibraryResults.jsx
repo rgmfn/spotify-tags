@@ -21,32 +21,33 @@ function LibraryResults({searchQuery, library, setSongToView}) {
       </div>
       <table>
         <tbody>
-          {filteredLibrary.map(
-            (result) => (
-              <tr
-                id={result.id}
-                onClick={clickedOnSong}
-              >
-                <td className="search-img-col">
-                  <div className="imgContainer">
-                    <img
-                      className="search-img"
-                      src={result.album.images[0].url}
-                      alt={'[' + result.album.name + ' img]'}
-                    />
-                  </div>
-                </td>
-                <td className="search-name-col">
-                  {result.name}
-                </td>
-                <td className="search-artist-col">
-                  {result.artists[0].name}
-                </td>
-                <td className="search-album-col">
-                  {result.album.name}
-                </td>
-              </tr>
-            ))}
+          {filteredLibrary.length === 0 ?
+            <tr><td>No match found.</td></tr> : filteredLibrary.map(
+              (result) => (
+                <tr
+                  id={result.id}
+                  onClick={clickedOnSong}
+                >
+                  <td className="search-img-col">
+                    <div className="imgContainer">
+                      <img
+                        className="search-img"
+                        src={result.album.images[0].url}
+                        alt={'[' + result.album.name + ' img]'}
+                      />
+                    </div>
+                  </td>
+                  <td className="search-name-col">
+                    {result.name}
+                  </td>
+                  <td className="search-artist-col">
+                    {result.artists[0].name}
+                  </td>
+                  <td className="search-album-col">
+                    {result.album.name}
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </div>
