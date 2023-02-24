@@ -155,21 +155,16 @@ function Home() {
   const mapped = library.map(function(el, i) {
     return {
       index: i,
-      track_name: el.name.toLowerCase(),
-      artist_name: el.artists[0].name.toLowerCase(),
-      album_name: el.album.name.toLowerCase(),
+      trackName: el.name.toLowerCase(),
+      artistName: el.artists[0].name.toLowerCase(),
+      albumName: el.album.name.toLowerCase(),
       releaseDate: el.album.release_date.toLowerCase(),
-      song_length: el.duration_ms,
-      popularity_song: el.popularity,
+      songLength: el.duration_ms,
+      popularity: el.popularity,
     };
-  });
-
-  const sortedTracks = mapped.sort(songSort(false,
-    'artist_name', 'popularity_song'));
-  const result = sortedTracks.map(function(el) {
-      return library[el.index];
-  });
-  console.log(result);
+ });
+  
+  songSort(false,'artist_name', 'popularity_song');
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *

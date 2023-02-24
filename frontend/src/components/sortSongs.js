@@ -1,14 +1,17 @@
-
 /**
- * @param {*} reverse
- * @param {*} primary
- * @param {*} secondary
- * @returns
+ * 
+ * @param {*} reverse 
+ * @param {*} primary 
+ * @param {*} secondary 
+ * @param {*} library 
+ * @param {*} mapped 
+ * @param {*} setLibrary 
  */
-function songSort(reverse, primary, secondary) {
+function songSort(reverse, primary, secondary, library, mapped, setLibrary) {
+     
      // created to return an anon func. to be used
      // as a callback function for array.prototype.sort()
-     return function(a, b) {
+     mapped.sort(function(a, b){
           let comparison = 0; // will store all the given comparisons
 
           // sorting by primary attribute
@@ -32,6 +35,10 @@ function songSort(reverse, primary, secondary) {
           }
 
           return reverse ? -comparison : comparison;
-     };
+     });
+     const result = mapped.map(function (el) {
+          return library[el.index]
+     });
+     setLibrary(result);
 }
 
