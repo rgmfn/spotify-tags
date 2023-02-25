@@ -22,7 +22,7 @@ function LibraryResults({searchQuery, library, setSongToView}) {
       <table>
         <tbody>
           {filteredLibrary.length === 0 ?
-            <tr><td>No match found.</td></tr> : filteredLibrary.map(
+            <tr><td>No songs match your search</td></tr> : filteredLibrary.map(
               (result) => (
                 <tr
                   id={result.id}
