@@ -15,7 +15,7 @@ import './TopBar.css';
  */
 function TopBar(props) {
   return (
-    <div id="top-bar">
+    <div id="top-bar" onClick={props.clickedOnBar}>
       <Expression
         expression={props.expression}
         setExpression={props.setExpression}

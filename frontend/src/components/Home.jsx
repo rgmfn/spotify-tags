@@ -7,6 +7,7 @@ import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
+import TagPopover from './TagPopover';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
@@ -93,6 +94,7 @@ function Home() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   // used to keep track of the current playing status 'isPlaying'
   const [songToView, setSongToView] = React.useState(emptySong);
+  const [tagSelection, setTagSelection] = React.useState([]); 
   // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
@@ -196,6 +198,25 @@ function Home() {
   };
 
   /**
+   * Opens TagPopover
+   * 
+   * TODO: add an argument that holds the list of tags to pass.
+   */
+  const clickedOnBar = () => {
+    console.log("clickedOnBar");
+    setTagSelection(fakeTags);
+  };
+
+   /**
+   * Called when clicking outside of the TagPopover.
+   *
+   * Sets tagSelection to an empty array (makes the Popover go away).
+   */
+   const closeTagPopover = () => {
+    setTagSelection([]);
+  };
+
+  /**
    * Called when clicking on the 'Refresh List' button.
    *
    * Refreshes the library of songs displayed using the temporary getSearch
@@ -243,6 +264,7 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
+        clickedOnBar={clickedOnBar}
       />
       <div className="searchbar">
         <SearchBar
@@ -271,6 +293,10 @@ function Home() {
         library={library}
         setLibrary={setLibrary}
         closeCard={closeCard}
+      />
+      <TagPopover
+        tags={tagSelection}
+        closeTagPopover={closeTagPopover}
       />
       { (accessToken !== '') && <Player
         accessToken={accessToken}

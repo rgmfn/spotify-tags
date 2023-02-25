@@ -14,7 +14,7 @@
     "eslint-config-google": "*",
     "jest": "^29.4.2",
     "mocha": "^10.2.0",
-    "nodemon": "*",
+    "nodemon": "^2.0.20",
     "pg-test": "^1.0.6"
   },
   "dependencies": {
@@ -22,12 +22,11 @@
     "body-parser": "*",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "*",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-openapi-validator": "*",
     "express-session": "*",
     "js-yaml": "*",
-    "nodemon": "^2.0.20",
     "pg": "*",
     "request": "^2.88.2",
     "swagger-ui-express": "*"
