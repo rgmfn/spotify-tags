@@ -1,3 +1,5 @@
+
+
 /**
  * 
  * @param {*} reverse 
@@ -7,11 +9,11 @@
  * @param {*} mapped 
  * @param {*} setLibrary 
  */
-function songSort(reverse, primary, secondary, library, mapped, setLibrary) {
+function songSort(reverse, primary, secondary) {
      
      // created to return an anon func. to be used
-     // as a callback function for array.prototype.sort()
-     mapped.sort(function(a, b){
+     // to sort the mapped variable
+     return function(a, b){
           let comparison = 0; // will store all the given comparisons
 
           // sorting by primary attribute
@@ -35,10 +37,36 @@ function songSort(reverse, primary, secondary, library, mapped, setLibrary) {
           }
 
           return reverse ? -comparison : comparison;
-     });
-     const result = mapped.map(function (el) {
-          return library[el.index]
-     });
-     setLibrary(result);
+     };
 }
 
+/**
+ * 
+ * @param {*} reverse 
+ * @param {*} primary 
+ * @param {*} secondary 
+ * @param {*} library 
+ * @param {*} setLibrary 
+ */
+function mainSort(reverse, primary, secondary, library, setLibrary) {
+     // creating a new object for each attribute we want to sort
+     // in order to have the same depths for all
+     const mapped = library.map(function(el, i) {
+          return {
+            index: i,
+            trackName: el.name.toLowerCase(),
+            artistName: el.artists[0].name.toLowerCase(),
+            albumName: el.album.name.toLowerCase(),
+            releaseDate: el.album.release_date.toLowerCase(),
+            songLength: el.duration_ms,
+            popularity: el.popularity,
+          };
+     });
+
+     const sortedSongs = mapped.sort(songSort(reverse, primary, secondary));
+     const result = sortedSongs.map(function (el) {
+          return library[el.index];
+     });
+
+     setLibrary(result);
+}

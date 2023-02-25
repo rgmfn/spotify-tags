@@ -147,24 +147,7 @@ function Home() {
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
-
-  /**
-   * creating a new object for each attribute we want to sort
-   * in order to have the same depths for all
-   */
-  const mapped = library.map(function(el, i) {
-    return {
-      index: i,
-      trackName: el.name.toLowerCase(),
-      artistName: el.artists[0].name.toLowerCase(),
-      albumName: el.album.name.toLowerCase(),
-      releaseDate: el.album.release_date.toLowerCase(),
-      songLength: el.duration_ms,
-      popularity: el.popularity,
-    };
- });
   
-  songSort(false,'artist_name', 'popularity_song');
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
