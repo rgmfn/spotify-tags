@@ -99,11 +99,11 @@ function Home() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 1},
     {name: 'instrumental', color: '#81b29a'},
-    {name: 'BUT NOT', color: '#888888'},
+    {name: 'BUT NOT', color: '#888888', id: 2},
     {name: 'guitar', color: '#719cd6'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 3},
     {name: 'jazz', color: '#719cd6'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
