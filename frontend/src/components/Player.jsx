@@ -26,7 +26,7 @@ const theme = createTheme({
 function Player({accessToken, clickedTrackURI, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   /**
    * Sets up web player to stream music.
@@ -74,10 +74,21 @@ function Player({accessToken, clickedTrackURI, updatedLib}) {
         console.error(message);
       });
 
+      // runs when state of the local playback has changed (i.e.
+      // current track playing changes, current track pauses,
+      // current track resumes playing)
+      player.addListener('player_state_changed', ((state) => {
+        if (!state) {
+          return;
+        }
+
+        setIsPaused(state.paused);
+      }));
+
       // connects web player instance to Spotify w/ credentials given
       // during initialization above
       player.connect().then((success) => {
-        if (success) { 
+        if (success) {
           console.log('The Web Playback SDK successfully ' +
                       'connected to Spotify!');
         }
@@ -114,20 +125,8 @@ function Player({accessToken, clickedTrackURI, updatedLib}) {
           'Authorization': `Bearer ${accessToken}`,
         },
       });
-      setIsPlaying(true);
     }
   }, [clickedTrackURI]);
-
-  /**
-   * Called when clicking on the pause/play button.
-   * Toggles the playing state of the SpotifySDKPlayer.
-   */
-  const clickedOnPlayPause = () => {
-    player.togglePlay().then(() => {
-      console.log('Toggled playback!');
-    });
-    setIsPlaying(!isPlaying);
-  };
 
   return (
     <>
@@ -149,8 +148,12 @@ function Player({accessToken, clickedTrackURI, updatedLib}) {
             id="play-button"
             className="play-button"
             color='secondary'
-            onClick={ clickedOnPlayPause }>
-            {isPlaying ?
+            onClick={() => {
+              player.togglePlay().then(() => {
+                console.log('Toggled play button!');
+              });
+            }}>
+            {!isPaused ?
               <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
               <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
           </IconButton>
