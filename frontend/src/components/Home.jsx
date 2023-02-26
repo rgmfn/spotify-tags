@@ -202,9 +202,10 @@ function Home() {
    * 
    * TODO: add an argument that holds the list of tags to pass.
    */
-  const clickedOnBar = () => {
+  const clickedOnBar = (event) => {
     console.log("clickedOnBar");
-    setTagSelection(fakeTags);
+    if (event.currentTarget === event.target)
+      setTagSelection(fakeTags);
   };
 
    /**

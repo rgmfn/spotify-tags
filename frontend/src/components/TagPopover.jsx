@@ -27,12 +27,23 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
     setState([...objectTags]); // populate array with new value.
   });
 
+  /**
+   * Function to add the first tag found in search by
+   * by pressing Enter.
+   */
+  function handleKeyDown(e) {
+    if (e.key == 'Enter'){
+      objectTags.push(filteredTags[0]);
+      setState([...objectTags]);
+    }
+  }
+
   return(
     <ThemeProvider theme={darkTheme}>
-      {console.log(tags.length)}
         <Popover
         open={Boolean(tags.length)} // if no tags, nothing to display.
         onClose={closeTagPopover}
+        onKeyDown={(e) => handleKeyDown(e)}
         anchorReference='none'
         style={{
           top: '45px',
