@@ -114,6 +114,7 @@ tr:hover {
     border-radius: 3px;
     margin-right: 10px;
     padding: 3px;
+    height: fit-content;
 }
 
 /* Testing borders {{{ */

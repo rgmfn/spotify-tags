@@ -3,7 +3,6 @@ import React from 'react';
 import './Home.css';
 import TopBar from './TopBar';
 import Library from './Library.jsx';
-import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
@@ -210,8 +209,8 @@ function Home() {
 
     // get current user info
     const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-        method: 'GET',
-        headers: {'Authorization': 'Bearer ' + accessToken},
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
 
@@ -238,6 +237,9 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
+        accessToken={accessToken}
+        clickedTrackURI={clickedTrackURI}
+        updatedLib={updatedLib}
       />
       <div className="searchbar">
         <SearchBar
@@ -267,12 +269,6 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      {(accessToken !== '') && <Player
-        // ^ sets up web player if there is a accessToken
-        accessToken={accessToken}
-        clickedTrackURI={clickedTrackURI}
-        updatedLib={updatedLib}
-      />}
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}

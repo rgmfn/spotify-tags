@@ -38,8 +38,10 @@ function parseExpression(song, expression) {
 
     if (i === 0) { // should only run once at the first tag
       out = isTagInSong(tagName, song);
-    } else if (Object.values(Operations).includes(tagName.toLowerCase())) { // if the tag is an op, store it
-      currOp = tagName.toLowerCase(); // using to lowercase, meaning case doesn't matter.
+    } else if (Object.values(Operations).includes(tagName.toLowerCase())) {
+      // if the tag is an op, store it
+      currOp = tagName.toLowerCase();
+      // using to lowercase, meaning case doesn't matter.
     } else if (currOp === Operations.AND) {
       if (butnotOut != null) {
         butnotOut = butnotOut || isTagInSong(tagName, song);
