@@ -6,6 +6,7 @@ import Library from './Library.jsx';
 import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import SearchBar from './SearchBar.js';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
@@ -70,6 +71,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
       headers: {'Authorization': 'Bearer ' + accessToken},
     });
   }
+
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
@@ -86,10 +88,20 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
+  const [updatedLib, setUpdatedLib] = React.useState([]);
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-  // const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const fakeExpression = [
+    {name: 'classical', color: '#c94f6d'},
+    {name: 'AND', color: '#888888', id: 1},
+    {name: 'instrumental', color: '#81b29a'},
+    {name: 'BUT NOT', color: '#888888', id: 2},
+    {name: 'guitar', color: '#719cd6'},
+    {name: 'AND', color: '#888888', id: 3},
+    {name: 'jazz', color: '#719cd6'},
+  ];
+  const [expression, setExpression] = React.useState(fakeExpression);
 
   /**
    * TODO
@@ -134,6 +146,9 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  // React.useEffect(() => {
+
+  // }, [updatedLib])
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
@@ -188,18 +203,48 @@ function Home() {
       });
   };
 
-  /**
-   * TODO
-   */
-  const logout = () => {
+  const logout = async () => {
+    // tokens
     setAccessToken('');
     setRefreshToken('');
+
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+        method: 'GET',
+        headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    const userid = userInfo.id;
+
+    // store each song in the library to db
+    for (const song of library) {
+      await fetch(`http://localhost:3010/v0/tagsPost`, {
+        // http get request to api.spotify.com/v1/search
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {userid: userid, spotifyid: song.id,
+            tags: song.tags}),
+      });
+    }
+
     window.localStorage.removeItem('accessToken');
   };
 
   return (
     <div className="App">
-      <TopBar />
+
+      <TopBar
+        expression={expression}
+        setExpression={setExpression}
+      />
+      <div className="searchbar">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      </div>
       {!accessToken ?
         <a href={ // login button
           `http://localhost:3010/login`
@@ -209,8 +254,11 @@ function Home() {
         // ^ displays library if there is no searchQuery
         hidden={Boolean(searchQuery)}
         library={library}
+        updatedLib={updatedLib}
+        setUpdatedLib={setUpdatedLib}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
+        expression={expression}
       />}
       <SongCard
         song={songToView}
@@ -223,7 +271,7 @@ function Home() {
         // ^ sets up web player if there is a accessToken
         accessToken={accessToken}
         clickedTrackURI={clickedTrackURI}
-        library={library}
+        updatedLib={updatedLib}
       />}
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery

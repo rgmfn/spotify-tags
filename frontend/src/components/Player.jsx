@@ -2,16 +2,31 @@ import React from 'react';
 
 import './Player.css';
 
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import IconButton from '@mui/material/IconButton';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    secondary: {
+      main: '#39506d',
+    },
+  },
+});
+
 /**
  * @param {state} accessToken
  * @param {state} clickedTrackURI
- * @param {state} library
+ * @param {state} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackURI, library}) {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [deviceID, setDeviceID] = React.useState(undefined);
+function Player({accessToken, clickedTrackURI, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
+  const [deviceID, setDeviceID] = React.useState(undefined);
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
   /**
    * Sets up web player to stream music.
@@ -78,15 +93,11 @@ function Player({accessToken, clickedTrackURI, library}) {
     if ((typeof(deviceID) != undefined) && (clickedTrackURI !== '')) {
       console.log(`Player: play clicked song`);
 
-      // creates list of uris (playlist) from list of songs (library)
+      // creates list of uris (playlist) from list of songs (updatedLib)
       let playlist = [];
-      library.map((song) => {
+      updatedLib.map((song) => {
         playlist = [...playlist, song.uri];
       });
-      console.log(`   playlist:`);
-      playlist.map((uri) =>
-        console.log(`     ${uri}`),
-      );
 
       // HTTP request to initially play music
       // plays songs in playlist starting with clicked song
@@ -118,43 +129,49 @@ function Player({accessToken, clickedTrackURI, library}) {
 
   return (
     <>
-      <div className="container">
-        <div className="main-wrapper">
-          <div className="stream-buttons-container">
-            <button
-              id="prev-button"
-              className="prev-button"
-              onClick={() => {
-                player.previousTrack().then(() => {
-                  console.log('Set to previous track!');
-                });
-              }}>
-              {'Prev'}
-            </button>
+      <ThemeProvider theme={theme}>
+        <div className="container">
+          <div className="main-wrapper">
+            <div className="stream-buttons-container">
+              <IconButton
+                id="prev-button"
+                className="prev-button"
+                color='secondary'
+                onClick={() => {
+                  player.previousTrack().then(() => {
+                    console.log('Set to previous track!');
+                  });
+                }}>
+                <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
+              </IconButton>
 
-            <button
-              id="play-button"
-              className="play-button"
-              onClick={ clickedOnPlayPause }>
-              {isPlaying ? 'Pause' : 'Play'}
-            </button>
+              <IconButton
+                id="play-button"
+                className="play-button"
+                color='secondary'
+                onClick={ handleClick }>
+                {isPlaying ?
+                  <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
+                  <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
+              </IconButton>
 
-            <button
-              id="next-button"
-              className="next-button"
-              onClick={() => {
-                player.nextTrack().then(() => {
-                  console.log('Skipped to next track!');
-                });
-              }}>
-              {'Next'}
-            </button>
+              <IconButton
+                id="next-button"
+                className="next-button"
+                color='secondary'
+                onClick={() => {
+                  player.nextTrack().then(() => {
+                    console.log('Skipped to next track!');
+                  });
+                }}>
+                <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
+              </IconButton>
+            </div>
           </div>
         </div>
-      </div>
+      </ThemeProvider>
     </>
   );
 }
-
 
 export default Player;
