@@ -18,14 +18,19 @@ const theme = createTheme({
 });
 
 /**
+ * @param {state} accessToken
+ * @param {state} clickedTrackURI
+ * @param {state} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, trackURI}) {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [deviceID, setDeviceID] = React.useState(undefined);
+function Player({accessToken, clickedTrackURI, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
+  const [deviceID, setDeviceID] = React.useState(undefined);
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
-  // sets up web player to stream music
+  /**
+   * Sets up web player to stream music.
+   */
   React.useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://sdk.scdn.co/spotify-player.js';
@@ -72,25 +77,38 @@ function Player({accessToken, trackURI}) {
       // connects web player instance to Spotify w/ credentials given
       // during initialization above
       player.connect().then((success) => {
-        if (success) {
-          // eslint-disable-next-line max-len
-          console.log('The Web Playback SDK successfully connected to Spotify!');
+        if (success) { 
+          console.log('The Web Playback SDK successfully ' +
+                      'connected to Spotify!');
         }
       });
     };
   }, [accessToken]);
 
-  // if web player is ready & song is clicked on, song plays in browser
+  /**
+   * If web player is connected to device & song is clicked on,
+   * an array of track uris from all library songs is passed to
+   * play on device. The first song that is played is the
+   * clicked song by user.
+   */
   React.useEffect(() => {
-    if ((typeof(deviceID) != undefined) && trackURI !== '') {
+    if ((typeof(deviceID) != undefined) && (clickedTrackURI !== '')) {
       console.log(`Player: play clicked song`);
-      console.log(`   trackURI: ${trackURI}`);
-      console.log(`   deviceID: ${deviceID}`);
+
+      // creates list of uris (playlist) from list of songs (updatedLib)
+      let playlist = [];
+      updatedLib.map((song) => {
+        playlist = [...playlist, song.uri];
+      });
 
       // HTTP request to initially play music
+      // plays songs in playlist starting with clicked song
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
         method: 'PUT',
-        body: JSON.stringify({uris: [trackURI]}),
+        body: JSON.stringify({
+          uris: playlist,
+          offset: {position: playlist.indexOf(clickedTrackURI)},
+        }),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`,
@@ -98,16 +116,17 @@ function Player({accessToken, trackURI}) {
       });
       setIsPlaying(true);
     }
-  }, [trackURI]);
+  }, [clickedTrackURI]);
 
-  // called when the "play/ pause" button is clicked,
-  // triggers the play or pause of the music
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
-
+  /**
+   * Called when clicking on the pause/play button.
+   * Toggles the playing state of the SpotifySDKPlayer.
+   */
+  const clickedOnPlayPause = () => {
     player.togglePlay().then(() => {
       console.log('Toggled playback!');
     });
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -121,7 +140,6 @@ function Player({accessToken, trackURI}) {
             onClick={() => {
               player.previousTrack().then(() => {
                 console.log('Set to previous track!');
-                console.log(`    trackURI: ${trackURI}`);
               });
             }}>
             <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
@@ -131,7 +149,7 @@ function Player({accessToken, trackURI}) {
             id="play-button"
             className="play-button"
             color='secondary'
-            onClick={ handleClick }>
+            onClick={ clickedOnPlayPause }>
             {isPlaying ?
               <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
               <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
@@ -144,7 +162,6 @@ function Player({accessToken, trackURI}) {
             onClick={() => {
               player.nextTrack().then(() => {
                 console.log('Skipped to next track!');
-                console.log(`    trackURI: ${trackURI}`);
               });
             }}>
             <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
@@ -154,6 +171,5 @@ function Player({accessToken, trackURI}) {
     </>
   );
 }
-
 
 export default Player;

@@ -74,7 +74,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(data);
+  console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -88,18 +88,16 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
-  const [trackURI, setTrackURI] = React.useState('');
-  // used to keep track of the current playing status 'isPlaying'
+  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-  // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 1},
     {name: 'instrumental', color: '#81b29a'},
-    {name: 'BUT NOT', color: '#888888'},
+    {name: 'BUT NOT', color: '#888888', id: 2},
     {name: 'guitar', color: '#719cd6'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 3},
     {name: 'jazz', color: '#719cd6'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
@@ -158,10 +156,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   trackURI: ${event.currentTarget.title}`);
-    setTrackURI(event.currentTarget.title);
-    // called when clicking on a song
-    // event stores the thing that was clicked on
+    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
+    setClickedTrackURI(event.currentTarget.title);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -242,7 +238,8 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
-        trackURI={trackURI}
+        clickedTrackURI={clickedTrackURI}
+        updatedLib={updatedLib}
       />
       <div className="searchbar">
         <SearchBar
