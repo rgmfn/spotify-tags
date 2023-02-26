@@ -5,7 +5,7 @@ import ValidateExpression from './ValidateExpression';
 
 /**
  * @param {array} expression - array of tag objects representing the current
- * @param {array} setExpression - sets the expression
+ * @param {function} setExpression - sets the expression
  * @return {object} JSX
  */
 function Expression({expression, setExpression}) {

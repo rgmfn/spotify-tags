@@ -297,6 +297,8 @@ function Home() {
       <TagPopover
         tags={tagSelection}
         closeTagPopover={closeTagPopover}
+        objectTags={expression}
+        setState={setExpression}
       />
       { (accessToken !== '') && <Player
         accessToken={accessToken}

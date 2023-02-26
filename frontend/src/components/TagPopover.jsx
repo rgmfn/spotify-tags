@@ -8,16 +8,23 @@ import SearchBar from './SearchBar';
 
 /**
  * 
- * @param {object} tags
- * @param {function} closeTagPopover 
+ * @param {array} tags - list of tags user can select
+ * @param {function} closeTagPopover
+ * @param {array} objectTags - Tag list of an object to append to.
+ * @param {function} setState - set the state of the object we appended to.
  * @returns 
  */
-function TagPopover({tags , closeTagPopover}){
+function TagPopover({tags , closeTagPopover, objectTags, setState}){
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
 
+  
+  const filteredTags = (tagSearchQuery === '') ? tags : tags.filter((tag) =>
+    tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase()),
+  );
+
   const clickedOnTag = ((tag) => {
-    closeTagPopover();
-    return tag;
+    objectTags.push(tag);
+    setState([...objectTags]); // populate array with new value.
   });
 
   return(
@@ -28,6 +35,7 @@ function TagPopover({tags , closeTagPopover}){
         onClose={closeTagPopover}
         anchorReference='none'
         style={{
+          top: '45px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -40,18 +48,21 @@ function TagPopover({tags , closeTagPopover}){
             />
           </div>
           <div id="popover-container">
-            <table
-            style={{borderCollapse: "separate",
-            borderSpacing: "10px"}}
-            >
+            <table style={{
+            borderCollapse: "separate",
+            borderSpacing: "10px"
+            }}>
               <tbody>
-                {tags.map((tag) => (
-                  <tr>
+                {filteredTags.length === 0 ?
+                <tr><td>No tags match your search</td></tr> : filteredTags.map(
+                (tag) => (
+                  <tr
+                  onClick={((event) => clickedOnTag(tag))}
+                  >
                     <td>
                       <div
                         style={{backgroundColor: tag.color}}
                         className="tagName"
-                        onClick={((event) => clickedOnTag(tag))}
                         // Remove tag from Expression if clicked.
                         // onClick={removeExpression}
                       >
