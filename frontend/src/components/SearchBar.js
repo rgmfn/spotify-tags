@@ -4,24 +4,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#192330',
-      // Same color theme as the Home.css file.
-      text: '#aeafb0',
-    },
-    secondary: {
-      main: '#39506d',
-      text: '#29394f',
-    },
-  },
-  typography: {
-    fontFamily: 'Gotham Circular, Verdana, Arial, sans-serif',
-  },
-});
+import {ThemeProvider} from '@mui/material/styles';
+import {theme} from './Theme.js';
 
 /**
 *
