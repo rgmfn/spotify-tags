@@ -25,6 +25,7 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
   const clickedOnTag = ((tag) => {
     objectTags.push(tag);
     setState([...objectTags]); // populate array with new value.
+    setTagSearchQuery('');
   });
 
   /**
@@ -35,6 +36,7 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
     if (e.key == 'Enter'){
       objectTags.push(filteredTags[0]);
       setState([...objectTags]);
+      setTagSearchQuery('');
     }
   }
 
