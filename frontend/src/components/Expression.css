@@ -4,6 +4,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    width: 50%;
 }
 
 #expression {
@@ -11,7 +12,7 @@
     border-radius: 5px;
     /* border: 2px solid green; */
     padding: 10px;
-    max-width: 80%;
+    max-width: 90%;
     text-align: center;
     display: flex;
     flex-wrap: wrap;

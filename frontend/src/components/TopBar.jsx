@@ -25,7 +25,7 @@ function TopBar(props) {
       { (props.accessToken !== '') && <Player
         accessToken={props.accessToken}
         clickedTrackURI={props.clickedTrackURI}
-        updatedLib={props.updatedLib}}/> }
+        updatedLib={props.updatedLib}/> }
     </div>
   );
 }
