@@ -23,7 +23,8 @@ const theme = createTheme({
  * @param {state} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackURI, updatedLib}) {
+function Player({accessToken, clickedTrackURI,
+  updatedLib, setPlayingTrackID}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -74,10 +75,22 @@ function Player({accessToken, clickedTrackURI, updatedLib}) {
         console.error(message);
       });
 
+      player.addListener('account_error', ({message}) => {
+        console.error(message);
+      });
+
+      player.addListener('player_state_changed', ({
+        // eslint-disable-next-line camelcase
+        track_window: {current_track},
+      }) => {
+        // eslint-disable-next-line camelcase
+        setPlayingTrackID(current_track.id);
+      });
+
       // connects web player instance to Spotify w/ credentials given
       // during initialization above
       player.connect().then((success) => {
-        if (success) { 
+        if (success) {
           console.log('The Web Playback SDK successfully ' +
                       'connected to Spotify!');
         }
