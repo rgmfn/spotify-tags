@@ -26,6 +26,7 @@ function TopBar(props) {
       { (props.accessToken !== '') && <Player
         accessToken={props.accessToken}
         clickedTrackURI={props.clickedTrackURI}
+        setPlayingTrackID={props.setPlayingTrackID}
         updatedLib={props.updatedLib}/> }
     </div>
   );

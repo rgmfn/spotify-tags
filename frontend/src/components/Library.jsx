@@ -1,4 +1,3 @@
-import {experimentalStyled} from '@mui/material';
 import React from 'react';
 
 import parseExpression from './Parser.jsx';
@@ -14,7 +13,8 @@ import validateExpression from './ValidateExpression';
  *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
-function Library({library, updatedLib, setUpdatedLib, clickedOnSong, clickedOnTags, expression}) {
+function Library({library, updatedLib, setUpdatedLib,
+  clickedOnSong, clickedOnTags, expression, playingTrackID}) {
   const validExpression = validateExpression(expression);
   // is expression valid
 
@@ -49,6 +49,10 @@ function Library({library, updatedLib, setUpdatedLib, clickedOnSong, clickedOnTa
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
                 title={song.uri}
+                style={{
+                  fontWeight: song.id === playingTrackID ? 'bold' : '',
+                  color: song.id === playingTrackID ? '#719cd6' : '',
+                }}
               >
                 <td className="imgCol"
                 // td = table data (data cell)

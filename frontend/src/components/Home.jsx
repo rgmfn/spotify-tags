@@ -96,6 +96,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
+  const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [tagSelection, setTagSelection] = React.useState([]); 
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -268,6 +269,7 @@ function Home() {
         clickedOnBar={clickedOnBar}
         accessToken={accessToken}
         clickedTrackURI={clickedTrackURI}
+        setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
       />
       <div className="searchbar">
@@ -291,6 +293,7 @@ function Home() {
         library={library}
         updatedLib={updatedLib}
         setUpdatedLib={setUpdatedLib}
+        playingTrackID={playingTrackID}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
         expression={expression}

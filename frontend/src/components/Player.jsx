@@ -13,10 +13,12 @@ import {theme} from './Theme.js';
 /**
  * @param {state} accessToken
  * @param {state} clickedTrackURI
+ * @param {state} setPlayingTrackID
  * @param {state} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackURI, updatedLib}) {
+function Player({accessToken, clickedTrackURI, setPlayingTrackID,
+  updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
@@ -68,13 +70,17 @@ function Player({accessToken, clickedTrackURI, updatedLib}) {
       });
 
       // runs when state of the local playback has changed (i.e.
-      // current track playing changes, current track pauses,
+      // current playing track changes, current track pauses,
       // current track resumes playing)
       player.addListener('player_state_changed', ((state) => {
         if (!state) {
           return;
         }
 
+        // eslint-disable-next-line camelcase
+        setPlayingTrackID(state.track_window.current_track.id);
+        // eslint-disable-next-line camelcase
+        console.log(`Current playing song: ${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
       }));
 
