@@ -21,6 +21,7 @@ function TopBar(props) {
       <Expression
         expression={props.expression}
         setExpression={props.setExpression}
+        clickedOnBar={props.clickedOnBar}
       />
       { (props.accessToken !== '') && <Player
         accessToken={props.accessToken}

@@ -5,10 +5,10 @@ import ValidateExpression from './ValidateExpression';
 
 /**
  * @param {array} expression - array of tag objects representing the current
- * @param {array} setExpression - sets the expression
+ * @param {function} setExpression - sets the expression
  * @return {object} JSX
  */
-function Expression({expression, setExpression}) {
+function Expression({expression, setExpression, clickedOnBar}) {
   const validExpression = ValidateExpression(expression);
 
   // Removes tags from the expression when they are clicked.
@@ -26,6 +26,7 @@ function Expression({expression, setExpression}) {
       <div
         id="expression"
         style={{backgroundColor: validExpression ? '': '#c94f6d'}}
+        onClick={clickedOnBar}
       >
         {expression.length === 0 ? 'Click to build expression...' :
           expression.map((tag) => (

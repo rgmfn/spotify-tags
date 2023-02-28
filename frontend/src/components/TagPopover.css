@@ -1,0 +1,9 @@
+#popover-container {
+    /* TODO do this dynamically? */
+    width: 500px;
+    height: 600px;
+}
+
+#search-bar {
+    padding: 10px;
+}

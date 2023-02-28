@@ -6,6 +6,7 @@ import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
+import TagPopover from './TagPopover';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -96,6 +97,7 @@ function Home() {
   const [updatedLib, setUpdatedLib] = React.useState([]);
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
+  const [tagSelection, setTagSelection] = React.useState([]); 
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
@@ -196,6 +198,26 @@ function Home() {
   };
 
   /**
+   * Opens TagPopover
+   * 
+   * TODO: add an argument that holds the list of tags to pass.
+   */
+  const clickedOnBar = (event) => {
+    console.log("clickedOnBar");
+    if (event.currentTarget === event.target)
+      setTagSelection(fakeTags);
+  };
+
+   /**
+   * Called when clicking outside of the TagPopover.
+   *
+   * Sets tagSelection to an empty array (makes the Popover go away).
+   */
+   const closeTagPopover = () => {
+    setTagSelection([]);
+  };
+
+  /**
    * Called when clicking on the 'Refresh List' button.
    *
    * Refreshes the library of songs displayed using the temporary getSearch
@@ -243,6 +265,7 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
+        clickedOnBar={clickedOnBar}
         accessToken={accessToken}
         clickedTrackURI={clickedTrackURI}
         updatedLib={updatedLib}
@@ -278,6 +301,12 @@ function Home() {
         library={library}
         setLibrary={setLibrary}
         closeCard={closeCard}
+      />
+      <TagPopover
+        tags={tagSelection}
+        closeTagPopover={closeTagPopover}
+        objectTags={expression}
+        setState={setExpression}
       />
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
