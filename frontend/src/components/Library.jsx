@@ -1,32 +1,37 @@
 import {experimentalStyled} from '@mui/material';
 import React from 'react';
 
-import ParseExpression from './Parser.jsx';
-import ValidateExpression from './ValidateExpression';
+import parseExpression from './Parser.jsx';
+import validateExpression from './ValidateExpression';
 
 /**
  * @param {array} library
+ * @param {array} updatedLib - the library we will store songs that adhere
+ *                             to the expression.
  * @param {function} clickedOnSong - in Home.jsx, when clicking on a <tr>
  *                                   representing a song
  * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
  *                                   column of a <tr> representing a song
  * @return {object} JSX
  */
-function Library({library, clickedOnSong, clickedOnTags, expression}) {
-  let updatedLib = [];
-  // the library we will store songs that adhere to the expression.
+function Library({library, updatedLib, setUpdatedLib, clickedOnSong, clickedOnTags, expression}) {
+  const validExpression = validateExpression(expression);
+  // is expression valid
 
-  const validExpression = ValidateExpression(expression);
+  let songMatches = [];
 
-  // store all songs that match expression criteria
-  // might need a check to see if expression is empty
-  // (aka we are not searching for anything atm)
-  if (validExpression && library.length > 0) {
-    updatedLib = library.filter(function(song) {
-      return ParseExpression(song, expression);
+  // store all songs that match the expression criteria
+  if (expression.length === 0) {
+    songMatches = library;
+  } else if (validExpression && library.length > 0) {
+    songMatches = library.filter(function(song) {
+      return parseExpression(song, expression);
     });
-    console.log('matches ' + updatedLib);
   }
+
+  React.useEffect(() => {
+    setUpdatedLib(songMatches);
+  }, [library, expression]);
 
   return (
     <table>
@@ -47,7 +52,6 @@ function Library({library, clickedOnSong, clickedOnTags, expression}) {
               >
                 <td className="imgCol"
                   // td = table data (data cell)
-                >
                   <div className="imgContainer">
                     <img
                       src={song.album.images[0].url}

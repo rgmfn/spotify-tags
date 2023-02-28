@@ -24,9 +24,11 @@ function isTagInSong(tagName, song) {
 
 
 /**
+ * @param {object} song
+ * @param {object} expression
  * @return {object}
  */
-function ParseExpression(song, expression) {
+function parseExpression(song, expression) {
   let out = null; // output value, will be updated as we go
   let butnotOut = null; // output to use once but not tag has been seen
   let currOp = Operations.START; // current operation to execute between tags
@@ -41,6 +43,10 @@ function ParseExpression(song, expression) {
       out = isTagInSong(tagName, song);
     } else if (Object.values(Operations).includes(tagName.toLowerCase())) { // if the tag is an op, store it
       currOp = tagName.toLowerCase(); // using to lowercase, meaning case doesn't matter.
+    } else if (Object.values(Operations).includes(tagName.toLowerCase())) {
+      // if the tag is an op, store it
+      currOp = tagName.toLowerCase();
+      // using to lowercase, meaning case doesn't matter.
     } else if (currOp === Operations.AND) {
       if (butnotOut != null) {
         butnotOut = butnotOut || isTagInSong(tagName, song);
@@ -57,12 +63,16 @@ function ParseExpression(song, expression) {
       butnotOut = isTagInSong(tagName, song);
     }
   }
+
   // console.log("butnotOut: " + butnotOut);
   if (butnotOut != null) {
     return out && !butnotOut;
   }
 
+  if (butnotOut != null) {
+    return out && !butnotOut;
+  }
   return out;
 }
 
-export default ParseExpression;
+export default parseExpression;

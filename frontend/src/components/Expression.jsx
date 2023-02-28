@@ -13,9 +13,12 @@ function Expression({expression, setExpression}) {
 
   // Removes tags from the expression when they are clicked.
   const removeExpression = ((event) => {
-    setExpression(expression.filter((tag) =>
-      tag.name !== event.currentTarget.textContent,
-    ));
+    const filtered = expression.filter((tag) =>
+      tag.id ?
+        tag.id !== parseInt(event.currentTarget.id) :
+        tag.name !== event.currentTarget.textContent,
+    );
+    setExpression(filtered);
   });
 
   return (
@@ -29,6 +32,7 @@ function Expression({expression, setExpression}) {
             <div
               style={{backgroundColor: tag.color}}
               className="tagName"
+              id={tag.id}
               // Remove tag from Expression if clicked.
               onClick={removeExpression}
             >

@@ -3,7 +3,6 @@ import React from 'react';
 import './Home.css';
 import TopBar from './TopBar';
 import Library from './Library.jsx';
-import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SortModal from './SortModal.jsx';
@@ -76,7 +75,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(data);
+  console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -89,19 +88,17 @@ function Home() {
   const [refreshToken, setRefreshToken] = React.useState('');
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
-  const [trackURI, setTrackURI] = React.useState('');
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  // used to keep track of the current playing status 'isPlaying'
+  const [updatedLib, setUpdatedLib] = React.useState([]);
+  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-  // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 1},
     {name: 'instrumental', color: '#81b29a'},
-    {name: 'BUT NOT', color: '#888888'},
+    {name: 'BUT NOT', color: '#888888', id: 2},
     {name: 'guitar', color: '#719cd6'},
-    {name: 'AND', color: '#888888'},
+    {name: 'AND', color: '#888888', id: 3},
     {name: 'jazz', color: '#719cd6'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
@@ -152,6 +149,9 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
+  // React.useEffect(() => {
+
+  // }, [updatedLib])
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
@@ -160,10 +160,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   trackURI: ${event.currentTarget.title}`);
-    setTrackURI(event.currentTarget.title);
-    // called when clicking on a song
-    // event stores the thing that was clicked on
+    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
+    setClickedTrackURI(event.currentTarget.title);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -209,6 +207,7 @@ function Home() {
   };
 
   const logout = async () => {
+    // tokens
     setAccessToken('');
     setRefreshToken('');
 
@@ -242,6 +241,9 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
+        accessToken={accessToken}
+        clickedTrackURI={clickedTrackURI}
+        updatedLib={updatedLib}
       />
       <div className="searchbar">
         <SearchBar
@@ -258,6 +260,8 @@ function Home() {
         // ^ displays library if there is no searchQuery
         hidden={Boolean(searchQuery)}
         library={library}
+        updatedLib={updatedLib}
+        setUpdatedLib={setUpdatedLib}
         clickedOnSong={clickedOnSong}
         clickedOnTags={clickedOnTags}
         expression={expression}
@@ -269,9 +273,6 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      { (accessToken !== '') && <Player
-        accessToken={accessToken}
-        trackURI={trackURI}/> }
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}

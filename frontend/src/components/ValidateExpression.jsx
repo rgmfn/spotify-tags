@@ -6,60 +6,34 @@ const Operations = {
 };
 
 /**
- *
  * @param {object} expression
  * @return {object}
  */
-function ValidateExpression(expression) {
+function validateExpression(expression) {
   console.log('Validating');
 
   let butnotTag = false;
   for (let i=0; i<expression.length; i++) {
-    console.log('butnotTag: ' + butnotTag);
-    const tagName = expression[i].name;
-    const operandTag = Object.values(Operations).includes(tagName.toLowerCase());
-    console.log(operandTag);
+    const tagName = expression[i].name.toLowerCase();
+    const operandTag = Object.values(Operations).includes(tagName);
 
-    if (i % 2 == 0) { // on even tags
-      if (operandTag) { // the tag should not be an operand
-        return false;
-      }
-    } else {
-      if (!operandTag) {
-        return false;
-      }
+    // on even tags
+    if (i % 2 === 0 && operandTag) { // the tag should not be an operand
+      return false;
+    } else if (i % 2 === 1 && !operandTag) { // on odd tags it should
+      return false;
     }
-    if (tagName.toLowerCase() === Operations.BUT_NOT) {
-      if (butnotTag) { // there can't be two but not tags
-        return false;
+
+    if (tagName === Operations.BUT_NOT) {
+      if (!butnotTag) {
+        butnotTag = true; // if this is the first BUT NOT tag in expression
       } else {
-        butnotTag = true;
+        return false; // there can't be two but not tags
       }
     }
-    // check if expression is imcomplete
-    // if (i + 1 === expression.length){ // if i + 1 == length incomplete expression.
-    //   return(
-    //     <h2 id='error message'>
-    //       Error: Invalid Expression.{'\n'}
-    //       Remove trailing boolean operator.
-    //     </h2>
-    //   );
-    // }
-    /**
-     * check if operand tag is formated correctly,
-     * not needed since tags are put into expression from
-     * existing tags.
-     */
-    // else { // Invalid Operation
-    //   return(
-    //     <h2 id='error message'>
-    //       Error: Invalid Expression.{"\n"}
-    //       "{tagName}" is not a valid boolean operator.
-    //     </h2>
-    //   );
-    // }
+
   }
   return true;
 }
 
-export default ValidateExpression;
+export default validateExpression;
