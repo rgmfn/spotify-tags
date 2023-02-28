@@ -3,7 +3,6 @@ import React from 'react';
 import './Home.css';
 import TopBar from './TopBar';
 import Library from './Library.jsx';
-import Player from './Player.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
@@ -76,7 +75,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(data);
+  console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -90,12 +89,9 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
-  const [trackURI, setTrackURI] = React.useState('');
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  // used to keep track of the current playing status 'isPlaying'
+  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [tagSelection, setTagSelection] = React.useState([]); 
-  // const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
@@ -162,10 +158,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   trackURI: ${event.currentTarget.title}`);
-    setTrackURI(event.currentTarget.title);
-    // called when clicking on a song
-    // event stores the thing that was clicked on
+    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
+    setClickedTrackURI(event.currentTarget.title);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -237,8 +231,8 @@ function Home() {
 
     // get current user info
     const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-        method: 'GET',
-        headers: {'Authorization': 'Bearer ' + accessToken},
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
 
@@ -266,6 +260,9 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         clickedOnBar={clickedOnBar}
+        accessToken={accessToken}
+        clickedTrackURI={clickedTrackURI}
+        updatedLib={updatedLib}
       />
       <div className="searchbar">
         <SearchBar
@@ -301,9 +298,6 @@ function Home() {
         objectTags={expression}
         setState={setExpression}
       />
-      { (accessToken !== '') && <Player
-        accessToken={accessToken}
-        trackURI={trackURI}/> }
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
