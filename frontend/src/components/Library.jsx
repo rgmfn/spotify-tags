@@ -52,6 +52,7 @@ function Library({library, updatedLib, setUpdatedLib, clickedOnSong, clickedOnTa
               >
                 <td className="imgCol"
                   // td = table data (data cell)
+                >
                   <div className="imgContainer">
                     <img
                       src={song.album.images[0].url}
