@@ -6,7 +6,8 @@ import Modal from '@mui/material/Modal';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import sortFunc from './sortSongs.js';
 
 const style = {
   position: 'absolute',
@@ -20,17 +21,24 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal() {
+/**
+ *
+ * @param {Array} library
+ * @param {*} setLibrary
+ *
+ * @return {Object}
+ */
+export default function BasicModal(props) {
   const [open, setOpen] = React.useState(false);
   const [reverse, setReverse] = React.useState(false);
   const [primary, setPrimary] = React.useState('Song Name');
   const [secondary, setSecondary] = React.useState('Song Name');
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const printOut = () => {
-    console.log(reverse, primary, secondary);
-  }
+  
+  const handleSort = () => {
+    sortFunc(reverse, primary, secondary, props.library, props.setLibrary);
+  };
   const handleChangeReverse = (event) => {
     setReverse(event.target.value);
   };
@@ -95,7 +103,7 @@ export default function BasicModal() {
               <MenuItem value={'popularity'}>Popularity</MenuItem>
             </Select>
           </FormControl>
-          <Button onClick={printOut}>Sort</Button>
+          <Button onClick={handleSort}>Sort</Button>
         </Box>
       </Modal>
     </div>

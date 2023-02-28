@@ -9,7 +9,6 @@ import SearchResults from './SearchResults.jsx';
 import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
 
-
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 
@@ -136,6 +135,9 @@ function Home() {
     setAccessToken(accessToken);
   }, []);
 
+  React.useEffect(() => {
+    console.log('library', library);
+  }, [library]);
 
   /**
    * When the refreshToken or accessToken change, reset the library using
@@ -280,7 +282,7 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <SortModal/>
+      <SortModal library={library} setLibrary={setLibrary}/>
     </div>
   );
 }
