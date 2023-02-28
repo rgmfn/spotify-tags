@@ -12,7 +12,6 @@
     "emoji-picker-react": "*",
     "prop-types": "*",
     "react": "*",
-    "react-dom": "^18.2.0",
     "react-router": "*",
     "react-router-dom": "*"
   },
@@ -27,7 +26,7 @@
     "msw": "*",
     "puppeteer": "*",
     "puppeteer-core": "*",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "*"
   },
   "scripts": {
     "build": "react-scripts build",
