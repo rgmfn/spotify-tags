@@ -7,9 +7,15 @@ import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
 import TagPopover from './TagPopover';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import IconButton from '@mui/material/IconButton';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
+import {ThemeProvider} from '@mui/material/styles';
+import {theme} from './Theme.js';
 
 /**
  * Gets a new access token using the refresh token.
@@ -270,11 +276,15 @@ function Home() {
           setSearchQuery={setSearchQuery}
         />
       </div>
-      {!accessToken ?
-        <a href={ // login button
-          `http://localhost:3010/login`
-        }>Login to Spotify</a>: <button onClick={logout}>Logout</button>}
-      <button onClick={refreshList}>Refresh List</button>
+      <ThemeProvider theme={theme}>
+        {!accessToken ?
+          <IconButton href='http://localhost:3010/login' color= 'secondary'>
+            <LoginIcon color= 'secondary'/>
+          </IconButton>: <IconButton onClick={logout} color= 'secondary'>
+            <LogoutIcon color= 'secondary'/></IconButton>}
+        <IconButton onClick={refreshList} color= 'secondary'>
+          <RefreshIcon color= 'secondary'/></IconButton>
+      </ThemeProvider>
       {!Boolean(searchQuery) && <Library
         // ^ displays library if there is no searchQuery
         hidden={Boolean(searchQuery)}

@@ -7,15 +7,8 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-
-const theme = createTheme({
-  palette: {
-    secondary: {
-      main: '#39506d',
-    },
-  },
-});
+import {ThemeProvider} from '@mui/material/styles';
+import {theme} from './Theme.js';
 
 /**
  * @param {state} accessToken
