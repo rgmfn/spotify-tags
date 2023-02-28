@@ -20,14 +20,15 @@ const theme = createTheme({
 /**
  * @param {state} accessToken
  * @param {state} clickedTrackURI
+ * @param {state} setPlayingTrackID
  * @param {state} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackURI,
-  updatedLib, setPlayingTrackID}) {
+function Player({accessToken, clickedTrackURI, setPlayingTrackID,
+  updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   /**
    * Sets up web player to stream music.
@@ -75,17 +76,20 @@ function Player({accessToken, clickedTrackURI,
         console.error(message);
       });
 
-      player.addListener('account_error', ({message}) => {
-        console.error(message);
-      });
+      // runs when state of the local playback has changed (i.e.
+      // current playing track changes, current track pauses,
+      // current track resumes playing)
+      player.addListener('player_state_changed', ((state) => {
+        if (!state) {
+          return;
+        }
 
-      player.addListener('player_state_changed', ({
         // eslint-disable-next-line camelcase
-        track_window: {current_track},
-      }) => {
+        setPlayingTrackID(state.track_window.current_track.id);
         // eslint-disable-next-line camelcase
-        setPlayingTrackID(current_track.id);
-      });
+        console.log(`Current playing song: ${state.track_window.current_track.name}`);
+        setIsPaused(state.paused);
+      }));
 
       // connects web player instance to Spotify w/ credentials given
       // during initialization above
@@ -127,20 +131,8 @@ function Player({accessToken, clickedTrackURI,
           'Authorization': `Bearer ${accessToken}`,
         },
       });
-      setIsPlaying(true);
     }
   }, [clickedTrackURI]);
-
-  /**
-   * Called when clicking on the pause/play button.
-   * Toggles the playing state of the SpotifySDKPlayer.
-   */
-  const clickedOnPlayPause = () => {
-    player.togglePlay().then(() => {
-      console.log('Toggled playback!');
-    });
-    setIsPlaying(!isPlaying);
-  };
 
   return (
     <>
@@ -162,8 +154,12 @@ function Player({accessToken, clickedTrackURI,
             id="play-button"
             className="play-button"
             color='secondary'
-            onClick={ clickedOnPlayPause }>
-            {isPlaying ?
+            onClick={() => {
+              player.togglePlay().then(() => {
+                console.log('Toggled play button!');
+              });
+            }}>
+            {!isPaused ?
               <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
               <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
           </IconButton>
