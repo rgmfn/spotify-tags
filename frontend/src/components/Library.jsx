@@ -11,6 +11,7 @@ import validateExpression from './ValidateExpression';
  *                                   representing a song
  * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
  *                                   column of a <tr> representing a song
+ * @param {string} playingTrackID
  * @return {object} JSX
  */
 function Library({library, updatedLib, setUpdatedLib,
