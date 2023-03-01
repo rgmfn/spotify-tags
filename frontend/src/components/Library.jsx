@@ -34,6 +34,40 @@ function Library({library, updatedLib, setUpdatedLib,
     setUpdatedLib(songMatches);
   }, [library, expression]);
 
+  /**
+   * Called by Ryan's wrapper for Victor's expression builder pop-up module.
+   *
+   * DOES THIS -> LIST STEPS:
+   *
+   *  @return {array} list of artist and album tags from each song in library
+   */
+  const artistAlbumTags = (() => {
+    // creates list of artists and albums from each song in library
+    let artistsAlbums = [];
+    let artist = '';
+    let album = '';
+
+    library.map((song) => {
+      artist = song.artists[0].name;
+      album = song.album.name;
+
+      artistsAlbums = (artistsAlbums.includes(artist)) ? (artistsAlbums) :
+        [...artistsAlbums, song.artists[0].name];
+      artistsAlbums = (artistsAlbums.includes(album)) ? (artistsAlbums) :
+        [...artistsAlbums, song.album.name];
+    });
+    return artistsAlbums;
+  });
+
+  // calls artistsAlbumTags
+  React.useEffect(() => {
+    console.log(`List of artist and album tags from library songs: `);
+
+    artistAlbumTags().map((tag) => {
+      console.log(` tag: ${tag}`);
+    });
+  }, [library]);
+
   return (
     <table>
       <tbody
