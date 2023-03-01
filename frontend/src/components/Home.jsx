@@ -5,6 +5,7 @@ import TopBar from './TopBar';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
 import TagPopover from './TagPopover';
 import LoginIcon from '@mui/icons-material/Login';
@@ -140,6 +141,9 @@ function Home() {
     setAccessToken(accessToken);
   }, []);
 
+  React.useEffect(() => {
+    console.log('library', library);
+  }, [library]);
 
   /**
    * When the refreshToken or accessToken change, reset the library using
@@ -321,6 +325,7 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
+      <SortModal library={library} setLibrary={setLibrary}/>
     </div>
   );
 }

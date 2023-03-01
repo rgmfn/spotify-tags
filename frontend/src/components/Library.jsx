@@ -42,9 +42,9 @@ function Library({library, updatedLib, setUpdatedLib,
           <tr><td>Loading...</td></tr> : updatedLib.length === 0 ?
           // render 'Loading...' if the library isn't loaded
             <tr><td>No match found.</td></tr> : updatedLib.map((song) => (
-            // render 'No match found.' if the new library is now empty
+              // render 'No match found.' if the new library is now empty
               <tr
-              // tr = table row
+                // tr = table row
                 onClick={clickedOnSong}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
@@ -55,7 +55,7 @@ function Library({library, updatedLib, setUpdatedLib,
                 }}
               >
                 <td className="imgCol"
-                // td = table data (data cell)
+                  // td = table data (data cell)
                 >
                   <div className="imgContainer">
                     <img
