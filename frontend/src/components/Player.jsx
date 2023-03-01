@@ -11,10 +11,10 @@ import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
 
 /**
- * @param {state} accessToken
- * @param {state} clickedTrackURI
- * @param {state} setPlayingTrackID
- * @param {state} updatedLib
+ * @param {string} accessToken
+ * @param {string} clickedTrackURI
+ * @param {function} setPlayingTrackID
+ * @param {array} updatedLib
  * @return {object} JSX
  */
 function Player({accessToken, clickedTrackURI, setPlayingTrackID,
@@ -80,7 +80,8 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
         // eslint-disable-next-line camelcase
         setPlayingTrackID(state.track_window.current_track.id);
         // eslint-disable-next-line camelcase
-        console.log(`Current playing song: ${state.track_window.current_track.name}`);
+        console.log(`Current playing song: ` +
+                    `${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
       }));
 
@@ -107,7 +108,7 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
 
       // creates list of uris (playlist) from list of songs (updatedLib)
       let playlist = [];
-      updatedLib.map((song) => {
+      updatedLib.forEach((song) => {
         playlist = [...playlist, song.uri];
       });
 

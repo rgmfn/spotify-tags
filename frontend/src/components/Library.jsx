@@ -2,6 +2,7 @@ import React from 'react';
 
 import parseExpression from './Parser.jsx';
 import validateExpression from './ValidateExpression';
+import {artistAlbumTags} from './artistAlbumTags.js';
 
 /**
  * @param {array} library
@@ -11,6 +12,7 @@ import validateExpression from './ValidateExpression';
  *                                   representing a song
  * @param {function} clickedOnTags - in Home.jsx, when clicking on the tags
  *                                   column of a <tr> representing a song
+ * @param {string} playingTrackID
  * @return {object} JSX
  */
 function Library({library, updatedLib, setUpdatedLib,
@@ -32,6 +34,16 @@ function Library({library, updatedLib, setUpdatedLib,
   React.useEffect(() => {
     setUpdatedLib(songMatches);
   }, [library, expression]);
+
+  // calls artistsAlbumTags (testing)
+  React.useEffect(() => {
+    console.log(`artistAlbumsTags for library songs: `);
+    console.log(` artistAlbumTags(library): ${artistAlbumTags(library)}`);
+
+    artistAlbumTags(library).forEach((tag) => {
+      console.log(` {name: ${tag.name}, color: ${tag.color}},`);
+    });
+  }, [library]);
 
   return (
     <table>
