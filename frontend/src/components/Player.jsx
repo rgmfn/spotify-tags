@@ -87,8 +87,8 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
         // eslint-disable-next-line camelcase
         setPlayingTrackID(state.track_window.current_track.id);
         // eslint-disable-next-line camelcase
-        console.log(`Current playing song: + 
-                    ${state.track_window.current_track.name}`);
+        console.log(`Current playing song: ` +
+                    `${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
       }));
 
