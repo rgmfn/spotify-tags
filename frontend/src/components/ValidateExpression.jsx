@@ -31,7 +31,6 @@ function validateExpression(expression) {
         return false; // there can't be two but not tags
       }
     }
-
   }
   return true;
 }

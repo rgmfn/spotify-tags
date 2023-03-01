@@ -8,6 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import sortFunc from './sortSongs.js';
+import {ThemeProvider} from '@mui/material/styles';
+import {darkTheme} from './darkTheme.js';
 
 const style = {
   position: 'absolute',
@@ -23,8 +25,7 @@ const style = {
 
 /**
  *
- * @param {Array} library
- * @param {*} setLibrary
+ * @param {Object} props
  *
  * @return {Object}
  */
@@ -35,7 +36,7 @@ export default function BasicModal(props) {
   const [secondary, setSecondary] = React.useState('Song Name');
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
+
   const handleSort = () => {
     sortFunc(reverse, primary, secondary, props.library, props.setLibrary);
   };
@@ -50,7 +51,7 @@ export default function BasicModal(props) {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={darkTheme}>
       <Button onClick={handleOpen}>Sort</Button>
       <Modal
         open={open}
@@ -62,7 +63,7 @@ export default function BasicModal(props) {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Sort Options
           </Typography>
-          <FormControl fullWidth>
+          <FormControl margin='normal' fullWidth>
             <InputLabel>Sort Type</InputLabel>
             <Select
               value={reverse}
@@ -73,7 +74,7 @@ export default function BasicModal(props) {
               <MenuItem value={true}>Reverse</MenuItem>
             </Select>
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl margin='normal' fullWidth>
             <InputLabel>Primary</InputLabel>
             <Select
               value={primary}
@@ -88,7 +89,7 @@ export default function BasicModal(props) {
               <MenuItem value={'popularity'}>Popularity</MenuItem>
             </Select>
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl margin='normal' fullWidth>
             <InputLabel>Secondary</InputLabel>
             <Select
               value={secondary}
@@ -106,6 +107,6 @@ export default function BasicModal(props) {
           <Button onClick={handleSort}>Sort</Button>
         </Box>
       </Modal>
-    </div>
+    </ThemeProvider>
   );
 }
