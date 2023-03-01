@@ -58,6 +58,7 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
             <SearchBar
             searchQuery={tagSearchQuery}
             setSearchQuery={setTagSearchQuery}
+            placeholder="Search a Tag"
             />
           </div>
           <div id="popover-container">

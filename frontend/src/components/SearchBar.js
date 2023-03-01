@@ -38,7 +38,7 @@ export default function SearchBar(props) {
       }}
       value={props.searchQuery}
       // Value is always what searchQuery is.
-      placeholder='Search a Song'
+      placeholder={props.placeholder}
       bgcolor='primary'
       color='secondary'
       // Color of the search bar when focused.
