@@ -9,8 +9,8 @@ import SongTagAdder from './SongTagAdder.jsx';
 import {darkTheme} from './darkTheme.js';
 
 /**
- * @param {object} song - the song being viewed in the SongCard, if there is
- *                        none, the SongCard does not show up
+ * @param {object} songToView - the song being viewed in the SongCard, if
+ *                              there is none, the SongCard does not show up
  * @param {function} setSongToView - sets the song being viewed in the SongCard,
  *                                   set to emptySong to make SongCard go away
  * @param {array} library - the current song library
@@ -20,16 +20,16 @@ import {darkTheme} from './darkTheme.js';
  * @param {function} setExpression - used inside SongTagAdder
  * @return {object} JSX
  */
-function SongCard({song, setSongToView, library, setLibrary, closeCard,
-  expression, setExpression}) {
-  const [addingTags, setAddingTags] = React.useState(false);
+function SongCard({songToView, setSongToView, library,
+  setLibrary, closeCard}) {
+  const [isAddingTags, setIsAddingTags] = React.useState(false);
 
   /**
    * TODO
    */
   const clickedOnTagContainer = (() => {
     console.log('clicked tag container');
-    setAddingTags(true);
+    setIsAddingTags(true);
   });
 
   /**
@@ -39,11 +39,11 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard,
    */
   const clickedOnTag = ((event) => {
     event.stopPropagation();
-    const newTags = song.tags.filter((tag) =>
+    const newTags = songToView.tags.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
     );
     const newLibrary = library.map((newSong) => {
-      if (newSong.id === song.id) {
+      if (newSong.id === songToView.id) {
         newSong.tags = newTags;
         setSongToView(newSong);
         return newSong;
@@ -57,7 +57,8 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard,
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
-        open={Boolean(song.id)}
+        id='songcard'
+        open={Boolean(songToView.id)}
         onClose={closeCard}
         anchorReference='none'
         style={{
@@ -71,36 +72,36 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard,
             <div id="left-half">
               <div id="name-container">
                 <p id="songName" className="tagName">
-                  {song.name}
+                  {songToView.name}
                 </p>
               </div>
               <div id="artist-container">
                 <PersonIcon id="personIcon"/>
                 <p id="artistName" className="tagName">
-                  {song.artists[0].name}
+                  {songToView.artists[0].name}
                 </p>
               </div>
               <div id="album-container">
                 <AlbumIcon id="albumIcon"/>
                 <p id="albumName" className="tagName">
-                  {song.album.name}
+                  {songToView.album.name}
                 </p>
               </div>
             </div>
             <div id="right-half">
               <img
-                src={song.album.images[0].url}
-                alt={'[' + song.album.name + ' img]'}
+                src={songToView.album.images[0].url}
+                alt={'[' + songToView.album.name + ' img]'}
                 id="songImg"
               />
             </div>
           </div>
           <hr className="divider"/>
-          <div id="bottom-half">
-            <div id="tags-container"
-              onClick={clickedOnTagContainer}
-            >
-              {song.tags.map((tag) => (
+          <div id="bottom-half"
+            onClick={clickedOnTagContainer}
+          >
+            <div id="tags-container">
+              {songToView.tags.map((tag) => (
                 <div
                   style={{backgroundColor: tag.color}}
                   className="tagName"
@@ -113,11 +114,13 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard,
           </div>
         </div>
         <SongTagAdder
-          open={addingTags}
+          open={isAddingTags}
           userID={''}
-          expression={expression}
-          setExpression={setExpression}
-          setAddingTags={setAddingTags}
+          songToView={songToView}
+          setSongToView={setSongToView}
+          library={library}
+          setLibrary={setLibrary}
+          setIsAddingTags={setIsAddingTags}
         />
       </Popover>
     </ThemeProvider>

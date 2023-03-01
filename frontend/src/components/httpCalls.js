@@ -70,7 +70,7 @@ const getSong = async (accessToken, refreshToken, setAccessToken,
 };
 
 const getAllTags = async (userID) => {
-  const result = await fetch(`localhost:3000/v1/tagList?userid=${userID}`, {
+  const result = await fetch(`http://localhost:3010/v0/tagList?userid=${userID}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

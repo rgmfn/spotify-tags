@@ -1,11 +1,12 @@
 import React from 'react';
 
 import './Home.css';
-import TopBar from './TopBar';
+import TopBar from './TopBar.jsx';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
+
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -43,6 +44,7 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
 const insertTestingTags = (songs) => {
   for (const song of songs.tracks.items) {
     song.tags = fakeTags;
+    // song.tags = [];
   }
 
   return songs;
@@ -99,16 +101,16 @@ function Home() {
   const [songToView, setSongToView] = React.useState(emptySong);
 
   const [searchQuery, setSearchQuery] = React.useState('');
-  const fakeExpression = [
-    {name: 'classical', color: '#c94f6d'},
-    {name: 'AND', color: '#888888', id: 1},
-    {name: 'instrumental', color: '#81b29a'},
-    {name: 'BUT NOT', color: '#888888', id: 2},
-    {name: 'guitar', color: '#719cd6'},
-    {name: 'AND', color: '#888888', id: 3},
-    {name: 'jazz', color: '#719cd6'},
-  ];
-  const [expression, setExpression] = React.useState(fakeExpression);
+  // const fakeExpression = [
+  //   {name: 'classical', color: '#c94f6d'},
+  //   {name: 'AND', color: '#888888', id: 1},
+  //   {name: 'instrumental', color: '#81b29a'},
+  //   {name: 'BUT NOT', color: '#888888', id: 2},
+  //   {name: 'guitar', color: '#719cd6'},
+  //   {name: 'AND', color: '#888888', id: 3},
+  //   {name: 'jazz', color: '#719cd6'},
+  // ];
+  const [expression, setExpression] = React.useState([]);
 
   /**
    * TODO
@@ -198,17 +200,6 @@ function Home() {
   };
 
   /**
-   * Opens TagPopover
-   *
-   * TODO: add an argument that holds the list of tags to pass.
-   *
-   * @param {object} event
-   */
-  const clickedOnBar = (event) => {
-    console.log('clickedOnBar');
-  };
-
-  /**
    * Called when clicking on the 'Refresh List' button.
    *
    * Refreshes the library of songs displayed using the temporary getSearch
@@ -232,7 +223,7 @@ function Home() {
       headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
-    // TODO use userID state for this
+    // TODO in sprint4: make userID into state
 
     // store each song in the library to db
     for (const song of library) {
@@ -257,7 +248,6 @@ function Home() {
       <TopBar
         expression={expression}
         setExpression={setExpression}
-        clickedOnBar={clickedOnBar}
         accessToken={accessToken}
         clickedTrackURI={clickedTrackURI}
         setPlayingTrackID={setPlayingTrackID}
@@ -289,10 +279,8 @@ function Home() {
         expression={expression}
       />}
       <SongCard
-        song={songToView}
+        songToView={songToView}
         setSongToView={setSongToView}
-        expression={expression}
-        setExpression={setExpression}
         library={library}
         setLibrary={setLibrary}
         closeCard={closeCard}

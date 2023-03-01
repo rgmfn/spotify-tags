@@ -1,24 +1,21 @@
 import React from 'react';
 
 import TagPopover from './TagPopover';
-// import {getAllTags} from './httpCalls.js';
+import {getAllTags} from './httpCalls.js';
 
-/**
- * TODO temporary until fetch to backend
- *
- * @param {string} id - id of user (fake data)
- * @return {array} ofTags
- */
-const getAllTags = () => {
-  return [
-    {name: 'AND', color: '#888888'},
-    {name: 'OR', color: '#888888'},
-    {name: 'BUT NOT', color: '#888888'},
-    {name: 'classical', color: '#c94f6d'},
-    {name: 'instrumental', color: '#81b29a'},
-    {name: 'guitar', color: '#719cd6'},
-    {name: 'jazz', color: '#719cd6'},
-  ];
+import './SongTagAdder.css';
+
+const positioning = {
+  anchorEl: 'songcard',
+  anchorOrigin: {
+    vertical: 'top',
+    horizontal: 'right',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'left',
+  },
+  anchorReference: null,
 };
 
 /**
@@ -31,26 +28,57 @@ const getAllTags = () => {
  *                                   SongCard or not
  * @return {JSX} thing
  */
-function SongTagAdder({open, userID, expression,
-  setExpression, setAddingTags}) {
+function SongTagAdder({open, userID, songToView, setSongToView,
+  library, setLibrary, setIsAddingTags}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
 
   React.useEffect(() => {
     if (open) {
-      console.log('getting tags...');
-      const tags = getAllTags();
-      setTagsToSelect(tags);
+      getAllTags('TEST_USER_ID_1').then((obj) => {
+        setTagsToSelect(obj.tags);
+      });
     }
-  }, [open]);
+  }, [open, songToView]);
+
+  /*
+   * Rows that go before the tagsToSelect in the table.
+   */
+  const preRows = (
+    <>
+      <tr id='create-new-tag'>
+        <td>Create new tag</td>
+      </tr>
+    </>
+  );
+
+  /**
+   * Called when clicking on a tag to add to the target.
+   *
+   * @param {array} newTags - list of tags to set the viewed songs tags to
+   */
+  const setTargetsTags = (newTags) => {
+    const newLibrary = library.map((newSong) => {
+      if (newSong.id === songToView.id) {
+        newSong.tags = newTags;
+        setSongToView(newSong);
+        return newSong;
+      } else {
+        return newSong;
+      }
+    });
+    setLibrary(newLibrary);
+  };
 
   return (
     <TagPopover
       open={open}
       tagsToSelect={tagsToSelect}
       setTagsToSelect={setTagsToSelect}
-      targetsTags={expression}
-      setTargetsTags={setExpression}
-      setAddingTags={setAddingTags}
+      targetsTags={songToView.tags}
+      setTargetsTags={setTargetsTags}
+      setIsAddingTags={setIsAddingTags}
+      preRows={preRows}
+      positioning={positioning}
     />
   );
 }

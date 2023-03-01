@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './Expression.css';
-import ValidateExpression from './ValidateExpression';
+import validateExpression from './ValidateExpression';
 
 /**
  * @param {array} expression - array of tag objects representing the current
@@ -9,10 +9,11 @@ import ValidateExpression from './ValidateExpression';
  * @return {object} JSX
  */
 function Expression({expression, setExpression, clickedOnBar}) {
-  const validExpression = ValidateExpression(expression);
+  const validExpression = validateExpression(expression);
 
   // Removes tags from the expression when they are clicked.
   const removeExpression = ((event) => {
+    event.stopPropagation();
     const filtered = expression.filter((tag) =>
       tag.id ?
         tag.id !== parseInt(event.currentTarget.id) :

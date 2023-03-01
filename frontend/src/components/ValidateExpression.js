@@ -32,6 +32,7 @@ function validateExpression(expression) {
       }
     }
   }
+
   return true;
 }
 

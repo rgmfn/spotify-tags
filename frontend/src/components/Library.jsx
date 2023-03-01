@@ -15,7 +15,7 @@ import validateExpression from './ValidateExpression';
  */
 function Library({library, updatedLib, setUpdatedLib,
   clickedOnSong, clickedOnTags, expression, playingTrackID}) {
-  const validExpression = validateExpression(expression);
+  // const validExpression = validateExpression(expression);
   // is expression valid
 
   const [songMatches, setSongMatches] = React.useState([]);
@@ -24,12 +24,12 @@ function Library({library, updatedLib, setUpdatedLib,
   React.useEffect(() => {
     if (expression.length === 0) {
       setSongMatches(library);
-    } else if (validExpression && library.length > 0) {
+    } else if (validateExpression(expression) && library.length > 0) {
       setSongMatches(
         library.filter((song) => parseExpression(song, expression)),
       );
     }
-  }, [expression, library, validExpression]);
+  }, [expression, library]);
 
 
   React.useEffect(() => {
@@ -87,14 +87,16 @@ function Library({library, updatedLib, setUpdatedLib,
                   className="tagCol"
                   onClick={clickedOnTags}
                 >
-                  {song.tags.map((tag) => (
-                    <div
-                      style={{backgroundColor: tag.color}}
-                      className="tagName"
-                    >
-                      {tag.name}
-                    </div>
-                  ))}
+                  {!song.tags || song.tags.length <= 0 ?
+                    [] :
+                    song.tags.map((tag) => (
+                      <div
+                        style={{backgroundColor: tag.color}}
+                        className="tagName"
+                      >
+                        {tag.name}
+                      </div>
+                    ))}
                 </td>
               </tr>
             ))}
