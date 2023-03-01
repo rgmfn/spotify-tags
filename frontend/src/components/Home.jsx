@@ -99,7 +99,7 @@ function Home() {
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-  const [tagSelection, setTagSelection] = React.useState([]); 
+  const [tagSelection, setTagSelection] = React.useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
@@ -204,7 +204,7 @@ function Home() {
 
   /**
    * Opens TagPopover
-   * 
+   * @param {object} event
    * TODO: add an argument that holds the list of tags to pass.
    */
   const clickedOnBar = (event) => {
@@ -280,6 +280,7 @@ function Home() {
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          placeholder="Search a Song"
         />
       </div>
       <ThemeProvider theme={theme}>
