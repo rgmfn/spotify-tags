@@ -146,9 +146,6 @@ function Home() {
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
-  // React.useEffect(() => {
-
-  // }, [updatedLib])
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
