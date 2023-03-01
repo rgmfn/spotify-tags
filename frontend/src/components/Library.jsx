@@ -18,20 +18,23 @@ function Library({library, updatedLib, setUpdatedLib,
   const validExpression = validateExpression(expression);
   // is expression valid
 
-  let songMatches = [];
+  const [songMatches, setSongMatches] = React.useState([]);
 
   // store all songs that match the expression criteria
-  if (expression.length === 0) {
-    songMatches = library;
-  } else if (validExpression && library.length > 0) {
-    songMatches = library.filter(function(song) {
-      return parseExpression(song, expression);
-    });
-  }
+  React.useEffect(() => {
+    if (expression.length === 0) {
+      setSongMatches(library);
+    } else if (validExpression && library.length > 0) {
+      setSongMatches(
+        library.filter((song) => parseExpression(song, expression)),
+      );
+    }
+  }, [expression, library, validExpression]);
+
 
   React.useEffect(() => {
     setUpdatedLib(songMatches);
-  }, [library, expression]);
+  }, [setUpdatedLib, songMatches]);
 
   return (
     <table>

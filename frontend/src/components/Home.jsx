@@ -6,7 +6,6 @@ import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SearchBar from './SearchBar.js';
-import TagPopover from './TagPopover';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -78,10 +77,10 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
     });
   }
 
-  console.log(`accessToken: ${accessToken}`);
+  // console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(`data: ${data}`);
+  // console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -98,7 +97,7 @@ function Home() {
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-  const [tagSelection, setTagSelection] = React.useState([]); 
+
   const [searchQuery, setSearchQuery] = React.useState('');
   const fakeExpression = [
     {name: 'classical', color: '#c94f6d'},
@@ -140,7 +139,6 @@ function Home() {
     setAccessToken(accessToken);
   }, []);
 
-
   /**
    * When the refreshToken or accessToken change, reset the library using
    * the temporary getSearch method.
@@ -181,6 +179,7 @@ function Home() {
    *                         clicked on
    */
   const clickedOnTags = ((event) => {
+    event.stopPropagation();
     if (event.currentTarget.parentNode.id) {
       const song = library.find((libSong) =>
         libSong.id === event.currentTarget.parentNode.id, emptySong,
@@ -200,22 +199,13 @@ function Home() {
 
   /**
    * Opens TagPopover
-   * 
+   *
    * TODO: add an argument that holds the list of tags to pass.
+   *
+   * @param {object} event
    */
   const clickedOnBar = (event) => {
-    console.log("clickedOnBar");
-    if (event.currentTarget === event.target)
-      setTagSelection(fakeTags);
-  };
-
-   /**
-   * Called when clicking outside of the TagPopover.
-   *
-   * Sets tagSelection to an empty array (makes the Popover go away).
-   */
-   const closeTagPopover = () => {
-    setTagSelection([]);
+    console.log('clickedOnBar');
   };
 
   /**
@@ -242,6 +232,7 @@ function Home() {
       headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
     const userid = userInfo.id;
+    // TODO use userID state for this
 
     // store each song in the library to db
     for (const song of library) {
@@ -289,7 +280,6 @@ function Home() {
       </ThemeProvider>
       {!Boolean(searchQuery) && <Library
         // ^ displays library if there is no searchQuery
-        hidden={Boolean(searchQuery)}
         library={library}
         updatedLib={updatedLib}
         setUpdatedLib={setUpdatedLib}
@@ -301,15 +291,11 @@ function Home() {
       <SongCard
         song={songToView}
         setSongToView={setSongToView}
+        expression={expression}
+        setExpression={setExpression}
         library={library}
         setLibrary={setLibrary}
         closeCard={closeCard}
-      />
-      <TagPopover
-        tags={tagSelection}
-        closeTagPopover={closeTagPopover}
-        objectTags={expression}
-        setState={setExpression}
       />
       {Boolean(searchQuery) && <SearchResults
         // ^ displays library if there is a searchQuery

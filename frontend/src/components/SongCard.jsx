@@ -5,6 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import {ThemeProvider} from '@mui/material/styles';
 
 import './SongCard.css';
+import SongTagAdder from './SongTagAdder.jsx';
 import {darkTheme} from './darkTheme.js';
 
 /**
@@ -15,15 +16,29 @@ import {darkTheme} from './darkTheme.js';
  * @param {array} library - the current song library
  * @param {function} setLibrary - sets the current song library
  * @param {function} closeCard - called when clicking off of the SongCard
+ * @param {function} expression - used inside SongTagAdder
+ * @param {function} setExpression - used inside SongTagAdder
  * @return {object} JSX
  */
-function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
+function SongCard({song, setSongToView, library, setLibrary, closeCard,
+  expression, setExpression}) {
+  const [addingTags, setAddingTags] = React.useState(false);
+
+  /**
+   * TODO
+   */
+  const clickedOnTagContainer = (() => {
+    console.log('clicked tag container');
+    setAddingTags(true);
+  });
+
   /**
    * @param {object} event - event.currentTarget.textContent holds the
    *                         name of the tag to be removed
    * Removes the tag clicked from the song and from that song in the library.
    */
   const clickedOnTag = ((event) => {
+    event.stopPropagation();
     const newTags = song.tags.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
     );
@@ -82,7 +97,9 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
           </div>
           <hr className="divider"/>
           <div id="bottom-half">
-            <div id="tags-container">
+            <div id="tags-container"
+              onClick={clickedOnTagContainer}
+            >
               {song.tags.map((tag) => (
                 <div
                   style={{backgroundColor: tag.color}}
@@ -95,6 +112,13 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
             </div>
           </div>
         </div>
+        <SongTagAdder
+          open={addingTags}
+          userID={''}
+          expression={expression}
+          setExpression={setExpression}
+          setAddingTags={setAddingTags}
+        />
       </Popover>
     </ThemeProvider>
   );
