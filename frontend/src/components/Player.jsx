@@ -115,7 +115,7 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
 
       // creates list of uris (playlist) from list of songs (updatedLib)
       let playlist = [];
-      updatedLib.map((song) => {
+      updatedLib.forEach((song) => {
         playlist = [...playlist, song.uri];
       });
 

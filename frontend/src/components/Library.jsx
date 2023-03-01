@@ -47,7 +47,7 @@ function Library({library, updatedLib, setUpdatedLib,
     let artist = '';
     let album = '';
 
-    library.map((song) => {
+    library.forEach((song) => {
       artist = song.artists[0].name;
       album = song.album.name;
 
@@ -57,7 +57,8 @@ function Library({library, updatedLib, setUpdatedLib,
         [...artistsAlbums, album];
     });
 
-    //  
+    // transforms artistsAlbums list into properly formatted list of tags
+    let artistAlbumTags = [];
 
     return artistsAlbums;
   });
@@ -66,7 +67,7 @@ function Library({library, updatedLib, setUpdatedLib,
   React.useEffect(() => {
     console.log(`List of artist and album tags from library songs: `);
 
-    artistAlbumTags().map((tag) => {
+    artistAlbumTags().forEach((tag) => {
       console.log(` tag: ${tag}`);
     });
   }, [library]);
