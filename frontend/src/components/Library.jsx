@@ -39,10 +39,10 @@ function Library({library, updatedLib, setUpdatedLib,
    *
    * DOES THIS -> LIST STEPS:
    *
-   *  @return {array} list of artist and album tags from each song in library
+   *  @return {array} list of artist and album tags from each library song
    */
   const artistAlbumTags = (() => {
-    // creates list of artists and albums from each song in library
+    // creates no-duplicate list of artists and albums from each library song
     let artistsAlbums = [];
     let artist = '';
     let album = '';
@@ -52,10 +52,13 @@ function Library({library, updatedLib, setUpdatedLib,
       album = song.album.name;
 
       artistsAlbums = (artistsAlbums.includes(artist)) ? (artistsAlbums) :
-        [...artistsAlbums, song.artists[0].name];
+        [...artistsAlbums, artist];
       artistsAlbums = (artistsAlbums.includes(album)) ? (artistsAlbums) :
-        [...artistsAlbums, song.album.name];
+        [...artistsAlbums, album];
     });
+
+    //  
+
     return artistsAlbums;
   });
 
