@@ -37,12 +37,13 @@ function Library({library, updatedLib, setUpdatedLib,
   /**
    * Called by Ryan's wrapper for Victor's expression builder pop-up module.
    *
-   * DOES THIS -> LIST STEPS:
+   * Makes list of artists and albums from all library songs (no duplicates).
+   * Then, it makes a list of properly formatted artist and album tags.
    *
-   *  @return {array} list of artist and album tags from each library song
+   *  @return {array} - list of artist and album tags for each library song
    */
   const artistAlbumTags = (() => {
-    // creates no-duplicate list of artists and albums from each library song
+    // creates no-duplicate list of artists and albums for each library song
     let artistsAlbums = [];
     let artist = '';
     let album = '';
@@ -58,17 +59,21 @@ function Library({library, updatedLib, setUpdatedLib,
     });
 
     // transforms artistsAlbums list into properly formatted list of tags
-    let artistAlbumTags = [];
+    const artistAlbumTags = [];
+    artistsAlbums.forEach((artistAlbumName) => {
+      artistAlbumTags.push({name: artistAlbumName, color: '#dddddd'});
+    });
 
-    return artistsAlbums;
+    return artistAlbumTags;
   });
 
-  // calls artistsAlbumTags
+  // calls artistsAlbumTags (testing)
   React.useEffect(() => {
-    console.log(`List of artist and album tags from library songs: `);
+    console.log(`artistAlbumTags: ${artistAlbumTags()}`);
+    console.log(`artistAlbumsTags for library songs: `);
 
     artistAlbumTags().forEach((tag) => {
-      console.log(` tag: ${tag}`);
+      console.log(` {name: ${tag.name}, color: ${tag.color}},`);
     });
   }, [library]);
 
