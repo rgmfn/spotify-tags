@@ -7,17 +7,15 @@ import {darkTheme} from './darkTheme.js';
 import SearchBar from './SearchBar';
 
 /**
- * 
  * @param {array} tags - list of tags user can select
  * @param {function} closeTagPopover
  * @param {array} objectTags - Tag list of an object to append to.
  * @param {function} setState - set the state of the object we appended to.
- * @returns 
+ * @return {object}
  */
-function TagPopover({tags , closeTagPopover, objectTags, setState}){
+function TagPopover({tags, closeTagPopover, objectTags, setState}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
 
-  
   const filteredTags = (tagSearchQuery === '') ? tags : tags.filter((tag) =>
     tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase()),
   );
@@ -31,16 +29,17 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
   /**
    * Function to add the first tag found in search by
    * by pressing Enter.
+   * @param {*} e
    */
   function handleKeyDown(e) {
-    if (e.key == 'Enter'){
+    if (e.key == 'Enter') {
       objectTags.push(filteredTags[0]);
       setState([...objectTags]);
       setTagSearchQuery('');
     }
   }
 
-  return(
+  return (
     <ThemeProvider theme={darkTheme}>
         <Popover
         open={Boolean(tags.length)} // if no tags, nothing to display.
@@ -63,8 +62,8 @@ function TagPopover({tags , closeTagPopover, objectTags, setState}){
           </div>
           <div id="popover-container">
             <table style={{
-            borderCollapse: "separate",
-            borderSpacing: "10px"
+            borderCollapse: 'separate',
+            borderSpacing: '10px',
             }}>
               <tbody>
                 {filteredTags.length === 0 ?
