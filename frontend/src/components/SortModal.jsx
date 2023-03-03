@@ -38,7 +38,7 @@ export default function BasicModal(props) {
   const handleClose = () => setOpen(false);
 
   const handleSort = () => {
-    sortFunc(reverse, primary, secondary, props.library, props.setLibrary);
+    sortFunc(reverse, primary, secondary, props.updatedLib, props.setUpdatedLib);
   };
   const handleChangeReverse = (event) => {
     setReverse(event.target.value);

@@ -324,7 +324,7 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <SortModal library={library} setLibrary={setLibrary}/>
+      <SortModal updatedLib={updatedLib} setUpdatedLib={setUpdatedLib}/>
     </div>
   );
 }
