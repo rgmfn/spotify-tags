@@ -21,82 +21,111 @@ const tagIsInList = (toFind, list) => {
 };
 
 /**
- * @param {boolean} open - if the popover is open
+ * @param {boolean} isOpen - if the popover is open
  * @param {array} tagsToSelect - list of tags user can select
  * @param {function} setTagsToSelect
  * @param {array} targetsTags - tag list of an object to append to
  * @param {function} setTargetsTags - set the state of the object we appended to
- * @param {boolean} setAddingTags - sets if the tags are being added to
- *                                  (aka if SongTagAdder popover is open);
+ * @param {boolean} setIsAddingTags - sets if the targets tags are being added
+ *                                    to (aka if SongTagAdder popover is open)
  * @param {array} preRows - any extra rows to include before the standard tags
- * @param {array} postRows - any extra rows not needed to be included after
- *                          the standard tags
  * @param {object} positioning - provides information on where to display the
  *                               popover (declared in SongTagAdder.jsx)
  * @return {JSX} thing
  */
-function TagPopover({open, tagsToSelect, setTagsToSelect,
+function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
   targetsTags, setTargetsTags, setIsAddingTags,
-  preRows, postRows, positioning}) {
+  preRows, positioning}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
+  // ^ string used to query the tagsToSelect
   const [filteredTags, setFilteredTags] = React.useState([]);
+  // ^ tagsToSelect - all tags in targetsTags and fitting tagSearchQuery
 
+  /*
+   * Filtered out all tags in the targets tags. If the tagSearchQuery is not
+   * empty, also filters out all tags that doesn't fit the tagSearchQuery.
+   * Puts the result into filteredTags
+   */
   React.useEffect(() => {
-    if (tagSearchQuery === '') {
-      const tagsWithoutTargetsTags = tagsToSelect.filter((tag) => (
-        !tagIsInList(tag, targetsTags)
-      )); // dont include tags already in target
-      setFilteredTags(tagsWithoutTargetsTags);
-    } else {
-      const tagsWithoutTargetsTags = tagsToSelect.filter((tag) =>
-        tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase()) &&
-        !tagIsInList(tag, targetsTags),
-      );
-      setFilteredTags(tagsWithoutTargetsTags);
-      // dont include tags already in target
+    let tagsToSelectFiltered = tagsToSelect.filter((tag) => (
+      !tagIsInList(tag, targetsTags)
+    ));
+
+    if (tagSearchQuery !== '') {
+      tagsToSelectFiltered = tagsToSelectFiltered.filter((tag) => (
+        tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
+      ));
     }
+
+    setFilteredTags(tagsToSelectFiltered);
   }, [targetsTags, tagSearchQuery, tagsToSelect]);
 
   /**
-   * Called when clicking on a tag in the list of tags (tagsToSelect).
-   *
-   * Adds clicked tags to the target objects list of tags (targetsTags).
+   * Adds speicified tag to the target objects list of tags (targetsTags).
    * Target object will either be the expression or a song's tags.
    *
    * @param {object} tag
    */
-  const clickedOnTag = ((tag) => {
+  const addTagToTarget = ((tag) => {
     if (targetsTags.every((targTag) => targTag.name !== tag.name)) {
       setTargetsTags([...targetsTags, tag]); // populate array with new value.
       setTagSearchQuery('');
     }
   });
 
+  /**
+   * Adds the tag object newTag to the list of tagsToSelect.
+   *
+   * @param {object} newTag - tag to add to the list of tagsToSelect
+   */
+  const createTag = ((newTag) => {
+    setTagsToSelect([...tagsToSelect, newTag]);
+    addTagToTarget(newTag); // add to target
+    // TODO put tag in database
+  });
 
+  /**
+   * If the tag doesn't exist yet, create the tag specified by tagSearchQuery.
+   * If the tag does exist, add that tag specified by tagSearchQuery to the
+   * target.
+   */
+  const clickedCreateTag = (() => {
+    if (tagsToSelect.every((tag) => tagSearchQuery !== tag.name)) {
+      createTag(
+        {
+          name: tagSearchQuery,
+          color: tagColors[Math.floor(Math.random() * tagColors.length)],
+          // ^ select random color from possible tagColors
+        },
+      );
+    } else {
+      addTagToTarget(tagsToSelect.find(
+        (tag) => tag.name === tagSearchQuery,
+      ));
+    }
+  });
+
+  /*
+   * When the TagPopover is opened, if the addTagRow button is visible, give
+   * it the specified onClick function.
+   *
+   * Not great programming practice because is only used by the SongTagAdder,
+   * but seemed less complicated.
+   *
+   * Not sure how to give create-new-tag its onClick and have that onClick
+   * reference tagSearchQuery, so this seemed like the other option.
+   */
   React.useEffect(() => {
-    if (open) {
+    if (isOpen) {
       const addTagRow = document.getElementById('create-new-tag');
       if (addTagRow && tagSearchQuery !== '') {
         addTagRow.onclick = () => {
-          const newTag = {
-            name: tagSearchQuery,
-            color: tagColors[Math.floor(Math.random() * tagColors.length)],
-          };
-          if (tagsToSelect.every((tag) => tagSearchQuery !== tag.name)) {
-            setTagsToSelect([...tagsToSelect, newTag]);
-            // ^ add to list of choices
-            clickedOnTag(newTag); // add to target
-            // TODO put tag in database
-          } else {
-            clickedOnTag(tagsToSelect.find(
-              (tag) => tag.name === tagSearchQuery,
-            )); // add to target
-          }
+          clickedCreateTag();
         };
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, tagSearchQuery]);
+  }, [isOpen, tagSearchQuery]);
 
   /**
    * Called when clicking outside of the TagPopover.
@@ -115,12 +144,8 @@ function TagPopover({open, tagsToSelect, setTagsToSelect,
    * @param {event} e
    */
   function handleKeyDown(e) {
-    if (e.key === 'Enter') {
-      if (tagSearchQuery === '') {
-        setTargetsTags([...targetsTags, filteredTags[2]]);
-      } else {
-        setTargetsTags([...targetsTags, filteredTags[0]]);
-      }
+    if (e.key === 'Enter' && filteredTags.length > 0) {
+      setTargetsTags([...targetsTags, filteredTags[0]]);
       setTagSearchQuery('');
     } else if (e.key === 'Delete' && e.ctrlKey) {
       const tempTargetsTags = [...targetsTags];
@@ -132,7 +157,7 @@ function TagPopover({open, tagsToSelect, setTagsToSelect,
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
-        open={open} // if no tags, nothing to display.
+        open={isOpen} // if no tags, nothing to display.
         onClose={closeTagPopover}
         onKeyDown={(e) => handleKeyDown(e)}
         anchorEl={
@@ -148,6 +173,8 @@ function TagPopover({open, tagsToSelect, setTagsToSelect,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          width: positioning.width,
+          height: positioning.height,
         }}
       >
         <div id="search-bar">
@@ -168,7 +195,7 @@ function TagPopover({open, tagsToSelect, setTagsToSelect,
                 filteredTags.map((tag) => (
                   <tr onClick={(event) => {
                     event.stopPropagation();
-                    clickedOnTag(tag);
+                    addTagToTarget(tag);
                   }}>
                     <td>
                       <div

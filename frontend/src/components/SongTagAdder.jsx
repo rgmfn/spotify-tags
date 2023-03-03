@@ -1,25 +1,49 @@
 import React from 'react';
 
-import TagPopover from './TagPopover';
-import {getAllTags} from './httpCalls.js';
+import Button from '@mui/material/Button';
+import {ThemeProvider} from '@mui/material/styles';
 
-import './SongTagAdder.css';
+import TagPopover from './TagPopover';
+import {theme} from './Theme.js';
+import {getAllTags} from './httpCalls.js';
 
 const positioning = {
   anchorEl: 'songcard',
   anchorOrigin: {
-    vertical: 'top',
+    vertical: 'center',
     horizontal: 'right',
   },
   transformOrigin: {
-    vertical: 'top',
+    vertical: 'center',
     horizontal: 'left',
   },
+  width: '400px',
+  height: '550px',
   anchorReference: null,
 };
 
+/*
+ * Rows that go before the tagsToSelect in the table.
+ */
+const preRows = (
+  <>
+    <tr id='create-new-tag'>
+      <td>
+        <ThemeProvider theme={theme}>
+          <Button
+            id='create-new-tag-button'
+            variant='contained'
+          >
+            Create new tag
+          </Button>
+        </ThemeProvider>
+      </td>
+    </tr>
+  </>
+);
+
 /**
- * @param {boolean} open - if the TagPopover is open or not
+ * @param {boolean} isOpen - if the TagPopover is open or not
  * @param {string} userID - spotify ID of current user
  * @param {array} expression - list of tag objects representing the expression
  *                             that controls the library
@@ -28,35 +52,30 @@ const positioning = {
  *                                   SongCard or not
  * @return {JSX} thing
  */
-function SongTagAdder({open, userID, songToView, setSongToView,
+function SongTagAdder({isOpen, userID, songToView, setSongToView,
   library, setLibrary, setIsAddingTags}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
 
+  /*
+   * When the SongTagAdder is opened, it getsAllTags in the database for the
+   * specified user and puts it in tagsToSelect.
+   */
   React.useEffect(() => {
-    if (open) {
+    if (isOpen) {
       getAllTags('TEST_USER_ID_1').then((obj) => {
-        setTagsToSelect(obj.tags);
+        setTagsToSelect([...obj.tags]);
       });
     }
-  }, [open, songToView]);
-
-  /*
-   * Rows that go before the tagsToSelect in the table.
-   */
-  const preRows = (
-    <>
-      <tr id='create-new-tag'>
-        <td>Create new tag</td>
-      </tr>
-    </>
-  );
+  }, [isOpen, songToView]);
 
   /**
    * Called when clicking on a tag to add to the target.
    *
+   * Sets the tags of songToView and songToView inside library to newTags.
+   *
    * @param {array} newTags - list of tags to set the viewed songs tags to
    */
-  const setTargetsTags = (newTags) => {
+  const setSongsTags = (newTags) => {
     const newLibrary = library.map((newSong) => {
       if (newSong.id === songToView.id) {
         newSong.tags = newTags;
@@ -71,11 +90,11 @@ function SongTagAdder({open, userID, songToView, setSongToView,
 
   return (
     <TagPopover
-      open={open}
+      isOpen={isOpen}
       tagsToSelect={tagsToSelect}
       setTagsToSelect={setTagsToSelect}
       targetsTags={songToView.tags}
-      setTargetsTags={setTargetsTags}
+      setTargetsTags={setSongsTags}
       setIsAddingTags={setIsAddingTags}
       preRows={preRows}
       positioning={positioning}

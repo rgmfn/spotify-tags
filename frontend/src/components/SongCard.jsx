@@ -25,10 +25,12 @@ function SongCard({songToView, setSongToView, library,
   const [isAddingTags, setIsAddingTags] = React.useState(false);
 
   /**
-   * TODO
+   * Called when clicked on the bottom half of the song card (technically the
+   * 'bottom-half' element, not the 'tags-container' element).
+   *
+   * Sets isAddingTags to true, making the SongTagAdder appear.
    */
   const clickedOnTagContainer = (() => {
-    console.log('clicked tag container');
     setIsAddingTags(true);
   });
 
@@ -114,8 +116,8 @@ function SongCard({songToView, setSongToView, library,
           </div>
         </div>
         <SongTagAdder
-          open={isAddingTags}
-          userID={''}
+          isOpen={isAddingTags}
+          userID={'this will be state passed in'}
           songToView={songToView}
           setSongToView={setSongToView}
           library={library}
