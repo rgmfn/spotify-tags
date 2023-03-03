@@ -5,6 +5,7 @@ import TopBar from './TopBar.jsx';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
+import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
 
 import LoginIcon from '@mui/icons-material/Login';
@@ -99,17 +100,7 @@ function Home() {
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
-
   const [searchQuery, setSearchQuery] = React.useState('');
-  // const fakeExpression = [
-  //   {name: 'classical', color: '#c94f6d'},
-  //   {name: 'AND', color: '#888888', id: 1},
-  //   {name: 'instrumental', color: '#81b29a'},
-  //   {name: 'BUT NOT', color: '#888888', id: 2},
-  //   {name: 'guitar', color: '#719cd6'},
-  //   {name: 'AND', color: '#888888', id: 3},
-  //   {name: 'jazz', color: '#719cd6'},
-  // ];
   const [expression, setExpression] = React.useState([]);
 
   /**
@@ -254,6 +245,7 @@ function Home() {
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          placeholder="Search a Song"
         />
       </div>
       <ThemeProvider theme={theme}>
@@ -292,6 +284,7 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
+      <SortModal library={library} setLibrary={setLibrary}/>
     </div>
   );
 }

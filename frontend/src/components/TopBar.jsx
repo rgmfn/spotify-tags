@@ -49,6 +49,7 @@ function TopBar(props) {
         expression={props.expression}
         setExpression={props.setExpression}
         setIsAddingTags={setIsBuildingExpression}
+        updatedLib={props.updatedLib}
       />
     </div>
   );

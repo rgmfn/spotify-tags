@@ -2,6 +2,7 @@ import React from 'react';
 
 import TagPopover from './TagPopover';
 import {getAllTags} from './httpCalls';
+import {artistAlbumTags} from './artistAlbumTags.js';
 
 // where the TagPopover will be positioned
 const positioning = {
@@ -15,13 +16,17 @@ const booleanOps = [
 
 /**
  * @param {boolean} isOpen - if the popover is open or not
+ * @param {array} expression - list of tag objects used to filter library
+ * @param {function} setExpression - sets the expression
  * @param {function} setIsAddingTags - sets if the expression is being
  *                                             built (aka if the popover is
  *                                             open or not)
+ * @param {array} updatedLib - list of song objects in library that fit
+ *                             the expression
  * @return {JSX} thing
  */
 function ExpressionTagAdder({isOpen, expression, setExpression,
-  setIsAddingTags}) {
+  setIsAddingTags, updatedLib}) {
   const [boolOpID, setBoolOpID] = React.useState(0);
   // ^ id assigned to the new boolean opererator added to the expression
   //   needed so that boolean op tags with same name can be distinguished
@@ -38,11 +43,11 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
       let tags = booleanOps.map((op) => ({name: op, color: '#888888'}));
       getAllTags('TEST_USER_ID_1').then((obj) => {
         tags = tags.concat(obj.tags); // gets all tags in DB
-        // TODO add Diana's part
+        tags = tags.concat(artistAlbumTags(updatedLib));
         setTagsToSelect(tags);
       });
     }
-  }, [isOpen]);
+  }, [isOpen, updatedLib]);
 
   /**
    * Called when clicking on a tag to add to the target.
