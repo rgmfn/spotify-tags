@@ -12,6 +12,10 @@ const Operations = {
  * @return {object}
  */
 function isTagInSong(tagName, song) {
+  // check if the tag is the artist or alubm name
+  if (song.artists[0].name === tagName || song.album.name === tagName) {
+    return true;
+  }
   for (let i=0; i<song.tags.length; i++) { // for all tags in the song
     if (song.tags[i].name === tagName) { // if there's a match
       return true;
