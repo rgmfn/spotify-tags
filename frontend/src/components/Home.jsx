@@ -108,7 +108,7 @@ function Home() {
     {name: 'BUT NOT', color: '#888888', id: 2},
     {name: 'guitar', color: '#719cd6'},
     {name: 'AND', color: '#888888', id: 3},
-    {name: 'jazz', color: '#719cd6'},
+    {name: 'Queen', color: '#dddddd'},
   ];
   const [expression, setExpression] = React.useState(fakeExpression);
 
