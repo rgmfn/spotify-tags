@@ -118,7 +118,10 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
   React.useEffect(() => {
     if (isOpen) {
       const addTagRow = document.getElementById('create-new-tag');
-      if (addTagRow && tagSearchQuery !== '') {
+      if (
+        addTagRow && tagSearchQuery !== '' &&
+        !['and', 'or', 'but not'].includes(tagSearchQuery.toLowerCase())
+      ) {
         addTagRow.onclick = () => {
           clickedCreateTag();
         };
