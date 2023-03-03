@@ -7,6 +7,7 @@ import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
+import MultiTagAdder from './MultiTagAdder.jsx';
 
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -285,6 +286,7 @@ function Home() {
         setSongToView={setSongToView}
       />}
       <SortModal library={library} setLibrary={setLibrary}/>
+      <MultiTagAdder />
     </div>
   );
 }
