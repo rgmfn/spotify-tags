@@ -94,7 +94,7 @@ function SongCard({songToView, setSongToView, library,
               <img
                 src={songToView.album.images[0].url}
                 alt={'[' + songToView.album.name + ' img]'}
-                id="songImg"
+                className="song-card-song-img"
               />
             </div>
           </div>

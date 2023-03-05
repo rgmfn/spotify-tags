@@ -1,0 +1,22 @@
+#popover-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#tags-to-add-container, #tags-to-remove-container,
+#make-changes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    width: 100%;
+    /* border: 2px solid red; */
+}
+
+#tags-to-add, #tags-to-remove {
+    height: 100%;
+    width: 80%;
+    background-color: var(--bg-color);
+    border-radius: 5px;
+}
