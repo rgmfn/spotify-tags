@@ -7,6 +7,8 @@ import {darkTheme} from './darkTheme';
 import {tagColors} from './tagColors';
 import SearchBar from './SearchBar';
 
+const boolOpColor = '#888888';
+
 /**
  * Returns true if toFind is present in list.
  *
@@ -16,7 +18,7 @@ import SearchBar from './SearchBar';
  */
 const tagIsInList = (toFind, list) => {
   return list.some((tag) => (
-    tag.name === toFind.name && !tag.id
+    (tag.name === toFind.name) && !tag.id
   ));
 };
 
@@ -40,6 +42,9 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
   // ^ string used to query the tagsToSelect
   const [filteredTags, setFilteredTags] = React.useState([]);
   // ^ tagsToSelect - all tags in targetsTags and fitting tagSearchQuery
+  const [boolOpID, setBoolOpID] = React.useState(1);
+  // ^ id assigned to the new boolean opererator added to the expression
+  //   needed so that boolean op tags with same name can be distinguished
 
   /*
    * Filtered out all tags in the targets tags. If the tagSearchQuery is not
@@ -67,7 +72,11 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
    * @param {object} tag
    */
   const addTagToTarget = ((tag) => {
-    if (targetsTags.every((targTag) => targTag.name !== tag.name)) {
+    if (tag.color === boolOpColor) {
+      tag.id = Math.floor(boolOpID);
+      setBoolOpID(boolOpID+1);
+    }
+    if (!tagIsInList(tag, targetsTags)) {
       setTargetsTags([...targetsTags, tag]); // populate array with new value.
       setTagSearchQuery('');
     }
@@ -79,6 +88,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
    * @param {object} newTag - tag to add to the list of tagsToSelect
    */
   const createTag = ((newTag) => {
+    newTag.name = newTag.name.toLowerCase();
     setTagsToSelect([...tagsToSelect, newTag]);
     addTagToTarget(newTag); // add to target
     // TODO put tag in database

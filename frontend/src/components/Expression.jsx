@@ -14,6 +14,8 @@ import validateExpression from './ValidateExpression';
 function Expression({expression, setExpression, clickedOnExpression}) {
   const isValidExpression = validateExpression(expression);
 
+  // TODO can only put 1 AND or OR
+
   /**
    * Called when clicking on a tag in the expression.
    *
