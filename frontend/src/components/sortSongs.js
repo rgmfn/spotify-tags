@@ -5,9 +5,9 @@
  * @param {*} reverse
  * @param {*} primary
  * @param {*} secondary
- * @param {*} library
+ * @param {*} updatedLib
  * @param {*} mapped
- * @param {*} setLibrary
+ * @param {*} setUpdatedLib
  *
  * @return {Number}
  */
@@ -46,15 +46,15 @@ function songSort(reverse, primary, secondary) {
  * @param {*} reverse
  * @param {*} primary
  * @param {*} secondary
- * @param {*} library
- * @param {*} setLibrary
+ * @param {*} updatedLib
+ * @param {*} setUpdatedLib
  *
  */
 export default function mainSort(reverse,
-  primary, secondary, library, setLibrary) {
+  primary, secondary, updatedLib, setUpdatedLib) {
   // creating a new object for each attribute we want to sort
   // in order to have the same depths for all
-  const mapped = library.map(function(el, i) {
+  const mapped = updatedLib.map(function(el, i) {
     return {
       index: i,
       trackName: el.name.toLowerCase(),
@@ -67,7 +67,7 @@ export default function mainSort(reverse,
   });
   const sortedSongs = mapped.sort(songSort(reverse, primary, secondary));
   const result = sortedSongs.map(function(el) {
-    return library[el.index];
+    return updatedLib[el.index];
   });
-  setLibrary(result);
+  setUpdatedLib(result);
 }
