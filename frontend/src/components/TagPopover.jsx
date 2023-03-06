@@ -72,12 +72,15 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
    * @param {object} tag
    */
   const addTagToTarget = ((tag) => {
-    if (tag.color === boolOpColor) {
-      tag.id = Math.floor(boolOpID);
+    const tagToAdd = {...tag};
+    if (tagToAdd.color === boolOpColor) {
+      tagToAdd.id = boolOpID;
       setBoolOpID(boolOpID+1);
     }
-    if (!tagIsInList(tag, targetsTags)) {
-      setTargetsTags([...targetsTags, tag]); // populate array with new value.
+
+    if (!tagIsInList(tagToAdd, targetsTags)) {
+      setTargetsTags([...targetsTags, tagToAdd]);
+      // ^ populate array with new value.
       setTagSearchQuery('');
     }
   });
