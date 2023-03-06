@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {emptySong} from './emptySong.js';
-import {getSong, getSearchByURL, getSearch} from './httpCalls.js';
+import {getSearchByURL, getSearch} from './httpCalls.js';
 
 /**
  * @return {object} JSX
@@ -71,7 +71,7 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
             (result) => (
               <tr
                 id={result.id}
-                onClick={clickedOnSong}
+                onClick={clickedOnSong(result.id)}
               >
                 <td className="search-img-col">
                   <div className="imgContainer">

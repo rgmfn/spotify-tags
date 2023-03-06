@@ -286,7 +286,10 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
         setIsPickingTag={setIsPickingTag}
-        clickedOnSong={selectedTag ? victors_funct : ryans_func}
+        // clickedOnSong={selectedTag ? victors_funct : ryans_func}
+        clickedOnSong={selectedTag ?
+          {/* victors funct */} : {/* ryans funct */}
+        }
       />}
       <SortModal library={library} setLibrary={setLibrary}/>
     </div>
