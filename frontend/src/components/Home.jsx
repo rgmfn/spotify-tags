@@ -211,12 +211,12 @@ function Home() {
     }
   };
 
-   /**
+  /**
    * Called when clicking outside of the TagPopover.
    *
    * Sets tagSelection to an empty array (makes the Popover go away).
    */
-   const closeTagPopover = () => {
+  const closeTagPopover = () => {
     setTagSelection([]);
   };
 
