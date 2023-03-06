@@ -259,7 +259,7 @@ function Home() {
         <IconButton onClick={refreshList} color= 'secondary'>
           <RefreshIcon color= 'secondary'/></IconButton>
       </ThemeProvider>
-      {!Boolean(searchQuery) && <Library
+      {!Boolean(searchQuery || selectedTag) && <Library
         // ^ displays library if there is no searchQuery
         library={library}
         updatedLib={updatedLib}
@@ -276,7 +276,7 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      {Boolean(searchQuery) && <SearchResults
+      {Boolean(searchQuery || selectedTag) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
         accessToken={accessToken}
@@ -288,7 +288,7 @@ function Home() {
         setIsPickingTag={setIsPickingTag}
         // clickedOnSong={selectedTag ? victors_funct : ryans_func}
         clickedOnSong={selectedTag ?
-          {/* victors funct */} : {/* ryans funct */}
+          () => {/* victors funct */} : () => {/* ryans funct */}
         }
       />}
       <SortModal library={library} setLibrary={setLibrary}/>
