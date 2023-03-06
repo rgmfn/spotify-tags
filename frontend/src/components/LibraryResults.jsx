@@ -3,16 +3,16 @@ import React from 'react';
 /**
  * @return {object} JSX
  */
-function LibraryResults({searchQuery, library, setSongToView}) {
+function LibraryResults({searchQuery, library, setSongToView, clickedOnSong}) {
   const filteredLibrary = library.filter((song) =>
     song.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-  const clickedOnSong = ((event) => {
-    if (event.currentTarget.id) {
-      const foundSong=library.find((song)=>song.id===event.currentTarget.id);
-      setSongToView(foundSong);
-    };
-  });
+  // const clickedOnSong = ((event) => {
+  //   if (event.currentTarget.id) {
+  //     const foundSong=library.find((song)=>song.id===event.currentTarget.id);
+  //     setSongToView(foundSong);
+  //   };
+  // });
   return (
     <div className="search-results">
       <div className="results-title">

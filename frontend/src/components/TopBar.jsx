@@ -1,5 +1,8 @@
 import React from 'react';
 
+import IconButton from '@mui/material/IconButton';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+
 import Expression from './Expression.jsx';
 import ExpressionTagAdder from './ExpressionTagAdder.jsx';
 import Player from './Player.jsx';
@@ -31,19 +34,21 @@ function TopBar(props) {
 
   return (
     <div id="top-bar">
-      <div
-        // to make spacing even on both sides of expression
-      />
-      <Expression
-        expression={props.expression}
-        setExpression={props.setExpression}
-        clickedOnExpression={clickedOnExpression}
-      />
+      <div>
+        <IconButton onClick={props.setIsPickingTag} color= 'secondary'>
+          <AddBoxIcon color= 'secondary'/>
+        </IconButton>
+      </div>
       { (props.accessToken !== '') && <Player
         accessToken={props.accessToken}
         clickedTrackURI={props.clickedTrackURI}
         setPlayingTrackID={props.setPlayingTrackID}
         updatedLib={props.updatedLib}/> }
+      <Expression
+        expression={props.expression}
+        setExpression={props.setExpression}
+        clickedOnExpression={clickedOnExpression}
+      />
       <ExpressionTagAdder
         isOpen={isBuildingExpression}
         expression={props.expression}

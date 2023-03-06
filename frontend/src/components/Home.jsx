@@ -7,7 +7,6 @@ import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
-import TestMultiTagAdderAlbum from './TestMultiTagAdderAlbum';
 
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -103,6 +102,8 @@ function Home() {
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [expression, setExpression] = React.useState([]);
+  const [isPickingTag, setIsPickingTag] = React.useState(false);
+  const [selectedTag, setSelectedTag] = React.useState(null);
 
   /**
    * TODO
@@ -284,9 +285,10 @@ function Home() {
         refreshTokenFunc={refreshTokenFunc}
         library={library}
         setSongToView={setSongToView}
+        setIsPickingTag={setIsPickingTag}
+        clickedOnSong={selectedTag ? victors_funct : ryans_func}
       />}
       <SortModal library={library} setLibrary={setLibrary}/>
-      <TestMultiTagAdderAlbum />
     </div>
   );
 }
