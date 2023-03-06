@@ -6,17 +6,26 @@ import validateExpression from './ValidateExpression';
 /**
  * @param {array} expression - array of tag objects representing the current
  * @param {function} setExpression - sets the expression
+ * @param {function} clickedOnExpression - called when clicking on the
+ *                                         expression (but not the tags of the
+ *                                         expression)
  * @return {object} JSX
  */
-function Expression({expression, setExpression, clickedOnBar}) {
-  const validExpression = validateExpression(expression);
+function Expression({expression, setExpression, clickedOnExpression}) {
+  const isValidExpression = validateExpression(expression);
 
-  // Removes tags from the expression when they are clicked.
-  const removeExpression = ((event) => {
+  /**
+   * Called when clicking on a tag in the expression.
+   *
+   * Removes tags from the expression when they are clicked.
+   *
+   * @param {object} tagToRemove - the tag to remove from the expression
+   */
+  const removeFromExpression = ((tagToRemove) => {
     const filtered = expression.filter((tag) =>
       tag.id ?
-        tag.id !== parseInt(event.currentTarget.id) :
-        tag.name !== event.currentTarget.textContent,
+        tag.id !== tagToRemove.id :
+        tag.name !== tagToRemove.name,
     );
     setExpression(filtered);
   });
@@ -25,8 +34,8 @@ function Expression({expression, setExpression, clickedOnBar}) {
     <div id="expression-container">
       <div
         id="expression"
-        style={{backgroundColor: validExpression ? '': '#c94f6d'}}
-        onClick={clickedOnBar}
+        style={{backgroundColor: isValidExpression ? '': '#c94f6d'}}
+        onClick={clickedOnExpression}
       >
         {expression.length === 0 ? 'Click to build expression...' :
           expression.map((tag) => (
@@ -34,8 +43,11 @@ function Expression({expression, setExpression, clickedOnBar}) {
               style={{backgroundColor: tag.color}}
               className="tagName"
               id={tag.id}
-              // Remove tag from Expression if clicked.
-              onClick={removeExpression}
+              onClick={(event) => {
+                event.stopPropagation();
+                // ^ prevents click from hitting expression div
+                removeFromExpression(tag);
+              }}
             >
               {tag.name}
             </div>

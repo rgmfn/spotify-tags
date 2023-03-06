@@ -2,7 +2,6 @@ import React from 'react';
 
 import parseExpression from './Parser.jsx';
 import validateExpression from './ValidateExpression';
-import {artistAlbumTags} from './artistAlbumTags.js';
 
 /**
  * @param {array} library
@@ -17,33 +16,26 @@ import {artistAlbumTags} from './artistAlbumTags.js';
  */
 function Library({library, updatedLib, setUpdatedLib,
   clickedOnSong, clickedOnTags, expression, playingTrackID}) {
-  const validExpression = validateExpression(expression);
+  // const validExpression = validateExpression(expression);
   // is expression valid
 
-  let songMatches = [];
+  const [songMatches, setSongMatches] = React.useState([]);
 
   // store all songs that match the expression criteria
-  if (expression.length === 0) {
-    songMatches = library;
-  } else if (validExpression && library.length > 0) {
-    songMatches = library.filter(function(song) {
-      return parseExpression(song, expression);
-    });
-  }
+  React.useEffect(() => {
+    if (expression.length === 0) {
+      setSongMatches(library);
+    } else if (validateExpression(expression) && library.length > 0) {
+      setSongMatches(
+        library.filter((song) => parseExpression(song, expression)),
+      );
+    }
+  }, [expression, library]);
+
 
   React.useEffect(() => {
     setUpdatedLib(songMatches);
-  }, [library, expression]);
-
-  // calls artistsAlbumTags (testing)
-  React.useEffect(() => {
-    console.log(`artistAlbumsTags for library songs: `);
-    console.log(` artistAlbumTags(library): ${artistAlbumTags(library)}`);
-
-    artistAlbumTags(library).forEach((tag) => {
-      console.log(` {name: ${tag.name}, color: ${tag.color}},`);
-    });
-  }, [library]);
+  }, [setUpdatedLib, songMatches]);
 
   return (
     <table>
@@ -96,14 +88,16 @@ function Library({library, updatedLib, setUpdatedLib,
                   className="tagCol"
                   onClick={clickedOnTags}
                 >
-                  {song.tags.map((tag) => (
-                    <div
-                      style={{backgroundColor: tag.color}}
-                      className="tagName"
-                    >
-                      {tag.name}
-                    </div>
-                  ))}
+                  {!song.tags || song.tags.length <= 0 ?
+                    [] :
+                    song.tags.map((tag) => (
+                      <div
+                        style={{backgroundColor: tag.color}}
+                        className="tagName"
+                      >
+                        {tag.name}
+                      </div>
+                    ))}
                 </td>
               </tr>
             ))}
