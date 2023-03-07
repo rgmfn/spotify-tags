@@ -101,6 +101,7 @@ function SongCard({songToView, setSongToView, library,
           <hr className="divider"/>
           <div id="bottom-half"
             onClick={clickedOnTagContainer}
+            title='Add tag to song'
           >
             <div id="tags-container">
               {songToView.tags.map((tag) => (
@@ -108,6 +109,7 @@ function SongCard({songToView, setSongToView, library,
                   style={{backgroundColor: tag.color}}
                   className="tagName"
                   onClick={clickedOnTag}
+                  title='Remove tag from song'
                 >
                   {tag.name}
                 </div>

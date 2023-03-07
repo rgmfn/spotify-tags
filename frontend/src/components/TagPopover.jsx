@@ -205,6 +205,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
                       <div
                         style={{backgroundColor: tag.color}}
                         className="tagName"
+                        title='Add tag to song'
                       >
                         {tag.name}
                       </div>

@@ -52,6 +52,7 @@ function Library({library, updatedLib, setUpdatedLib,
                 onClick={clickedOnSong}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
+                title='Play song'
                 style={{
                   fontWeight: song.id === playingTrackID ? 'bold' : '',
                   color: song.id === playingTrackID ? '#719cd6' : '',
@@ -86,6 +87,7 @@ function Library({library, updatedLib, setUpdatedLib,
                 <td
                   className="tagCol"
                   onClick={clickedOnTags}
+                  title='Open song card'
                 >
                   {!song.tags || song.tags.length <= 0 ?
                     [] :

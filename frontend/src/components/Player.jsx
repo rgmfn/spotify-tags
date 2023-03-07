@@ -139,6 +139,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             id="prev-button"
             className="prev-button"
             color='secondary'
+            title='Previous'
             onClick={() => {
               player.previousTrack().then(() => {
                 console.log('Set to previous track!');
@@ -151,20 +152,30 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             id="play-button"
             className="play-button"
             color='secondary'
+            // {!isPaused ? title='Pause': title='Play'}
             onClick={() => {
               player.togglePlay().then(() => {
                 console.log('Toggled play button!');
               });
             }}>
             {!isPaused ?
-              <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
-              <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
+              <PauseCircleIcon
+                style={{fontSize: 70}}
+                color='secondary'
+                title='Pause'
+              />:
+              <PlayCircleIcon
+                style={{fontSize: 70}}
+                color='secondary'
+                title='Play'
+              />}
           </IconButton>
 
           <IconButton
             id="next-button"
             className="next-button"
             color='secondary'
+            title='Next'
             onClick={() => {
               player.nextTrack().then(() => {
                 console.log('Skipped to next track!');

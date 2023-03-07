@@ -251,12 +251,24 @@ function Home() {
       </div>
       <ThemeProvider theme={theme}>
         {!accessToken ?
-          <IconButton href='http://localhost:3010/login' color= 'secondary'>
-            <LoginIcon color= 'secondary'/>
-          </IconButton>: <IconButton onClick={logout} color= 'secondary'>
-            <LogoutIcon color= 'secondary'/></IconButton>}
-        <IconButton onClick={refreshList} color= 'secondary'>
-          <RefreshIcon color= 'secondary'/></IconButton>
+          <IconButton
+            href='http://localhost:3010/login'
+            color='secondary'
+            title='Log in'>
+            <LoginIcon color='secondary'/>
+          </IconButton>:
+          <IconButton
+            onClick={logout}
+            color='secondary'
+            title='Log out'>
+            <LogoutIcon color='secondary'/>
+          </IconButton>}
+        <IconButton
+          onClick={refreshList}
+          color= 'secondary'
+          title='Refresh list'>
+          <RefreshIcon color='secondary'/>
+        </IconButton>
       </ThemeProvider>
       {!Boolean(searchQuery) && <Library
         // ^ displays library if there is no searchQuery
@@ -285,7 +297,10 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <SortModal library={library} setLibrary={setLibrary}/>
+      <SortModal
+        library={library}
+        setLibrary={setLibrary}
+      />
     </div>
   );
 }
