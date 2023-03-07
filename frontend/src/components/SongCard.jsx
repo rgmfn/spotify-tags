@@ -111,7 +111,7 @@ function SongCard({songToView, setSongToView, library,
                   className="tagName"
                   onClick={clickedOnTag}
                   // eslint-disable-next-line max-len
-                  title={`Remove ${tag.name} tag from ${songToView.name} by ${songToView.artists[0].name}`}
+                  title={`Remove '${tag.name}' tag from ${songToView.name} by ${songToView.artists[0].name}`}
                 >
                   {tag.name}
                 </div>

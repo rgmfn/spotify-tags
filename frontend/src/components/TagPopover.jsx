@@ -208,10 +208,10 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, isTargetSong,
                     }}
                     title={isTargetSong.isSong ?
                       // eslint-disable-next-line max-len
-                      `Add ${tag.name} tag to ${isTargetSong.song.name} by ${isTargetSong.song.artists[0].name}` :
+                      `Add '${tag.name}' tag to ${isTargetSong.song.name} by ${isTargetSong.song.artists[0].name}` :
                       tag.color === '#888888' ?
-                        `Add ${tag.name} op to expression` :
-                        `Add ${tag.name} tag to expression`
+                        `Add '${tag.name}' op to expression` :
+                        `Add '${tag.name}' tag to expression`
                     }
                   >
                     <td>
