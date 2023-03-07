@@ -52,7 +52,6 @@ function Library({library, updatedLib, setUpdatedLib,
                 onClick={clickedOnSong}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
-                title={song.uri}
                 style={{
                   fontWeight: song.id === playingTrackID ? 'bold' : '',
                   color: song.id === playingTrackID ? '#719cd6' : '',

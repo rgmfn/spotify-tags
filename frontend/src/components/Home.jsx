@@ -97,7 +97,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
-  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
+  const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -153,8 +153,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
-    setClickedTrackURI(event.currentTarget.title);
+    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
+    setClickedTrackID(event.currentTarget.id);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -237,7 +237,7 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
-        clickedTrackURI={clickedTrackURI}
+        clickedTrackID={clickedTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
         library={library}
