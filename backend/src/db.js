@@ -7,6 +7,14 @@ const pool = new Pool({
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
 });
+
+//ensures that there is only one unique combination pair with userid, spotifyid
+//in other words, only one song with that given spotifyid for that user
+(async () => {
+  await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid)');
+})();
+
+
 // selects all the songs for a user
 exports.selectAll = async (userid) => {
   const select = 'SELECT * FROM songs WHERE userid = $1';
@@ -67,6 +75,16 @@ exports.insertTags = async (userid, spotifyid, tags) => {
   return;
 };
 
-
+//updates the given song object if the userid, spotifyid
+//are already in the db
+exports.updateTags = async (userid, spotifyid, tags) => {
+  const select = 'UPDATE songs SET tags = $1 WHERE userid = $2 and spotifyid = $3';
+  const query = {
+      text: select,
+      values: [{tags: tags}, userid, spotifyid]
+  };
+  await pool.query(query);
+  return;
+};
 
 console.log(`Connected to database '${process.env.POSTGRES_DB}'`);
