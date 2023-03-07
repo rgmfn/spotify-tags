@@ -24,6 +24,10 @@ const tagIsInList = (toFind, list) => {
  * @param {boolean} isOpen - if the popover is open
  * @param {array} tagsToSelect - list of tags user can select
  * @param {function} setTagsToSelect
+ * @param {array} isTargetSong - indicates whether target is song or expression.
+ *                               If song, 1st object is true & 2nd object holds
+ *                               song object. If expression, 1st object is false
+ *                               & 2nd object is empty
  * @param {array} targetsTags - tag list of an object to append to
  * @param {function} setTargetsTags - set the state of the object we appended to
  * @param {boolean} setIsAddingTags - sets if the targets tags are being added
@@ -33,7 +37,7 @@ const tagIsInList = (toFind, list) => {
  *                               popover (declared in SongTagAdder.jsx)
  * @return {JSX} thing
  */
-function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
+function TagPopover({isOpen, tagsToSelect, setTagsToSelect, isTargetSong,
   targetsTags, setTargetsTags, setIsAddingTags,
   preRows, positioning}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
@@ -197,15 +201,23 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
               {filteredTags.length === 0 ?
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
-                  <tr onClick={(event) => {
-                    event.stopPropagation();
-                    addTagToTarget(tag);
-                  }}>
+                  <tr
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addTagToTarget(tag);
+                    }}
+                    title={isTargetSong.isSong ?
+                      // eslint-disable-next-line max-len
+                      `Add ${tag.name} tag to ${isTargetSong.song.name} by ${isTargetSong.song.artists[0].name}` :
+                      tag.color === '#888888' ?
+                        `Add ${tag.name} op to expression` :
+                        `Add ${tag.name} tag to expression`
+                    }
+                  >
                     <td>
                       <div
                         style={{backgroundColor: tag.color}}
                         className="tagName"
-                        title='Add tag to song'
                       >
                         {tag.name}
                       </div>

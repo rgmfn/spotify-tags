@@ -152,7 +152,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             id="play-button"
             className="play-button"
             color='secondary'
-            // {!isPaused ? title='Pause': title='Play'}
+            title={!isPaused ? 'Pause' : 'Play'}
             onClick={() => {
               player.togglePlay().then(() => {
                 console.log('Toggled play button!');
@@ -162,12 +162,10 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
               <PauseCircleIcon
                 style={{fontSize: 70}}
                 color='secondary'
-                title='Pause'
               />:
               <PlayCircleIcon
                 style={{fontSize: 70}}
                 color='secondary'
-                title='Play'
               />}
           </IconButton>
 

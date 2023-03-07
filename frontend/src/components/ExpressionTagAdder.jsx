@@ -31,6 +31,11 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
   //   needed so that boolean op tags with same name can be distinguished
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
   // ^ list of tags available to select in TagPopover
+  const isTargetSong = [
+    {isTargetSong: false},
+    {song: {}},
+  ];
+  // ^ indicates whether target is song or expression
 
   /*
    * When the SongTagAdder is opened, it getsAllTags in the database for the
@@ -71,6 +76,7 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
       isOpen={isOpen}
       tagsToSelect={tagsToSelect}
       setTagsToSelect={setTagsToSelect}
+      isTargetSong={isTargetSong}
       targetsTags={expression}
       setTargetsTags={setExpressionGiveBoolOpsIDs}
       setIsAddingTags={setIsAddingTags}
