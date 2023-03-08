@@ -97,6 +97,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
+  const [userid, setUserid] = React.useState('');
   const [clickedTrackURI, setClickedTrackURI] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
@@ -210,7 +211,7 @@ function Home() {
       method: 'GET',
       headers: {'Authorization': 'Bearer ' + accessToken},
     })).json();
-    const userid = userInfo.id;
+    setUserid(userInfo.id);
     // TODO in sprint4: make userID into state
 
     // store each song in the library to db
