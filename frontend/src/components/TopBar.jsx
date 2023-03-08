@@ -53,16 +53,15 @@ function TopBar(props) {
               <LogoutIcon color= 'secondary'/></IconButton>}
           <IconButton onClick={props.refreshList} color= 'secondary'>
             <RefreshIcon color= 'secondary'/></IconButton>
-          <IconButton
-            onClick={() => props.setIsPickingTag(true)}
-            color= 'secondary'
-            title='Click to select a tag'
-          >
-            {Boolean(props.selectedTag) ?
-              null :
-              <AddBoxIcon color='secondary'/>
-            }
-          </IconButton>
+          {Boolean(props.selectedTag) ?
+            null :
+            <IconButton>
+              <AddBoxIcon color='secondary'
+                onClick={() => props.setIsPickingTag(true)}
+                title='Click to select a tag'
+              />
+            </IconButton>
+          }
         </ThemeProvider>
       </div>
       <div id="player-container">
