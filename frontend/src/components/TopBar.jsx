@@ -1,11 +1,18 @@
 import React from 'react';
 
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 import Expression from './Expression.jsx';
 import ExpressionTagAdder from './ExpressionTagAdder.jsx';
 import Player from './Player.jsx';
+
+import {ThemeProvider} from '@mui/material/styles';
+import {theme} from './Theme.js';
+
 import './TopBar.css';
 
 /**
@@ -34,21 +41,53 @@ function TopBar(props) {
 
   return (
     <div id="top-bar">
-      <div>
-        <IconButton onClick={props.setIsPickingTag} color= 'secondary'>
-          <AddBoxIcon color= 'secondary'/>
-        </IconButton>
+      <div id="top-left-buttons">
+        <ThemeProvider theme={theme}>
+          {!props.accessToken ?
+            <IconButton href='http://localhost:3010/login' color= 'secondary'>
+              <LoginIcon color= 'secondary'/>
+            </IconButton>:
+            <IconButton onClick={props.logout}
+              color= 'secondary'
+            >
+              <LogoutIcon color= 'secondary'/></IconButton>}
+          <IconButton onClick={props.refreshList} color= 'secondary'>
+            <RefreshIcon color= 'secondary'/></IconButton>
+          <IconButton
+            onClick={() => props.setIsPickingTag(true)}
+            color= 'secondary'
+            title='Click to select a tag'
+          >
+            {Boolean(props.selectedTag) ?
+              null :
+              <AddBoxIcon color='secondary'/>
+            }
+          </IconButton>
+        </ThemeProvider>
       </div>
-      { (props.accessToken !== '') && <Player
-        accessToken={props.accessToken}
-        clickedTrackURI={props.clickedTrackURI}
-        setPlayingTrackID={props.setPlayingTrackID}
-        updatedLib={props.updatedLib}/> }
-      <Expression
-        expression={props.expression}
-        setExpression={props.setExpression}
-        clickedOnExpression={clickedOnExpression}
-      />
+      <div id="player-container">
+        { (props.accessToken !== '') && <Player
+          accessToken={props.accessToken}
+          clickedTrackURI={props.clickedTrackURI}
+          setPlayingTrackID={props.setPlayingTrackID}
+          updatedLib={props.updatedLib}/> }
+      </div>
+      <div id="top-right-container">
+        {Boolean(props.selectedTag) ?
+          <div
+            style={{backgroundColor: props.selectedTag.color}}
+            className="tagName"
+            onClick={() => props.setSelectedTag(null)}
+          >
+            {props.selectedTag.name}
+          </div> :
+          <Expression
+            expression={props.expression}
+            setExpression={props.setExpression}
+            clickedOnExpression={clickedOnExpression}
+          />
+        }
+      </div>
       <ExpressionTagAdder
         isOpen={isBuildingExpression}
         expression={props.expression}

@@ -7,16 +7,11 @@ import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
 import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
-
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import IconButton from '@mui/material/IconButton';
+import TagSelector from './TagSelector';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
-import {ThemeProvider} from '@mui/material/styles';
-import {theme} from './Theme.js';
+import {getSong} from './httpCalls';
 
 /**
  * Gets a new access token using the refresh token.
@@ -202,6 +197,30 @@ function Home() {
       });
   };
 
+  /**
+   * Called when clicking on a song in either SearchResults and there is no
+   * selectedTag.
+   *
+   * If the song is in the library, it displays that song, otherwise it gets
+   * the song object off of spotify and displays that (in a SongCard).
+   *
+   * @param {string} id - the spotify ID of the song to display
+   */
+  const displaySong = (id) => {
+    const songInLib = library.find((song) => (
+      song.id === id
+    ));
+
+    if (songInLib) {
+      setSongToView(songInLib);
+    } else {
+      getSong(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, id).then((song) => {
+        setSongToView(song);
+      });
+    }
+  };
+
   const logout = async () => {
     // tokens
     setAccessToken('');
@@ -239,9 +258,14 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
+        refreshList={refreshList}
+        logout={logout}
         clickedTrackURI={clickedTrackURI}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
+        selectedTag={selectedTag}
+        setSelectedTag={setSelectedTag}
+        setIsPickingTag={setIsPickingTag}
       />
       <div className="searchbar">
         <SearchBar
@@ -250,15 +274,6 @@ function Home() {
           placeholder="Search a Song"
         />
       </div>
-      <ThemeProvider theme={theme}>
-        {!accessToken ?
-          <IconButton href='http://localhost:3010/login' color= 'secondary'>
-            <LoginIcon color= 'secondary'/>
-          </IconButton>: <IconButton onClick={logout} color= 'secondary'>
-            <LogoutIcon color= 'secondary'/></IconButton>}
-        <IconButton onClick={refreshList} color= 'secondary'>
-          <RefreshIcon color= 'secondary'/></IconButton>
-      </ThemeProvider>
       {!Boolean(searchQuery || selectedTag) && <Library
         // ^ displays library if there is no searchQuery
         library={library}
@@ -286,11 +301,15 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
         setIsPickingTag={setIsPickingTag}
-        // clickedOnSong={selectedTag ? victors_funct : ryans_func}
         clickedOnSong={selectedTag ?
-          () => {/* victors funct */} : () => {/* ryans funct */}
+          () => console.log('victors func') : displaySong
         }
       />}
+      <TagSelector
+        isOpen={isPickingTag}
+        setSelectedTag={setSelectedTag}
+        setIsPickingTag={setIsPickingTag}
+      />
       <SortModal library={library} setLibrary={setLibrary}/>
     </div>
   );

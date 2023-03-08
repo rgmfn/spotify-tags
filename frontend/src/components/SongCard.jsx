@@ -40,6 +40,7 @@ function SongCard({songToView, setSongToView, library,
    * Removes the tag clicked from the song and from that song in the library.
    */
   const clickedOnTag = ((event) => {
+    // TODO if song is not in libray yet
     event.stopPropagation();
     const newTags = songToView.tags.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
@@ -103,15 +104,17 @@ function SongCard({songToView, setSongToView, library,
             onClick={clickedOnTagContainer}
           >
             <div id="tags-container">
-              {songToView.tags.map((tag) => (
-                <div
-                  style={{backgroundColor: tag.color}}
-                  className="tagName"
-                  onClick={clickedOnTag}
-                >
-                  {tag.name}
-                </div>
-              ))}
+              {!Boolean(songToView && songToView.tags) ?
+                null :
+                songToView.tags.map((tag) => (
+                  <div
+                    style={{backgroundColor: tag.color}}
+                    className="tagName"
+                    onClick={clickedOnTag}
+                  >
+                    {tag.name}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

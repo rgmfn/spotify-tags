@@ -7,3 +7,24 @@
     background-color: var(--bg-color);
     /* border: 2px solid green; */
 }
+
+#top-left-buttons {
+    width: 35%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#player-container {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#top-right-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+}

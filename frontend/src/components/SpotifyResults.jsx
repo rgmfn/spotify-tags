@@ -3,6 +3,14 @@ import React from 'react';
 import {emptySong} from './emptySong.js';
 import {getSearchByURL, getSearch} from './httpCalls.js';
 
+const noResults = (
+  <tr>
+    <td></td>
+    <td>No query to search</td>
+    <td></td>
+  </tr>
+);
+
 /**
  * @return {object} JSX
  */
@@ -18,11 +26,13 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
    * results from spotify fitting the new searchQuery.
    */
   React.useEffect(() => {
-    getSearch(accessToken, refreshToken, setAccessToken,
-      refreshTokenFunc, searchQuery).then((results) => {
-      setSongList(results.tracks.items);
-      setNextSongsURL(results.tracks.next);
-    });
+    if (searchQuery) {
+      getSearch(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, searchQuery).then((results) => {
+        setSongList(results.tracks.items);
+        setNextSongsURL(results.tracks.next);
+      });
+    }
   }, [searchQuery, accessToken, setAccessToken,
     refreshToken, refreshTokenFunc]);
 
@@ -67,11 +77,11 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
       </div>
       <table>
         <tbody>
-          {songList.map(
+          {!Boolean(searchQuery) ? noResults : songList.map(
             (result) => (
               <tr
                 id={result.id}
-                onClick={clickedOnSong(result.id)}
+                onClick={() => clickedOnSong(result.id)}
               >
                 <td className="search-img-col">
                   <div className="imgContainer">
@@ -93,12 +103,14 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
                 </td>
               </tr>
             ))}
-          <tr id="more-results" onClick={clickedMoreResults}>
-            <td/>
-            <td/>
-            <td>More results...</td>
-            <td/>
-          </tr>
+          {!Boolean(searchQuery) ? null :
+            <tr id="more-results" onClick={clickedMoreResults}>
+              <td/>
+              <td/>
+              <td>More results...</td>
+              <td/>
+            </tr>
+          }
         </tbody>
       </table>
     </div>

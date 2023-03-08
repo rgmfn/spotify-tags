@@ -26,7 +26,7 @@ function LibraryResults({searchQuery, library, setSongToView, clickedOnSong}) {
               (result) => (
                 <tr
                   id={result.id}
-                  onClick={clickedOnSong(result.id)}
+                  onClick={() => clickedOnSong(result.id)}
                 >
                   <td className="search-img-col">
                     <div className="imgContainer">

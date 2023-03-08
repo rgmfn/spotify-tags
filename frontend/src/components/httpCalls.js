@@ -1,5 +1,5 @@
 import {emptySong} from './emptySong.js';
-import {fakeTags} from './fakeTags.js';
+// import {fakeTags} from './fakeTags.js';
 
 const getSearch = async (accessToken, refreshToken, setAccessToken,
   refreshTokenFunc, query, numResults=25) => {
@@ -65,7 +65,7 @@ const getSong = async (accessToken, refreshToken, setAccessToken,
   }
 
   const data = await result.json();
-  data.tags = fakeTags;
+  // data.tags = fakeTags;
   return data;
 };
 
