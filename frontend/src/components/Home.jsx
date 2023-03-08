@@ -240,6 +240,7 @@ function Home() {
         clickedTrackURI={clickedTrackURI}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
+        library={library}
       />
       <div className="searchbar">
         <SearchBar
