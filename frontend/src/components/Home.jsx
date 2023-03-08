@@ -138,6 +138,7 @@ function Home() {
    * the temporary getSearch method.
    */
   React.useEffect(() => {
+    getUserInfo();
     getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
       (result) => {
         setLibrary(result.tracks.items);
@@ -145,6 +146,18 @@ function Home() {
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
+
+  /**
+   * Async function that sets the user ID
+   */
+  const getUserInfo = async () => {
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    setUserid(userInfo.id);
+  };
 
   /**
    * Called when clicking on a <tr> representing a song in the library.
@@ -205,14 +218,6 @@ function Home() {
     // tokens
     setAccessToken('');
     setRefreshToken('');
-
-    // get current user info
-    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + accessToken},
-    })).json();
-    setUserid(userInfo.id);
-    // TODO in sprint4: make userID into state
 
     // store each song in the library to db
     for (const song of library) {
