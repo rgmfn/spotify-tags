@@ -41,7 +41,7 @@ function TagPopover({tags, closeTagPopover, objectTags, setState}) {
 
   return (
     <ThemeProvider theme={darkTheme}>
-        <Popover
+      <Popover
         open={Boolean(tags.length)} // if no tags, nothing to display.
         onClose={closeTagPopover}
         onKeyDown={(e) => handleKeyDown(e)}
@@ -52,44 +52,44 @@ function TagPopover({tags, closeTagPopover, objectTags, setState}) {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        >
-          <div id="search-bar">
-            <SearchBar
+      >
+        <div id="search-bar">
+          <SearchBar
             searchQuery={tagSearchQuery}
             setSearchQuery={setTagSearchQuery}
             placeholder="Search a Tag"
-            />
-          </div>
-          <div id="popover-container">
-            <table style={{
+          />
+        </div>
+        <div id="popover-container">
+          <table style={{
             borderCollapse: 'separate',
             borderSpacing: '10px',
-            }}>
-              <tbody>
-                {filteredTags.length === 0 ?
+          }}>
+            <tbody>
+              {filteredTags.length === 0 ?
                 <tr><td>No tags match your search</td></tr> : filteredTags.map(
-                (tag) => (
-                  <tr
-                  onClick={((event) => clickedOnTag(tag))}
-                  >
-                    <td>
-                      <div
-                        style={{backgroundColor: tag.color}}
-                        className="tagName"
+                  (tag) => (
+                    <tr
+                      onClick={((event) => clickedOnTag(tag))}
+                    >
+                      <td>
+                        <div
+                          style={{backgroundColor: tag.color}}
+                          className="tagName"
                         // Remove tag from Expression if clicked.
                         // onClick={removeExpression}
-                      >
-                        {tag.name}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                        >
+                          {tag.name}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
 
-            </table>
-          </div>
+          </table>
+        </div>
 
-        </Popover>
+      </Popover>
     </ThemeProvider>
   );
 }

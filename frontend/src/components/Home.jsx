@@ -17,6 +17,8 @@ import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
+import {storeSong, retrieveAllSongs} from './backendWrapper.js';
+import getTrack from './getTrack.js';
 
 /**
  * Gets a new access token using the refresh token.
@@ -82,7 +84,7 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  console.log(`data: ${data}`);
+  console.log(`data: ${data}`, data);
   data = insertTestingTags(data);
   return data;
 };
@@ -150,10 +152,30 @@ function Home() {
    * the temporary getSearch method.
    */
   React.useEffect(() => {
-    getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
-      (result) => {
-        setLibrary(result.tracks.items);
-      });
+    // getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
+    //   (result) => {
+    //     setLibrary(result.tracks.items);
+    //   });
+
+    /**
+     */
+    async function fillLibrary() {
+      const userid = 'TEST_USER_ID_1';
+      const tmpLib = [];
+      const data = await retrieveAllSongs(userid);
+      console.log('wat', data.songs);
+      for (const song of data.songs) {
+        const track = await getTrack(song.spotifyid, accessToken);
+        track.tags = song.tags;
+        tmpLib.push(track);
+        if (tmpLib.length === data.songs.length) {
+          setLibrary(tmpLib);
+          console.log('library set');
+        }
+      }
+    }
+
+    fillLibrary();
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
@@ -211,12 +233,12 @@ function Home() {
     }
   };
 
-   /**
+  /**
    * Called when clicking outside of the TagPopover.
    *
    * Sets tagSelection to an empty array (makes the Popover go away).
    */
-   const closeTagPopover = () => {
+  const closeTagPopover = () => {
     setTagSelection([]);
   };
 
@@ -247,16 +269,7 @@ function Home() {
 
     // store each song in the library to db
     for (const song of library) {
-      await fetch(`http://localhost:3010/v0/tagsPost`, {
-        // http get request to api.spotify.com/v1/search
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          {userid: userid, spotifyid: song.id,
-            tags: song.tags}),
-      });
+      storeSong(userid, song);
     }
 
     window.localStorage.removeItem('accessToken');
