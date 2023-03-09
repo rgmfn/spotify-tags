@@ -43,7 +43,10 @@ function Expression({expression, setExpression, clickedOnExpression}) {
               style={{backgroundColor: tag.color}}
               className="tagName"
               id={tag.id}
-              title='Remove tag from expression'
+              title={tag.color === '#888888' ?
+                `Remove '${tag.name}' op from expression` :
+                `Remove '${tag.name}' tag from expression`
+              }
               onClick={(event) => {
                 event.stopPropagation();
                 // ^ prevents click from hitting expression div
