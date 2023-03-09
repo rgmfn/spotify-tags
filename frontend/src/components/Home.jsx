@@ -200,11 +200,11 @@ function Home() {
   /**
    * Called when clicking on a song in either SearchResults and there is a
    * selectedTag.
-   * 
+   *
    * On click of a song, adds selectedTag to that song's list of tags.
    * If it was not already in it, add it to the library.
-   * 
-   * @param {string} id - the spotify ID of the song to display 
+   *
+   * @param {string} id - the spotify ID of the song to display
    */
   const addTagToSong = (id) => {
     const songInLib = library.find((song) => (
@@ -215,8 +215,7 @@ function Home() {
       songInLib.tags = [...songInLib.tags, selectedTag];
       // populate song tags with new tag.
       setLibrary([...library]);
-    }
-    else {
+    } else {
       getSong(accessToken, refreshToken, setAccessToken,
         refreshTokenFunc, id).then((song) => {
         song.tags = [selectedTag];

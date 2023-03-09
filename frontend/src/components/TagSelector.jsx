@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fakeTags } from './fakeTags';
+import {fakeTags} from './fakeTags';
 import TagPopover from './TagPopover';
 import {getAllTags} from './httpCalls';
 
