@@ -26,9 +26,6 @@ const booleanOps = [
  */
 function ExpressionTagAdder({isOpen, expression, setExpression,
   setIsAddingTags, library}) {
-  const [boolOpID, setBoolOpID] = React.useState(0);
-  // ^ id assigned to the new boolean opererator added to the expression
-  //   needed so that boolean op tags with same name can be distinguished
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
   const targetTitle = 'expression';
   // ^ title on prospective tags/ ops to add to expression
@@ -49,24 +46,6 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
     }
   }, [isOpen, library]);
 
-  /**
-   * Called when clicking on a tag to add to the target.
-   *
-   * Changes all boolean op tags without ids into bool op tags with IDs.
-   * Puts the result in expression state.
-   *
-   * @param {array} newExpression - new array of tag objects to set the
-   *                                expression to
-   */
-  const setExpressionGiveBoolOpsIDs = (newExpression) => {
-    setExpression(newExpression.map((tag) => (
-      booleanOps.includes(tag.name) && !tag.id ?
-        {...tag, id: boolOpID} :
-        tag
-    )));
-    setBoolOpID(boolOpID+1);
-  };
-
   return (
     <TagPopover
       isOpen={isOpen}
@@ -74,7 +53,7 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
       setTagsToSelect={setTagsToSelect}
       targetTitle={targetTitle}
       targetsTags={expression}
-      setTargetsTags={setExpressionGiveBoolOpsIDs}
+      setTargetsTags={setExpression}
       setIsAddingTags={setIsAddingTags}
       positioning={positioning}
     />
