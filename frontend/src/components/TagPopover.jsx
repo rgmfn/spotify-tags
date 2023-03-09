@@ -24,10 +24,9 @@ const tagIsInList = (toFind, list) => {
  * @param {boolean} isOpen - if the popover is open
  * @param {array} tagsToSelect - list of tags user can select
  * @param {function} setTagsToSelect
- * @param {array} isTargetSong - indicates whether target is song or expression.
- *                               If song, 1st object is true & 2nd object holds
- *                               song object. If expression, 1st object is false
- *                               & 2nd object is empty
+ * @param {string} targetTitle - titles when hovering over tags/ ops (string
+ *                               is different when adding tags to songs v.
+ *                               adding tags/ ops to expression)
  * @param {array} targetsTags - tag list of an object to append to
  * @param {function} setTargetsTags - set the state of the object we appended to
  * @param {boolean} setIsAddingTags - sets if the targets tags are being added
@@ -37,7 +36,7 @@ const tagIsInList = (toFind, list) => {
  *                               popover (declared in SongTagAdder.jsx)
  * @return {JSX} thing
  */
-function TagPopover({isOpen, tagsToSelect, setTagsToSelect, isTargetSong,
+function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   targetsTags, setTargetsTags, setIsAddingTags,
   preRows, positioning}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
@@ -206,12 +205,9 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, isTargetSong,
                       event.stopPropagation();
                       addTagToTarget(tag);
                     }}
-                    title={isTargetSong[0].isSong ?
-                      // eslint-disable-next-line max-len
-                      `Add '${tag.name}' tag to ${isTargetSong[1].song.name} by ${isTargetSong[1].song.artists[0].name}` :
-                      (tag.color === '#888888' ?
-                        `Add '${tag.name}' op to expression` :
-                        `Add '${tag.name}' tag to expression`)
+                    title={`Add '${tag.name}' `
+                      .concat(tag.color === '#888888' ? 'op' : 'tag')
+                      .concat(' to ').concat(targetTitle)
                     }
                   >
                     <td>
