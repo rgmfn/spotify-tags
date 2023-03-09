@@ -5,30 +5,47 @@ import PersonIcon from '@mui/icons-material/Person';
 import {ThemeProvider} from '@mui/material/styles';
 
 import './SongCard.css';
+import SongTagAdder from './SongTagAdder.jsx';
 import {darkTheme} from './darkTheme.js';
 
 /**
- * @param {object} song - the song being viewed in the SongCard, if there is
- *                        none, the SongCard does not show up
+ * @param {object} songToView - the song being viewed in the SongCard, if
+ *                              there is none, the SongCard does not show up
  * @param {function} setSongToView - sets the song being viewed in the SongCard,
  *                                   set to emptySong to make SongCard go away
  * @param {array} library - the current song library
  * @param {function} setLibrary - sets the current song library
  * @param {function} closeCard - called when clicking off of the SongCard
+ * @param {function} expression - used inside SongTagAdder
+ * @param {function} setExpression - used inside SongTagAdder
  * @return {object} JSX
  */
-function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
+function SongCard({songToView, setSongToView, library,
+  setLibrary, closeCard}) {
+  const [isAddingTags, setIsAddingTags] = React.useState(false);
+
+  /**
+   * Called when clicked on the bottom half of the song card (technically the
+   * 'bottom-half' element, not the 'tags-container' element).
+   *
+   * Sets isAddingTags to true, making the SongTagAdder appear.
+   */
+  const clickedOnTagContainer = (() => {
+    setIsAddingTags(true);
+  });
+
   /**
    * @param {object} event - event.currentTarget.textContent holds the
    *                         name of the tag to be removed
    * Removes the tag clicked from the song and from that song in the library.
    */
   const clickedOnTag = ((event) => {
-    const newTags = song.tags.filter((tag) =>
+    event.stopPropagation();
+    const newTags = songToView.tags.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
     );
     const newLibrary = library.map((newSong) => {
-      if (newSong.id === song.id) {
+      if (newSong.id === songToView.id) {
         newSong.tags = newTags;
         setSongToView(newSong);
         return newSong;
@@ -42,7 +59,8 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Popover
-        open={Boolean(song.id)}
+        id='songcard'
+        open={Boolean(songToView.id)}
         onClose={closeCard}
         anchorReference='none'
         style={{
@@ -56,34 +74,36 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
             <div id="left-half">
               <div id="name-container">
                 <p id="songName" className="tagName">
-                  {song.name}
+                  {songToView.name}
                 </p>
               </div>
               <div id="artist-container">
                 <PersonIcon id="personIcon"/>
                 <p id="artistName" className="tagName">
-                  {song.artists[0].name}
+                  {songToView.artists[0].name}
                 </p>
               </div>
               <div id="album-container">
                 <AlbumIcon id="albumIcon"/>
                 <p id="albumName" className="tagName">
-                  {song.album.name}
+                  {songToView.album.name}
                 </p>
               </div>
             </div>
             <div id="right-half">
               <img
-                src={song.album.images[0].url}
-                alt={'[' + song.album.name + ' img]'}
+                src={songToView.album.images[0].url}
+                alt={'[' + songToView.album.name + ' img]'}
                 id="songImg"
               />
             </div>
           </div>
           <hr className="divider"/>
-          <div id="bottom-half">
+          <div id="bottom-half"
+            onClick={clickedOnTagContainer}
+          >
             <div id="tags-container">
-              {song.tags.map((tag) => (
+              {songToView.tags.map((tag) => (
                 <div
                   style={{backgroundColor: tag.color}}
                   className="tagName"
@@ -95,6 +115,15 @@ function SongCard({song, setSongToView, library, setLibrary, closeCard}) {
             </div>
           </div>
         </div>
+        <SongTagAdder
+          isOpen={isAddingTags}
+          userID={'this will be state passed in'}
+          songToView={songToView}
+          setSongToView={setSongToView}
+          library={library}
+          setLibrary={setLibrary}
+          setIsAddingTags={setIsAddingTags}
+        />
       </Popover>
     </ThemeProvider>
   );

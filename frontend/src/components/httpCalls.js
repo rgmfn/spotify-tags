@@ -69,5 +69,20 @@ const getSong = async (accessToken, refreshToken, setAccessToken,
   return data;
 };
 
+const getAllTags = async (userID) => {
+  const result = await fetch(`http://localhost:3010/v0/tagList?userid=${userID}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-export {getSearch, getSearchByURL, getSong};
+  if (!result.ok) {
+    console.log('Couldn\'t get all tags');
+  }
+
+  const data = await result.json();
+  return data;
+};
+
+export {getSearch, getSearchByURL, getSong, getAllTags};
