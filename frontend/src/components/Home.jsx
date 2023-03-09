@@ -98,7 +98,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
-  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
+  const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -174,8 +174,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
-    setClickedTrackURI(event.currentTarget.title);
+    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
+    setClickedTrackID(event.currentTarget.id);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -249,7 +249,7 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
-        clickedTrackURI={clickedTrackURI}
+        clickedTrackID={clickedTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
         library={library}
@@ -263,12 +263,24 @@ function Home() {
       </div>
       <ThemeProvider theme={theme}>
         {!accessToken ?
-          <IconButton href='http://localhost:3010/login' color= 'secondary'>
-            <LoginIcon color= 'secondary'/>
-          </IconButton>: <IconButton onClick={logout} color= 'secondary'>
-            <LogoutIcon color= 'secondary'/></IconButton>}
-        <IconButton onClick={refreshList} color= 'secondary'>
-          <RefreshIcon color= 'secondary'/></IconButton>
+          <IconButton
+            href='http://localhost:3010/login'
+            color='secondary'
+            title='Log in'>
+            <LoginIcon color='secondary'/>
+          </IconButton>:
+          <IconButton
+            onClick={logout}
+            color='secondary'
+            title='Log out'>
+            <LogoutIcon color='secondary'/>
+          </IconButton>}
+        <IconButton
+          onClick={refreshList}
+          color= 'secondary'
+          title='Refresh list'>
+          <RefreshIcon color='secondary'/>
+        </IconButton>
       </ThemeProvider>
       {!Boolean(searchQuery) && <Library
         // ^ displays library if there is no searchQuery
@@ -297,7 +309,10 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <SortModal library={library} setLibrary={setLibrary}/>
+      <SortModal
+        library={library}
+        setLibrary={setLibrary}
+      />
     </div>
   );
 }
