@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { fakeTags } from './fakeTags';
 import TagPopover from './TagPopover';
 import {getAllTags} from './httpCalls';
 
@@ -27,6 +28,7 @@ function TagSelector({isOpen, setSelectedTag, setIsPickingTag}) {
       getAllTags('TEST_USER_ID_1').then((obj) => {
         setTagsToSelect(obj.tags); // gets all tags in DB
       });
+      setTagsToSelect(fakeTags);
     }
   }, [isOpen]);
 

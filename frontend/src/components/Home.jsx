@@ -198,6 +198,35 @@ function Home() {
   };
 
   /**
+   * Called when clicking on a song in either SearchResults and there is a
+   * selectedTag.
+   * 
+   * On click of a song, adds selectedTag to that song's list of tags.
+   * If it was not already in it, add it to the library.
+   * 
+   * @param {string} id - the spotify ID of the song to display 
+   */
+  const addTagToSong = (id) => {
+    const songInLib = library.find((song) => (
+      song.id === id
+    ));
+
+    if (songInLib) {
+      songInLib.tags = [...songInLib.tags, selectedTag];
+      // populate song tags with new tag.
+      setLibrary([...library]);
+    }
+    else {
+      getSong(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, id).then((song) => {
+        song.tags = [selectedTag];
+        library.push(song);
+        setLibrary([...library]);
+      });
+    }
+  };
+
+  /**
    * Called when clicking on a song in either SearchResults and there is no
    * selectedTag.
    *
@@ -302,7 +331,7 @@ function Home() {
         setSongToView={setSongToView}
         setIsPickingTag={setIsPickingTag}
         clickedOnSong={selectedTag ?
-          () => console.log('victors func') : displaySong
+          addTagToSong : displaySong
         }
       />}
       <TagSelector
