@@ -32,7 +32,7 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
   // ^ list of tags available to select in TagPopover
   const isTargetSong = [
-    {isTargetSong: false},
+    {isSong: false},
     {song: {}},
   ];
   // ^ indicates whether target is song or expression
