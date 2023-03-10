@@ -5,7 +5,6 @@ import TopBar from './TopBar.jsx';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
-import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
 import TagSelector from './TagSelector';
 
@@ -233,26 +232,44 @@ function Home() {
   };
 
   /**
+   * Removes the selectedTag state from the current song in library.
+   *
+   * @param {object} song - song object to remove selected tag from
+   */
+  const removeSelectedTagFromSong = (song) => {
+    const newSong = {...song};
+    newSong.tags = song.tags.filter((tag) =>
+      tag.name !== selectedTag.name);
+    setLibrary(library.map((libSong) => (
+      libSong.id === newSong.id ?
+        newSong : libSong
+    )));
+  };
+
+  /**
    * Called when clicking on a song in either SearchResults and there is a
    * selectedTag.
    *
    * On click of a song, adds selectedTag to that song's list of tags.
-   * If it was not already in it, add it to the library.
+   * If it was not already in it, add it to the library. If it was already
+   * in it, it removes it from the song.
    *
    * @param {string} id - the spotify ID of the song to display
    */
-  const addTagToSong = (id) => {
+  const addRemoveTagToSong = (id) => {
     const songInLib = library.find((song) => (
       song.id === id
     ));
 
     if (songInLib) {
       // if song doesn't already have this tag
-      if (!songInLib.tags.some((tag) => tag === selectedTag)) {
+      if (!songInLib.tags.some((tag) => tag.name === selectedTag.name)) {
         // populate tags with new tag.
         songInLib.tags = [...songInLib.tags, selectedTag];
+        setLibrary([...library]);
+      } else {
+        removeSelectedTagFromSong(songInLib);
       }
-      setLibrary([...library]);
     } else {
       getSong(accessToken, refreshToken, setAccessToken,
         refreshTokenFunc, id).then((song) => {
@@ -360,15 +377,15 @@ function Home() {
         library={library}
         setIsPickingTag={setIsPickingTag}
         clickedOnSong={selectedTag ?
-          addTagToSong : displaySong
+          addRemoveTagToSong : displaySong
         }
+        selectedTag={selectedTag}
       />}
       <TagSelector
         isOpen={isPickingTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
       />
-      <SortModal library={library} setLibrary={setLibrary}/>
     </div>
   );
 }

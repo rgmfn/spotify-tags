@@ -97,7 +97,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
     newTag.name = newTag.name.toLowerCase();
     setTagsToSelect([...tagsToSelect, newTag]);
     addTagToTarget(newTag); // add to target
-    // TODO put tag in database
+    // store song in DB
   });
 
   /**

@@ -6,8 +6,9 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
-import Expression from './Expression.jsx';
 import ExpressionTagAdder from './ExpressionTagAdder.jsx';
+import Expression from './Expression.jsx';
+import SortModal from './SortModal.jsx';
 import Player from './Player.jsx';
 
 import {ThemeProvider} from '@mui/material/styles';
@@ -64,6 +65,7 @@ function TopBar(props) {
             </IconButton>
           }
         </ThemeProvider>
+        <SortModal library={props.library} setLibrary={props.setLibrary}/>
       </div>
       <div id="player-container">
         { Boolean(props.accessToken) && <Player
