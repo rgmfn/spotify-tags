@@ -134,34 +134,31 @@ function Home() {
   }, []);
 
   /**
-   * When the refreshToken or accessToken change, reset the library using
-   * the temporary getSearch method.
+   * When the refreshToken or accessToken change, get the library from
+   * the database.
    */
   React.useEffect(() => {
-    // getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
-    //   (result) => {
-    //     setLibrary(result.tracks.items);
-    //   });
-
-    /**
-     */
-    async function fillLibrary() {
-      const userid = 'TEST_USER_ID_1';
-      const tmpLib = [];
-      const data = await retrieveAllSongs(userid);
-      console.log('wat', data.songs);
-      for (const song of data.songs) {
-        const track = await getTrack(song.spotifyid, accessToken);
-        track.tags = song.tags;
-        tmpLib.push(track);
-        if (tmpLib.length === data.songs.length) {
-          setLibrary(tmpLib);
-          console.log('library set');
+    if (accessToken) {
+      /**
+       */
+      async function fillLibrary() {
+        const userid = 'TEST_USER_ID_1';
+        const tmpLib = [];
+        const data = await retrieveAllSongs(userid);
+        // console.log('wat', data.songs);
+        for (const song of data.songs) {
+          const track = await getTrack(song.spotifyid, accessToken);
+          track.tags = song.tags;
+          tmpLib.push(track);
+          if (tmpLib.length === data.songs.length) {
+            setLibrary(tmpLib);
+            // console.log('library set');
+          }
         }
       }
-    }
 
-    fillLibrary();
+      fillLibrary();
+    }
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
