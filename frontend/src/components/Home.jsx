@@ -12,6 +12,8 @@ import TagSelector from './TagSelector';
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 import {getSong} from './httpCalls';
+import {storeSong, retrieveAllSongs} from './backendWrapper.js';
+import getTrack from './getTrack.js';
 
 /**
  * Gets a new access token using the refresh token.
@@ -78,7 +80,6 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   // console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  // console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -92,7 +93,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
-  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
+  const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -130,14 +131,31 @@ function Home() {
   }, []);
 
   /**
-   * When the refreshToken or accessToken change, reset the library using
-   * the temporary getSearch method.
+   * When the refreshToken or accessToken change, get the library from
+   * the database.
    */
   React.useEffect(() => {
-    getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
-      (result) => {
-        setLibrary(result.tracks.items);
-      });
+    if (accessToken) {
+      /**
+       */
+      async function fillLibrary() {
+        const userid = 'TEST_USER_ID_1';
+        const tmpLib = [];
+        const data = await retrieveAllSongs(userid);
+        // console.log('wat', data.songs);
+        for (const song of data.songs) {
+          const track = await getTrack(song.spotifyid, accessToken);
+          track.tags = song.tags;
+          tmpLib.push(track);
+          if (tmpLib.length === data.songs.length) {
+            setLibrary(tmpLib);
+            // console.log('library set');
+          }
+        }
+      }
+
+      fillLibrary();
+    }
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
@@ -150,8 +168,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
-    setClickedTrackURI(event.currentTarget.title);
+    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
+    setClickedTrackID(event.currentTarget.id);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -181,6 +199,12 @@ function Home() {
    * Sets songToView to an empty song object (makes the SongCard go away).
    */
   const closeCard = () => {
+    if (songToView.tags.length <= 0) {
+      setLibrary(library.filter((libSong) => (
+        libSong.id !== songToView.id
+      )));
+      // remove from database
+    }
     setSongToView(emptySong);
   };
 
@@ -267,16 +291,7 @@ function Home() {
 
     // store each song in the library to db
     for (const song of library) {
-      await fetch(`http://localhost:3010/v0/tagsPost`, {
-        // http get request to api.spotify.com/v1/search
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          {userid: userid, spotifyid: song.id,
-            tags: song.tags}),
-      });
+      storeSong(userid, song);
     }
 
     window.localStorage.removeItem('accessToken');
@@ -291,13 +306,14 @@ function Home() {
         accessToken={accessToken}
         refreshList={refreshList}
         logout={logout}
-        clickedTrackURI={clickedTrackURI}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
         setSearchQuery={setSearchQuery}
+        clickedTrackID={clickedTrackID}
+        library={library}
       />
       <div className="searchbar">
         <SearchBar

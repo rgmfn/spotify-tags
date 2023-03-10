@@ -55,6 +55,8 @@ const preRows = (
 function SongTagAdder({isOpen, userID, songToView, setSongToView,
   library, setLibrary, setIsAddingTags}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
+  const targetTitle = `${songToView.name} by ${songToView.artists[0].name}`;
+  // ^ title on prospective tags to add to songs
 
   /*
    * When the SongTagAdder is opened, it getsAllTags in the database for the
@@ -116,6 +118,7 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
       isOpen={isOpen}
       tagsToSelect={tagsToSelect}
       setTagsToSelect={setTagsToSelect}
+      targetTitle={targetTitle}
       targetsTags={songToView.tags}
       setTargetsTags={setSongsTags}
       setIsAddingTags={setIsAddingTags}

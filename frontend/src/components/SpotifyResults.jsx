@@ -66,6 +66,8 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
                 id={result.id}
                 key={result.id}
                 onClick={() => clickedOnSong(result.id)}
+                // eslint-disable-next-line max-len
+                title={`View song details about ${result.name} by ${result.artists[0].name}`}
               >
                 <td className="search-img-col">
                   <div className="imgContainer">

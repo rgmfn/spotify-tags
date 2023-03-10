@@ -49,10 +49,10 @@ function Library({library, updatedLib, setUpdatedLib,
               // render 'No match found.' if the new library is now empty
               <tr
                 // tr = table row
-                onClick={clickedOnSong}
+                onClick={(event) => clickedOnSong(event)}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
-                title={song.uri}
+                title={`Play ${song.name} by ${song.artists[0].name}`}
                 style={{
                   fontWeight: song.id === playingTrackID ? 'bold' : '',
                   color: song.id === playingTrackID ? '#719cd6' : '',
@@ -87,6 +87,8 @@ function Library({library, updatedLib, setUpdatedLib,
                 <td
                   className="tagCol"
                   onClick={clickedOnTags}
+                  // eslint-disable-next-line
+                  title={`View song details about ${song.name} by ${song.artists[0].name}`}
                 >
                   {!song.tags || song.tags.length <= 0 ?
                     [] :

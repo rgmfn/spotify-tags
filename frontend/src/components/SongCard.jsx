@@ -102,6 +102,8 @@ function SongCard({songToView, setSongToView, library,
           <hr className="divider"/>
           <div id="bottom-half"
             onClick={clickedOnTagContainer}
+            // eslint-disable-next-line max-len
+            title={`Add tag to ${songToView.name} by ${songToView.artists[0].name}`}
           >
             <div id="tags-container">
               {!Boolean(songToView && songToView.tags) ?
@@ -112,6 +114,8 @@ function SongCard({songToView, setSongToView, library,
                     style={{backgroundColor: tag.color}}
                     className="tagName"
                     onClick={clickedOnTag}
+                    // eslint-disable-next-line max-len
+                    title={`Remove '${tag.name}' tag from ${songToView.name} by ${songToView.artists[0].name}`}
                   >
                     {tag.name}
                   </div>

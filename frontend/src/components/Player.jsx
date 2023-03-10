@@ -12,12 +12,12 @@ import {theme} from './Theme.js';
 
 /**
  * @param {string} accessToken
- * @param {string} clickedTrackURI
+ * @param {string} clickedTrackID
  * @param {function} setPlayingTrackID
  * @param {array} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackURI, setPlayingTrackID,
+function Player({accessToken, clickedTrackID, setPlayingTrackID,
   updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
@@ -103,7 +103,7 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
    * clicked song by user.
    */
   React.useEffect(() => {
-    if ((typeof(deviceID) != undefined) && (clickedTrackURI !== '')) {
+    if ((typeof(deviceID) != undefined) && (clickedTrackID !== '')) {
       console.log(`Player: play clicked song`);
 
       // creates list of uris (playlist) from list of songs (updatedLib)
@@ -111,6 +111,9 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
       updatedLib.forEach((song) => {
         playlist = [...playlist, song.uri];
       });
+
+      // creates clicked track's URI string using its ID
+      const clickedTrackURI = 'spotify:track:'.concat(clickedTrackID);
 
       // HTTP request to initially play music
       // plays songs in playlist starting with clicked song
@@ -126,7 +129,7 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
         },
       });
     }
-  }, [clickedTrackURI]);
+  }, [clickedTrackID]);
 
   return (
     <>
@@ -136,6 +139,7 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
             id="prev-button"
             className="prev-button"
             color='secondary'
+            title='Previous'
             onClick={() => {
               player.previousTrack().then(() => {
                 console.log('Set to previous track!');
@@ -148,20 +152,28 @@ function Player({accessToken, clickedTrackURI, setPlayingTrackID,
             id="play-button"
             className="play-button"
             color='secondary'
+            title={!isPaused ? 'Pause' : 'Play'}
             onClick={() => {
               player.togglePlay().then(() => {
                 console.log('Toggled play button!');
               });
             }}>
             {!isPaused ?
-              <PauseCircleIcon style={{fontSize: 70}} color='secondary'/>:
-              <PlayCircleIcon style={{fontSize: 70}} color='secondary'/>}
+              <PauseCircleIcon
+                style={{fontSize: 70}}
+                color='secondary'
+              />:
+              <PlayCircleIcon
+                style={{fontSize: 70}}
+                color='secondary'
+              />}
           </IconButton>
 
           <IconButton
             id="next-button"
             className="next-button"
             color='secondary'
+            title='Next'
             onClick={() => {
               player.nextTrack().then(() => {
                 console.log('Skipped to next track!');
