@@ -40,7 +40,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
         getOAuthToken: (cb) => {
           cb(accessToken);
         },
-        volume: 0.25,
+        volume: 0.5,
       });
 
       setPlayer(player);
@@ -194,24 +194,24 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
         <div className="volume-control-container">
           <button
             id='down-button'
-            className='down-buton'
+            className='down-button'
             color='secondary'
             type='button'
             onClick={() => {
+              console.log(`Down button clicked`);
               player.getVolume().then((volume) => {
-                console.log(`Current volume: ${volume}`);
-                const pVolume = Number(volume - 0.01).toFixed(2);
-                // const pVolume = volume - 0.01;
-                console.log(`Possible new volume: ${pVolume}`);
+                volume *= 100;
+                console.log(` Current volume: ${volume}`);
+                const pVolume = Math.round(volume - 2);
+                console.log(` Possible new volume: ${pVolume}`);
 
                 if (pVolume >= 0) {
-                  player.setVolume(pVolume);
-                  const volumePercentage = Math.round(pVolume * 100);
+                  player.setVolume(pVolume/100);
                   document.getElementById('volume-display').innerHTML =
-                    'Volume: '.concat((volumePercentage).toString())
-                    .concat('%');
+                    'Volume: '.concat((pVolume).toString())
+                      .concat('%');
                 } else {
-                  console.log(`Volume is already at minimum level` +
+                  console.log(` Volume is already at minimum level; ` +
                     `cannot go any lower!`);
                 }
               });
@@ -225,6 +225,34 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             className="volume-display"
             color='secondary'>
           </p>
+
+          <button
+            id='up-button'
+            className='up-button'
+            color='secondary'
+            type='button'
+            onClick={() => {
+              console.log(`Up button clicked`);
+              player.getVolume().then((volume) => {
+                volume *= 100;
+                console.log(` Current volume: ${volume}`);
+                const pVolume = Math.round(volume + 2);
+                console.log(` Possible new volume: ${pVolume}`);
+
+                if (pVolume <= 100) {
+                  player.setVolume(pVolume/100);
+                  document.getElementById('volume-display').innerHTML =
+                    'Volume: '.concat((pVolume).toString())
+                      .concat('%');
+                } else {
+                  console.log(` Volume is already at maximum level; ` +
+                    `cannot go any higher!`);
+                }
+              });
+            }}
+          >
+            Up
+          </button>
         </div>
       </ThemeProvider>
     </>
