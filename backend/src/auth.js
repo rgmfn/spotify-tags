@@ -14,11 +14,11 @@ const redirectURI = 'http://localhost:3010/callback'; // Your redirect uri
  * @return {string} The generated string
  */
 const generateRandomString = function(length) {
-  const text = '';
+  let text = '';
   // eslint-disable-next-line max-len
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (const i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
@@ -40,8 +40,8 @@ router.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  const scope = 'user-read-private user-read-email user-read-playback-state' +
-    'user-modify-playback-state user-read-currently-playing' +
+  const scope = 'user-read-private user-read-email user-read-playback-state ' +
+    'user-modify-playback-state user-read-currently-playing ' +
     'app-remote-control streaming';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
