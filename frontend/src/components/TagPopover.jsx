@@ -7,6 +7,8 @@ import {darkTheme} from './darkTheme';
 import {tagColors} from './tagColors';
 import SearchBar from './SearchBar';
 
+const boolOpColor = '#888888';
+
 /**
  * Returns true if toFind is present in list.
  *
@@ -16,7 +18,7 @@ import SearchBar from './SearchBar';
  */
 const tagIsInList = (toFind, list) => {
   return list.some((tag) => (
-    tag.name === toFind.name && !tag.id
+    (tag.name === toFind.name) && !tag.id
   ));
 };
 
@@ -24,6 +26,9 @@ const tagIsInList = (toFind, list) => {
  * @param {boolean} isOpen - if the popover is open
  * @param {array} tagsToSelect - list of tags user can select
  * @param {function} setTagsToSelect
+ * @param {string} targetTitle - titles when hovering over tags/ ops (string
+ *                               is different when adding tags to songs v.
+ *                               adding tags/ ops to expression)
  * @param {array} targetsTags - tag list of an object to append to
  * @param {function} setTargetsTags - set the state of the object we appended to
  * @param {boolean} setIsAddingTags - sets if the targets tags are being added
@@ -33,13 +38,16 @@ const tagIsInList = (toFind, list) => {
  *                               popover (declared in SongTagAdder.jsx)
  * @return {JSX} thing
  */
-function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
+function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   targetsTags, setTargetsTags, setIsAddingTags,
   preRows, positioning}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
   // ^ string used to query the tagsToSelect
   const [filteredTags, setFilteredTags] = React.useState([]);
   // ^ tagsToSelect - all tags in targetsTags and fitting tagSearchQuery
+  const [boolOpID, setBoolOpID] = React.useState(1);
+  // ^ id assigned to the new boolean opererator added to the expression
+  //   needed so that boolean op tags with same name can be distinguished
 
   /*
    * Filtered out all tags in the targets tags. If the tagSearchQuery is not
@@ -67,8 +75,15 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
    * @param {object} tag
    */
   const addTagToTarget = ((tag) => {
-    if (targetsTags.every((targTag) => targTag.name !== tag.name)) {
-      setTargetsTags([...targetsTags, tag]); // populate array with new value.
+    const tagToAdd = {...tag};
+    if (tagToAdd.color === boolOpColor) {
+      tagToAdd.id = boolOpID;
+      setBoolOpID(boolOpID+1);
+    }
+
+    if (!tagIsInList(tagToAdd, targetsTags)) {
+      setTargetsTags([...targetsTags, tagToAdd]);
+      // ^ populate array with new value.
       setTagSearchQuery('');
     }
   });
@@ -79,6 +94,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
    * @param {object} newTag - tag to add to the list of tagsToSelect
    */
   const createTag = ((newTag) => {
+    newTag.name = newTag.name.toLowerCase();
     setTagsToSelect([...tagsToSelect, newTag]);
     addTagToTarget(newTag); // add to target
     // TODO put tag in database
@@ -197,10 +213,16 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
               {filteredTags.length === 0 ?
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
-                  <tr onClick={(event) => {
-                    event.stopPropagation();
-                    addTagToTarget(tag);
-                  }}>
+                  <tr
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addTagToTarget(tag);
+                    }}
+                    title={`Add '${tag.name}' `
+                      .concat(tag.color === '#888888' ? 'op' : 'tag')
+                      .concat(' to ').concat(targetTitle)
+                    }
+                  >
                     <td>
                       <div
                         style={{backgroundColor: tag.color}}

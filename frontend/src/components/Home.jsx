@@ -17,6 +17,8 @@ import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
+import {storeSong, retrieveAllSongs} from './backendWrapper.js';
+import getTrack from './getTrack.js';
 
 /**
  * Gets a new access token using the refresh token.
@@ -83,7 +85,6 @@ const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
   // console.log(`accessToken: ${accessToken}`);
 
   let data = await result.json();
-  // console.log(`data: ${data}`);
   data = insertTestingTags(data);
   return data;
 };
@@ -98,7 +99,7 @@ function Home() {
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
   const [userid, setUserid] = React.useState('');
-  const [clickedTrackURI, setClickedTrackURI] = React.useState('');
+  const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -134,8 +135,8 @@ function Home() {
   }, []);
 
   /**
-   * When the refreshToken or accessToken change, reset the library using
-   * the temporary getSearch method.
+   * When the refreshToken or accessToken change, get the library from
+   * the database.
    */
   React.useEffect(() => {
     getUserInfo();
@@ -143,6 +144,28 @@ function Home() {
       (result) => {
         setLibrary(result.tracks.items);
       });
+      
+    if (accessToken) {
+      /**
+       */
+      async function fillLibrary() {
+        const userid = 'TEST_USER_ID_1';
+        const tmpLib = [];
+        const data = await retrieveAllSongs(userid);
+        // console.log('wat', data.songs);
+        for (const song of data.songs) {
+          const track = await getTrack(song.spotifyid, accessToken);
+          track.tags = song.tags;
+          tmpLib.push(track);
+          if (tmpLib.length === data.songs.length) {
+            setLibrary(tmpLib);
+            // console.log('library set');
+          }
+        }
+      }
+
+      fillLibrary();
+    }
   }, [refreshToken, accessToken]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
@@ -167,8 +190,8 @@ function Home() {
    */
   const clickedOnSong = ((event) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackURI: ${event.currentTarget.title}`);
-    setClickedTrackURI(event.currentTarget.title);
+    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
+    setClickedTrackID(event.currentTarget.id);
     // event.currentTarget is the thing with the onClick (the tr for the song)
   });
 
@@ -221,16 +244,7 @@ function Home() {
 
     // store each song in the library to db
     for (const song of library) {
-      await fetch(`http://localhost:3010/v0/tagsPost`, {
-        // http get request to api.spotify.com/v1/search
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          {userid: userid, spotifyid: song.id,
-            tags: song.tags}),
-      });
+      storeSong(userid, song);
     }
 
     window.localStorage.removeItem('accessToken');
@@ -243,9 +257,10 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
-        clickedTrackURI={clickedTrackURI}
+        clickedTrackID={clickedTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
+        library={library}
       />
       <div className="searchbar">
         <SearchBar
@@ -256,12 +271,24 @@ function Home() {
       </div>
       <ThemeProvider theme={theme}>
         {!accessToken ?
-          <IconButton href='http://localhost:3010/login' color= 'secondary'>
-            <LoginIcon color= 'secondary'/>
-          </IconButton>: <IconButton onClick={logout} color= 'secondary'>
-            <LogoutIcon color= 'secondary'/></IconButton>}
-        <IconButton onClick={refreshList} color= 'secondary'>
-          <RefreshIcon color= 'secondary'/></IconButton>
+          <IconButton
+            href='http://localhost:3010/login'
+            color='secondary'
+            title='Log in'>
+            <LoginIcon color='secondary'/>
+          </IconButton>:
+          <IconButton
+            onClick={logout}
+            color='secondary'
+            title='Log out'>
+            <LogoutIcon color='secondary'/>
+          </IconButton>}
+        <IconButton
+          onClick={refreshList}
+          color= 'secondary'
+          title='Refresh list'>
+          <RefreshIcon color='secondary'/>
+        </IconButton>
       </ThemeProvider>
       {!Boolean(searchQuery) && <Library
         // ^ displays library if there is no searchQuery
@@ -290,7 +317,10 @@ function Home() {
         library={library}
         setSongToView={setSongToView}
       />}
-      <SortModal library={library} setLibrary={setLibrary}/>
+      <SortModal
+        library={library}
+        setLibrary={setLibrary}
+      />
     </div>
   );
 }
