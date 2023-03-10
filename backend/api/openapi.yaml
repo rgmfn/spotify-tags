@@ -102,6 +102,23 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Error'
+  /postUpdate:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleSong'
+      responses:
+        200:
+          description: completed update
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/Error' 
 
 
