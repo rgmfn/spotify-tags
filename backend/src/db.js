@@ -8,6 +8,12 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
 });
 
+// ensures that there is only one unique combination pair with userid, spotifyid
+// in other words, only one song with that given spotifyid for that user
+(async () => {
+  await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid)');
+})();
+
 // selects all the songs for a user
 exports.selectAll = async (userid) => {
   const select = 'SELECT * FROM songs WHERE userid = $1';
@@ -66,7 +72,8 @@ exports.allTags = async (userid) => {
 // inserts a new song object into the database
 exports.insertTags = async (userid, spotifyid, tags) => {
   const select = 'INSERT INTO songs(userid, spotifyid, tags)' +
-    'VALUES ($1, $2, $3)';
+    'VALUES ($1, $2, $3) ON CONFLICT (userid, spotifyid) DO '+
+    'UPDATE SET userid=$1, spotifyid=$2, tags=$3;';
   const query = {
     text: select,
     values: [userid, spotifyid, {tags: tags}],
@@ -85,6 +92,19 @@ exports.deleteSong = async (userid, spotifyid) => {
   const query = {
     text: delet,
     values: [userid, spotifyid],
+  };
+  await pool.query(query);
+  return;
+};
+
+// updates the given song object if the userid, spotifyid
+// are already in the db
+exports.updateTags = async (userid, spotifyid, tags) => {
+  // eslint-disable-next-line
+  const select = 'UPDATE songs SET tags = $1 WHERE userid = $2 and spotifyid = $3';
+  const query = {
+    text: select,
+    values: [{tags: tags}, userid, spotifyid],
   };
   await pool.query(query);
   return;
