@@ -5,7 +5,8 @@ import React from 'react';
  */
 function LibraryResults({searchQuery, library, clickedOnSong}) {
   const filteredLibrary = library.filter((song) =>
-    song.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    song.name.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+      .toLowerCase().includes(searchQuery.toLowerCase()),
   );
   // const clickedOnSong = ((event) => {
   //   if (event.currentTarget.id) {

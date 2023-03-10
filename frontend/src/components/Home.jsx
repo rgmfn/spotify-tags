@@ -212,8 +212,11 @@ function Home() {
     ));
 
     if (songInLib) {
-      songInLib.tags = [...songInLib.tags, selectedTag];
-      // populate song tags with new tag.
+      // if song doesn't already have this tag
+      if (!songInLib.tags.some((tag) => tag === selectedTag)) {
+        // populate tags with new tag.
+        songInLib.tags = [...songInLib.tags, selectedTag];
+      }
       setLibrary([...library]);
     } else {
       getSong(accessToken, refreshToken, setAccessToken,
