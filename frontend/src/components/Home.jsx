@@ -166,6 +166,10 @@ function Home() {
       console.log('wat', data.songs);
       for (const song of data.songs) {
         const track = await getTrack(song.spotifyid, accessToken);
+        if (track === null) {
+          console.log('BRAKEN');
+          break;
+        }
         track.tags = song.tags;
         tmpLib.push(track);
         if (tmpLib.length === data.songs.length) {
