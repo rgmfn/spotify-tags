@@ -12,7 +12,7 @@ import TagSelector from './TagSelector';
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
 import {getSong} from './httpCalls';
-import {storeSong, retrieveAllSongs} from './backendWrapper.js';
+import {storeSong, retrieveAllSongs, removeSong} from './backendWrapper.js';
 import getTrack from './getTrack.js';
 
 /**
@@ -106,6 +106,7 @@ function Home() {
    */
   React.useEffect(() => {
     const hash = window.location.hash;
+    console.log(`hash: ${hash}`);
     let accessToken = window.localStorage.getItem('accessToken');
     let refreshToken = window.localStorage.getItem('refreshToken');
     console.log('hash:', hash);
@@ -114,6 +115,7 @@ function Home() {
       refreshToken = hash.substring(1).split('&').find((elem) =>
         elem.startsWith('refresh_token')).split('=')[1];
     }
+    console.log(`refreshToken: ${refreshToken}`);
 
     setRefreshToken(refreshToken);
 
@@ -148,8 +150,8 @@ function Home() {
           track.tags = song.tags;
           tmpLib.push(track);
           if (tmpLib.length === data.songs.length) {
+            console.log(tmpLib);
             setLibrary(tmpLib);
-            // console.log('library set');
           }
         }
       }
@@ -193,6 +195,14 @@ function Home() {
     }
   });
 
+  const getUserID = async () => {
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    return userInfo.id;
+  };
+
   /**
    * Called when clicking outside of the SongCard.
    *
@@ -204,6 +214,11 @@ function Home() {
         libSong.id !== songToView.id
       )));
       // remove from database
+      // {{{
+      getUserID().then((userid) => {
+        removeSong(userid, songToView);
+      });
+      // }}}
     }
     setSongToView(emptySong);
   };

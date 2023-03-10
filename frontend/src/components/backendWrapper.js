@@ -28,4 +28,17 @@ export async function retrieveAllSongs(userid) {
   return data;
 }
 
-
+/**
+ * @param {string} userid - spotify user id to remove song from
+ * @param {object} song - song object to remove from user
+ */
+export async function removeSong(userid, song) {
+  await fetch(`http://localhost:3010/v0/song?${new URLSearchParams({spotifyid: song.id,
+    userid: userid})}`, {
+    // http get request to api.spotify.com/v1/search
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+}
