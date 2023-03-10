@@ -165,14 +165,12 @@ function Home() {
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
-   * @param {object} event - contains things like the element that was
-   *                         clicked on
+   * @param {object} songID - spotify id of song clicked on
    */
-  const clickedOnSong = ((event) => {
+  const clickedOnSong = ((songID) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
-    setClickedTrackID(event.currentTarget.id);
-    // event.currentTarget is the thing with the onClick (the tr for the song)
+    console.log(`   clickedTrackID: ${songID}`);
+    setClickedTrackID(songID);
   });
 
   /**
@@ -213,12 +211,10 @@ function Home() {
       setLibrary(library.filter((libSong) => (
         libSong.id !== songToView.id
       )));
-      // remove from database
-      // {{{
+      // TODO use userID state
       getUserID().then((userid) => {
         removeSong(userid, songToView);
       });
-      // }}}
     }
     setSongToView(emptySong);
   };

@@ -49,7 +49,7 @@ function Library({library, updatedLib, setUpdatedLib,
               // render 'No match found.' if the new library is now empty
               <tr
                 // tr = table row
-                onClick={(event) => clickedOnSong(event)}
+                onClick={() => clickedOnSong(song.id)}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
                 title={`Play ${song.name} by ${song.artists[0].name}`}

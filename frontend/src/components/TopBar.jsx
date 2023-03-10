@@ -68,7 +68,7 @@ function TopBar(props) {
       <div id="player-container">
         { Boolean(props.accessToken) && <Player
           accessToken={props.accessToken}
-          clickedTrackURI={props.clickedTrackURI}
+          clickedTrackID={props.clickedTrackID}
           setPlayingTrackID={props.setPlayingTrackID}
           updatedLib={props.updatedLib}/> }
       </div>
