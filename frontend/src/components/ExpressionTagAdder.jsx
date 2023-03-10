@@ -27,7 +27,8 @@ const booleanOps = [
 function ExpressionTagAdder({isOpen, expression, setExpression,
   setIsAddingTags, library}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
-  // ^ list of tags available to select in TagPopover
+  const targetTitle = 'expression';
+  // ^ title on prospective tags/ ops to add to expression
 
   /*
    * When the SongTagAdder is opened, it getsAllTags in the database for the
@@ -50,6 +51,7 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
       isOpen={isOpen}
       tagsToSelect={tagsToSelect}
       setTagsToSelect={setTagsToSelect}
+      targetTitle={targetTitle}
       targetsTags={expression}
       setTargetsTags={setExpression}
       setIsAddingTags={setIsAddingTags}

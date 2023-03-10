@@ -26,6 +26,9 @@ const tagIsInList = (toFind, list) => {
  * @param {boolean} isOpen - if the popover is open
  * @param {array} tagsToSelect - list of tags user can select
  * @param {function} setTagsToSelect
+ * @param {string} targetTitle - titles when hovering over tags/ ops (string
+ *                               is different when adding tags to songs v.
+ *                               adding tags/ ops to expression)
  * @param {array} targetsTags - tag list of an object to append to
  * @param {function} setTargetsTags - set the state of the object we appended to
  * @param {boolean} setIsAddingTags - sets if the targets tags are being added
@@ -35,7 +38,7 @@ const tagIsInList = (toFind, list) => {
  *                               popover (declared in SongTagAdder.jsx)
  * @return {JSX} thing
  */
-function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
+function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   targetsTags, setTargetsTags, setIsAddingTags,
   preRows, positioning}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
@@ -210,10 +213,16 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
               {filteredTags.length === 0 ?
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
-                  <tr onClick={(event) => {
-                    event.stopPropagation();
-                    addTagToTarget(tag);
-                  }}>
+                  <tr
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addTagToTarget(tag);
+                    }}
+                    title={`Add '${tag.name}' `
+                      .concat(tag.color === '#888888' ? 'op' : 'tag')
+                      .concat(' to ').concat(targetTitle)
+                    }
+                  >
                     <td>
                       <div
                         style={{backgroundColor: tag.color}}

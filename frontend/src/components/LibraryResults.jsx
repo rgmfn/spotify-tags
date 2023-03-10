@@ -27,6 +27,8 @@ function LibraryResults({searchQuery, library, setSongToView}) {
                 <tr
                   id={result.id}
                   onClick={clickedOnSong}
+                  // eslint-disable-next-line max-len
+                  title={`View song details about ${result.name} by ${result.artists[0].name}`}
                 >
                   <td className="search-img-col">
                     <div className="imgContainer">
