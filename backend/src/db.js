@@ -15,6 +15,9 @@ exports.selectAll = async (userid) => {
     values: [userid]
   };
   const {rows} = await pool.query(query);
+  if (rows.length === 0){
+    return [];
+  }
 //   console.log(rows);
   const ret = {userid: rows[0].userid, songs: []};
   for (const row of rows) {
