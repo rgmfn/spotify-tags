@@ -40,7 +40,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
         getOAuthToken: (cb) => {
           cb(accessToken);
         },
-        volume: 0.5,
+        volume: 0.25,
       });
 
       setPlayer(player);
@@ -69,6 +69,15 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
         console.error(message);
       });
 
+      // connects web player instance to Spotify w/ credentials given
+      // during initialization above
+      player.connect().then((success) => {
+        if (success) {
+          console.log('The Web Playback SDK successfully ' +
+                      'connected to Spotify!');
+        }
+      });
+
       // runs when state of the local playback has changed (i.e.
       // current playing track changes, current track pauses,
       // current track resumes playing)
@@ -85,13 +94,12 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
         setIsPaused(state.paused);
       }));
 
-      // connects web player instance to Spotify w/ credentials given
-      // during initialization above
-      player.connect().then((success) => {
-        if (success) {
-          console.log('The Web Playback SDK successfully ' +
-                      'connected to Spotify!');
-        }
+      // displays actual player volume
+      player.getVolume().then((volume) => {
+        const volumePercentage = Math.round(volume * 100);
+        console.log(`The volume of the player is ${volumePercentage}%`);
+        document.getElementById('volume-display').innerHTML = 'Volume: '
+          .concat((volumePercentage).toString()).concat('%');
       });
     };
   }, [accessToken]);
@@ -181,6 +189,42 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             }}>
             <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
           </IconButton>
+        </div>
+
+        <div className="volume-control-container">
+          <button
+            id='down-button'
+            className='down-buton'
+            color='secondary'
+            type='button'
+            onClick={() => {
+              player.getVolume().then((volume) => {
+                console.log(`Current volume: ${volume}`);
+                const pVolume = Number(volume - 0.01).toFixed(2);
+                // const pVolume = volume - 0.01;
+                console.log(`Possible new volume: ${pVolume}`);
+
+                if (pVolume >= 0) {
+                  player.setVolume(pVolume);
+                  const volumePercentage = Math.round(pVolume * 100);
+                  document.getElementById('volume-display').innerHTML =
+                    'Volume: '.concat((volumePercentage).toString())
+                    .concat('%');
+                } else {
+                  console.log(`Volume is already at minimum level` +
+                    `cannot go any lower!`);
+                }
+              });
+            }}
+          >
+            Down
+          </button>
+
+          <p
+            id="volume-display"
+            className="volume-display"
+            color='secondary'>
+          </p>
         </div>
       </ThemeProvider>
     </>
