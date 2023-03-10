@@ -166,7 +166,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
         anchorEl={
           positioning.anchorEl === 'songcard' ?
             document.getElementById('songcard-container') :
-            'none'
+            null
         }
         anchorReference={positioning.anchorReference}
         anchorOrigin={positioning.anchorOrigin}
@@ -197,10 +197,13 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect,
               {filteredTags.length === 0 ?
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
-                  <tr onClick={(event) => {
-                    event.stopPropagation();
-                    addTagToTarget(tag);
-                  }}>
+                  <tr
+                    key={tag.name}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addTagToTarget(tag);
+                    }}
+                  >
                     <td>
                       <div
                         style={{backgroundColor: tag.color}}

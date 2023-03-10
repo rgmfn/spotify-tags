@@ -62,20 +62,16 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
    */
   React.useEffect(() => {
     if (isOpen) {
-      getAllTags('TEST_USER_ID_1').then((obj) => {
+      getAllTags(userID).then((obj) => {
         setTagsToSelect([...obj.tags]);
       });
     }
-  }, [isOpen, songToView]);
+  }, [isOpen, songToView, userID]);
 
   /**
-   * Called when clicking on a tag to add to the target.
-   *
-   * Sets the tags of songToView and songToView inside library to newTags.
-   *
-   * @param {array} newTags - list of tags to set the viewed songs tags to
+   * @param {array} newTags -
    */
-  const setSongsTags = (newTags) => {
+  const addTagToSongInLibrary = (newTags) => {
     const newLibrary = library.map((newSong) => {
       if (newSong.id === songToView.id) {
         newSong.tags = newTags;
@@ -86,6 +82,33 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
       }
     });
     setLibrary(newLibrary);
+  };
+
+  /**
+   * @param {array} newTags -
+   */
+  const addTagToSongFromSpotify = (newTags) => {
+    const newSongToView = {...songToView, tags: newTags};
+    setSongToView(newSongToView);
+    setLibrary([...library, newSongToView]);
+  };
+
+  /**
+   * Called when clicking on a tag to add to the target.
+   *
+   * Sets the tags of songToView and songToView inside library to newTags.
+   *
+   * @param {array} newTags - list of tags to set the viewed songs tags to
+   */
+  const setSongsTags = (newTags) => {
+    const songInLibrary = library.find((song) => song.id === songToView.id);
+    if (songInLibrary) {
+      // console.log('addTagToSongInLibrary');
+      addTagToSongInLibrary(newTags);
+    } else {
+      // console.log('addTagToSongFromSpotify');
+      addTagToSongFromSpotify(newTags);
+    }
   };
 
   return (

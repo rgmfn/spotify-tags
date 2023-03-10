@@ -294,6 +294,7 @@ function Home() {
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
+        setSearchQuery={setSearchQuery}
       />
       <div className="searchbar">
         <SearchBar
@@ -327,7 +328,6 @@ function Home() {
         refreshToken={refreshToken}
         refreshTokenFunc={refreshTokenFunc}
         library={library}
-        setSongToView={setSongToView}
         setIsPickingTag={setIsPickingTag}
         clickedOnSong={selectedTag ?
           addTagToSong : displaySong

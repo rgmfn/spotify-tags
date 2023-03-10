@@ -15,7 +15,6 @@ function SearchResults(props) {
       <LibraryResults
         library={props.library}
         searchQuery={props.searchQuery}
-        setSongToView={props.setSongToView}
         clickedOnSong={props.clickedOnSong}
       />
       <SpotifyResults
@@ -24,7 +23,6 @@ function SearchResults(props) {
         setAccessToken={props.setAccessToken}
         refreshToken={props.refreshToken}
         refreshTokenFunc={props.refreshTokenFunc}
-        setSongToView={props.setSongToView}
         clickedOnSong={props.clickedOnSong}
       />
     </div>

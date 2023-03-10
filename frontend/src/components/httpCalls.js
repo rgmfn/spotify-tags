@@ -66,6 +66,7 @@ const getSong = async (accessToken, refreshToken, setAccessToken,
 
   const data = await result.json();
   // data.tags = fakeTags;
+  data.tags = [];
   return data;
 };
 

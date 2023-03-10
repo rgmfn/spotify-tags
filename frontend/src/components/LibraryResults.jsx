@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * @return {object} JSX
  */
-function LibraryResults({searchQuery, library, setSongToView, clickedOnSong}) {
+function LibraryResults({searchQuery, library, clickedOnSong}) {
   const filteredLibrary = library.filter((song) =>
     song.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
@@ -26,6 +26,7 @@ function LibraryResults({searchQuery, library, setSongToView, clickedOnSong}) {
               (result) => (
                 <tr
                   id={result.id}
+                  key={result.id}
                   onClick={() => clickedOnSong(result.id)}
                 >
                   <td className="search-img-col">

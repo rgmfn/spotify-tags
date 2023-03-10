@@ -92,6 +92,7 @@ function Library({library, updatedLib, setUpdatedLib,
                     [] :
                     song.tags.map((tag) => (
                       <div
+                        key={`${song.name}:${tag.name}`}
                         style={{backgroundColor: tag.color}}
                         className="tagName"
                       >

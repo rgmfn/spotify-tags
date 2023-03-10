@@ -55,9 +55,10 @@ function TopBar(props) {
             <RefreshIcon color= 'secondary'/></IconButton>
           {Boolean(props.selectedTag) ?
             null :
-            <IconButton>
+            <IconButton
+              onClick={() => props.setIsPickingTag(true)}
+            >
               <AddBoxIcon color='secondary'
-                onClick={() => props.setIsPickingTag(true)}
                 title='Click to select a tag'
               />
             </IconButton>
@@ -65,7 +66,7 @@ function TopBar(props) {
         </ThemeProvider>
       </div>
       <div id="player-container">
-        { (props.accessToken !== '') && <Player
+        { Boolean(props.accessToken) && <Player
           accessToken={props.accessToken}
           clickedTrackURI={props.clickedTrackURI}
           setPlayingTrackID={props.setPlayingTrackID}
@@ -76,7 +77,10 @@ function TopBar(props) {
           <div
             style={{backgroundColor: props.selectedTag.color}}
             className="tagName"
-            onClick={() => props.setSelectedTag(null)}
+            onClick={() => {
+              props.setSelectedTag(null);
+              props.setSearchQuery('');
+            }}
           >
             {props.selectedTag.name}
           </div> :

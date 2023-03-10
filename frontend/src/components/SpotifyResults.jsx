@@ -15,7 +15,7 @@ const noResults = (
  * @return {object} JSX
  */
 function SpotifyResults({searchQuery, accessToken, setAccessToken,
-  refreshToken, refreshTokenFunc, setSongToView, clickedOnSong}) {
+  refreshToken, refreshTokenFunc, clickedOnSong}) {
   const [songList, setSongList] = React.useState([emptySong]);
   const [nextSongsURL, setNextSongsURL] = React.useState([]);
   // nextSongsURL used for tracking the next group of songs when clicking
@@ -35,23 +35,6 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
     }
   }, [searchQuery, accessToken, setAccessToken,
     refreshToken, refreshTokenFunc]);
-
-  // /**
-  //  * Called when clicking on a <tr> representing a song.
-  //  *
-  //  * Gets the song object corresponding to that row/song and sets it to
-  //  * display in a SongCard (by setting songToView).
-  //  *
-  //  * @param {object} event
-  //  */
-  // const clickedOnSong = ((event) => {
-  //   if (event.currentTarget.id) {
-  //     getSong(accessToken, refreshToken, setAccessToken,
-  //       refreshTokenFunc, event.currentTarget.id).then((song) => {
-  //       setSongToView(song);
-  //     });
-  //   }
-  // });
 
   /**
    * Called when clicking 'More results...' at the bottom of the results.
@@ -81,6 +64,7 @@ function SpotifyResults({searchQuery, accessToken, setAccessToken,
             (result) => (
               <tr
                 id={result.id}
+                key={result.id}
                 onClick={() => clickedOnSong(result.id)}
               >
                 <td className="search-img-col">
