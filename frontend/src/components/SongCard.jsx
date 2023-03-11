@@ -125,8 +125,8 @@ function SongCard({songToView, setSongToView, library,
         </div>
         <SongTagAdder
           isOpen={isAddingTags}
-          userID={'musicrag'}
-          // userID={'TEST_USER_ID_1'}
+          // userID={'musicrag'}
+          userID={'TEST_USER_ID_1'}
           songToView={songToView}
           setSongToView={setSongToView}
           library={library}
