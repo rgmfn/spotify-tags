@@ -11,6 +11,7 @@ const pool = new Pool({
 // ensures that there is only one unique combination pair with userid, spotifyid
 // in other words, only one song with that given spotifyid for that user
 (async () => {
+  // eslint-disable-next-line max-len
   await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid)');
 })();
 
@@ -22,7 +23,7 @@ exports.selectAll = async (userid) => {
     values: [userid],
   };
   const {rows} = await pool.query(query);
-  const ret = {userid: rows[0].userid, songs: []};
+  const ret = {userid: userid, songs: []};
   for (const row of rows) {
     const song = {};
     song.spotifyid = row.spotifyid;
