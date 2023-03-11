@@ -24,7 +24,7 @@ exports.selectAll = async (userid) => {
   };
   const {rows} = await pool.query(query);
 //   console.log(rows);
-  const ret = {userid: rows[0].userid, songs: []};
+  const ret = {userid: userid, songs: []};
   for (const row of rows) {
     let song = {};
     song.spotifyid = row.spotifyid;
