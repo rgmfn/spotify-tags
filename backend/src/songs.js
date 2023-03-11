@@ -45,16 +45,6 @@ exports.deleteSong = async (req, res) => {
   res.status(200).send();
 };
 
-exports.getAllTags = async (req, res) => {
-  let tagList = null;
-  tagList = await db.allTags(req.query.userid);
-  if (tagList.length === 0) {
-    res.status(404).send();
-  } else {
-    res.status(200).json(tagList);
-  }
-};
-
 exports.postUpdate = async (req, res) => {
   try {
     await db.updateTags(req.body.userid, req.body.spotifyid, req.body.tags);
