@@ -38,7 +38,6 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
   React.useEffect(() => {
     if (isOpen) {
       let tags = booleanOps.map((op) => ({name: op, color: '#888888'}));
-      // getAllTags('musicrag').then((obj) => {
       getAllTags('TEST_USER_ID_1').then((obj) => {
         tags = tags.concat(obj.tags); // gets all tags in DB
         tags = tags.concat(artistAlbumTags(library));

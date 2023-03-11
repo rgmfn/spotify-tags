@@ -35,18 +35,17 @@ exports.selectAll = async (userid) => {
 
 // selects all the tags for a specific song and a given user
 exports.selectTags = async (spotifyid, userid) => {
-  const select = 'SELECT tags, userid, spotifyid FROM songs' +
+  const select = 'SELECT tags, userid, spotifyid FROM songs ' +
     'WHERE spotifyid = $1 AND userid = $2';
   const query = {
     text: select,
     values: [spotifyid, userid],
   };
   const {rows} = await pool.query(query);
-  const ret = {
-    userid: rows[0].userid,
-    spotifyid: rows[0].spotifyid,
-    tags: rows[0].tags.tags,
-  };
+  if (rows.length === 0) {
+    return {userid: userid, spotifyid: spotifyid, tags: []};
+  }
+  const ret = {userid: userid, spotifyid: spotifyid, tags: rows[0].tags.tags};
   return ret;
 };
 
@@ -58,14 +57,12 @@ exports.allTags = async (userid) => {
     values: [userid],
   };
   const {rows} = await pool.query(query);
-  const ret = {userid: rows[0].userid, tags: []};
+  const ret = {userid: userid, tags: []};
 
   // aggregate and get rid of duplicate tags
-  ret.tags = [...new Set([].concat(
-    ...rows.map((row) =>
-      row.tags.tags.map((tag) =>
-        JSON.stringify(tag))))),
-  ];
+  ret.tags = [...new Set([].concat(...rows.map((row) =>
+    row.tags.tags.map((tag) =>
+      JSON.stringify(tag)))))];
   ret.tags = ret.tags.map((tag) => JSON.parse(tag));
   return ret;
 };
@@ -101,8 +98,8 @@ exports.deleteSong = async (userid, spotifyid) => {
 // updates the given song object if the userid, spotifyid
 // are already in the db
 exports.updateTags = async (userid, spotifyid, tags) => {
-  // eslint-disable-next-line
-  const select = 'UPDATE songs SET tags = $1 WHERE userid = $2 and spotifyid = $3';
+  const select = 'UPDATE songs SET tags = $1 '+
+    'WHERE userid = $2 and spotifyid = $3';
   const query = {
     text: select,
     values: [{tags: tags}, userid, spotifyid],

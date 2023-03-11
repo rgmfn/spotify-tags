@@ -25,7 +25,6 @@ function TagSelector({isOpen, setSelectedTag, setIsPickingTag}) {
    */
   React.useEffect(() => {
     if (isOpen) {
-      // getAllTags('musicrag').then((obj) => {
       getAllTags('TEST_USER_ID_1').then((obj) => {
         setTagsToSelect(obj.tags); // gets all tags in DB
       });

@@ -140,11 +140,9 @@ function Home() {
       /**
        */
       async function fillLibrary() {
-        // const userid = 'musicrag';
         const userid = 'TEST_USER_ID_1';
         const tmpLib = [];
         const data = await retrieveAllSongs(userid);
-        console.log('wat', data.songs);
         for (const song of data.songs) {
           const track = await getTrack(song.spotifyid, accessToken);
           if (track === null) {
@@ -154,7 +152,6 @@ function Home() {
           track.tags = song.tags;
           tmpLib.push(track);
           if (tmpLib.length === data.songs.length) {
-            console.log(tmpLib);
             setLibrary(tmpLib);
           }
         }
@@ -163,12 +160,6 @@ function Home() {
       fillLibrary();
     }
   }, [refreshToken, accessToken]);
-
-  React.useEffect(() => {
-    console.log('library', library);
-  }, [library]);
-  // get getSearch finishes (async), sets library to those search results
-  // called twice, once at page startup, another when we get the token
 
   /**
    * Called when clicking on a <tr> representing a song in the library.
