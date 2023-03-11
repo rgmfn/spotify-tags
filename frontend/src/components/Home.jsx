@@ -192,6 +192,11 @@ function Home() {
     }
   });
 
+  /**
+   * TODO Temporary until userID implemented.
+   *
+   * @return {string}
+   */
   const getUserID = async () => {
     const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
       method: 'GET',
