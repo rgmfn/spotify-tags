@@ -42,7 +42,10 @@ exports.selectTags = async (spotifyid, userid) => {
         values: [spotifyid, userid]
     };
     const {rows} = await pool.query(query);
-    const ret = {userid: rows[0].userid, spotifyid: rows[0].spotifyid, tags: rows[0].tags.tags};
+    if (rows.length === 0){
+      return {userid: userid, spotifyid: spotifyid, tags: []};
+    }
+    const ret = {userid: userid, spotifyid: spotifyid, tags: rows[0].tags.tags};
     return ret;
 };
 
@@ -56,7 +59,7 @@ exports.allTags = async (userid) => {
         values: [userid]
     };
     const {rows} = await pool.query(query);
-    const ret = {userid: rows[0].userid, tags: []};
+    const ret = {userid: userid, tags: []};
     
     // aggregate and get rid of duplicate tags
     ret.tags = [...new Set([].concat(...rows.map(row => row.tags.tags.map(tag => JSON.stringify(tag)))))];
