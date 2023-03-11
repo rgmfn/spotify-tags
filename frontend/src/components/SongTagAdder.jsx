@@ -6,6 +6,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import TagPopover from './TagPopover';
 import {theme} from './Theme.js';
 import {getAllTags} from './httpCalls.js';
+import {storeSong} from './backendWrapper.js';
 
 const positioning = {
   anchorEl: 'songcard',
@@ -113,6 +114,13 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
     }
   };
 
+  /**
+   *
+   */
+  const updateSongToViewInDB = () => {
+    storeSong(userID, songToView);
+  };
+
   return (
     <TagPopover
       isOpen={isOpen}
@@ -124,6 +132,7 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
       setIsAddingTags={setIsAddingTags}
       preRows={preRows}
       positioning={positioning}
+      updateSongToViewInDB={updateSongToViewInDB}
     />
   );
 }
