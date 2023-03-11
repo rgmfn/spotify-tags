@@ -103,6 +103,18 @@ exports.updateTags = async (userid, spotifyid, tags) => {
   const query = {
     text: select,
     values: [{tags: tags}, userid, spotifyid],
+      };
+  await pool.query(query);
+  return;
+};
+
+//updates the given song object if the userid, spotifyid
+//are already in the db
+exports.updateTags = async (userid, spotifyid, tags) => {
+  const select = 'UPDATE songs SET tags = $1 WHERE userid = $2 and spotifyid = $3';
+  const query = {
+      text: select,
+      values: [{tags: tags}, userid, spotifyid],
   };
   await pool.query(query);
   return;
