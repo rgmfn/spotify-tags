@@ -40,3 +40,13 @@ exports.getAllTags = async(req,res) => {
       res.status(200).json(tagList);
     }
 };
+
+exports.postUpdate = async(req, res) => {
+    try {
+      await db.updateTags(req.body.userid, req.body.spotifyid, req.body.tags);
+      res.status(200).send();
+    } catch(err){
+      console.log(err);
+      res.status(500).send();
+    }
+};

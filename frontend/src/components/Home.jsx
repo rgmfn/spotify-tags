@@ -152,14 +152,17 @@ function Home() {
         const userid = 'TEST_USER_ID_1';
         const tmpLib = [];
         const data = await retrieveAllSongs(userid);
-        // console.log('wat', data.songs);
+        console.log('wat', data.songs);
         for (const song of data.songs) {
           const track = await getTrack(song.spotifyid, accessToken);
+          if (track === null) {
+            console.log('BRAKEN');
+            break;
+          }
           track.tags = song.tags;
           tmpLib.push(track);
           if (tmpLib.length === data.songs.length) {
             setLibrary(tmpLib);
-            // console.log('library set');
           }
         }
       }
@@ -167,6 +170,10 @@ function Home() {
       fillLibrary();
     }
   }, [refreshToken, accessToken]);
+
+  React.useEffect(() => {
+    console.log('library', library);
+  }, [library]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
 
@@ -241,6 +248,18 @@ function Home() {
     // tokens
     setAccessToken('');
     setRefreshToken('');
+
+    // wipe libraries
+    setLibrary([]);
+    setUpdatedLib([]);
+
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    const userid = userInfo.id;
+    // TODO in sprint4: make userID into state
 
     // store each song in the library to db
     for (const song of library) {
