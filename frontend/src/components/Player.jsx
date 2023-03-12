@@ -74,7 +74,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       player.connect().then((success) => {
         if (success) {
           console.log('The Web Playback SDK successfully ' +
-                      'connected to Spotify!');
+            'connected to Spotify!');
         }
       });
 
@@ -93,14 +93,6 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
                     `${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
       }));
-
-      // displays actual player volume
-      player.getVolume().then((volume) => {
-        const volumePercentage = Math.round(volume * 100);
-        console.log(`The volume of the player is ${volumePercentage}%`);
-        document.getElementById('volume-display').innerHTML = 'Volume: '
-          .concat((volumePercentage).toString()).concat('%');
-      });
     };
   }, [accessToken]);
 
@@ -138,6 +130,63 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       });
     }
   }, [clickedTrackID]);
+
+  /**
+   * Called after volume is changed.
+   *
+   * Displays new volume value.
+   *
+   * @param {float} volume
+   */
+  const displayVolume = (volume) => {
+    document.getElementById('volume-display').innerHTML =
+    'Volume: '.concat((volume).toString())
+      .concat('%');
+  };
+
+  /**
+   * Called after mouse clicks or holds down 'Down' button.
+   *
+   * Lowers volume & displays new volume value.
+   */
+  const lowerVolume = () => {
+    console.log(`Toggled button to lower volume!`);
+
+    player.getVolume().then((volume) => {
+      volume *= 100;
+      const pVolume = Math.round(volume - 5);
+
+      if (pVolume >= 0) {
+        player.setVolume(pVolume/100);
+        displayVolume(pVolume);
+      } else {
+        console.log(` Volume is already at minimum level; ` +
+          `cannot go any lower!`);
+      }
+    });
+  };
+
+  /**
+  * Called after mouse clicks or holds down 'Up' button.
+  *
+  * Raises volume & displays new volume value.
+  */
+  const raiseVolume = () => {
+    console.log(`Toggled button to raise volume!`);
+
+    player.getVolume().then((volume) => {
+      volume *= 100;
+      const pVolume = Math.round(volume + 5);
+
+      if (pVolume <= 100) {
+        player.setVolume(pVolume/100);
+        displayVolume(pVolume);
+      } else {
+        console.log(` Volume is already at maximum level; ` +
+          `cannot go any higher!`);
+      }
+    });
+  };
 
   return (
     <>
@@ -197,25 +246,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             className='down-button'
             color='secondary'
             type='button'
-            onClick={() => {
-              console.log(`Down button clicked`);
-              player.getVolume().then((volume) => {
-                volume *= 100;
-                console.log(` Current volume: ${volume}`);
-                const pVolume = Math.round(volume - 2);
-                console.log(` Possible new volume: ${pVolume}`);
-
-                if (pVolume >= 0) {
-                  player.setVolume(pVolume/100);
-                  document.getElementById('volume-display').innerHTML =
-                    'Volume: '.concat((pVolume).toString())
-                      .concat('%');
-                } else {
-                  console.log(` Volume is already at minimum level; ` +
-                    `cannot go any lower!`);
-                }
-              });
-            }}
+            onClick={lowerVolume}
           >
             Down
           </button>
@@ -223,7 +254,9 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
           <p
             id="volume-display"
             className="volume-display"
-            color='secondary'>
+            color='secondary'
+          >
+            Volume: 50%
           </p>
 
           <button
@@ -231,25 +264,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             className='up-button'
             color='secondary'
             type='button'
-            onClick={() => {
-              console.log(`Up button clicked`);
-              player.getVolume().then((volume) => {
-                volume *= 100;
-                console.log(` Current volume: ${volume}`);
-                const pVolume = Math.round(volume + 2);
-                console.log(` Possible new volume: ${pVolume}`);
-
-                if (pVolume <= 100) {
-                  player.setVolume(pVolume/100);
-                  document.getElementById('volume-display').innerHTML =
-                    'Volume: '.concat((pVolume).toString())
-                      .concat('%');
-                } else {
-                  console.log(` Volume is already at maximum level; ` +
-                    `cannot go any higher!`);
-                }
-              });
-            }}
+            onClick={raiseVolume}
           >
             Up
           </button>
