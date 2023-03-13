@@ -98,6 +98,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
+  const [userid, setUserid] = React.useState('');
   const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
   const [songToView, setSongToView] = React.useState(emptySong);
@@ -138,6 +139,12 @@ function Home() {
    * the database.
    */
   React.useEffect(() => {
+    getUserInfo();
+    getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
+      (result) => {
+        setLibrary(result.tracks.items);
+      });
+      
     if (accessToken) {
       /**
        */
@@ -169,6 +176,18 @@ function Home() {
   }, [library]);
   // get getSearch finishes (async), sets library to those search results
   // called twice, once at page startup, another when we get the token
+
+  /**
+   * Async function that sets the user ID
+   */
+  const getUserInfo = async () => {
+    // get current user info
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    setUserid(userInfo.id);
+  };
 
   /**
    * Called when clicking on a <tr> representing a song in the library.
