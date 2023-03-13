@@ -45,14 +45,23 @@ function TopBar(props) {
       <div id="top-left-buttons">
         <ThemeProvider theme={theme}>
           {!props.accessToken ?
-            <IconButton href='http://localhost:3010/login' color= 'secondary'>
-              <LoginIcon color= 'secondary'/>
-            </IconButton>:
-            <IconButton onClick={props.logout}
+            <IconButton 
+              href='http://localhost:3010/login'
               color= 'secondary'
+              title='Log in'
+            >
+              <LoginIcon color= 'secondary'/></IconButton>:
+            <IconButton 
+              onClick={props.logout}
+              color= 'secondary'
+              title='Log out'
             >
               <LogoutIcon color= 'secondary'/></IconButton>}
-          <IconButton onClick={props.refreshList} color= 'secondary'>
+          <IconButton 
+            onClick={props.refreshList}
+            color= 'secondary'
+            title='Refresh list'
+           >
             <RefreshIcon color= 'secondary'/></IconButton>
           {Boolean(props.selectedTag) ?
             null :
