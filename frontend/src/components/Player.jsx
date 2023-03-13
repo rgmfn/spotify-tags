@@ -147,12 +147,12 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   };
 
   /**
-   * Called after mouse clicks or holds down 'Down' button.
+   * Called after mouse clicks 'Down' button.
    *
    * Lowers volume & displays new volume value.
    */
   const lowerVolume = () => {
-    console.log(`Toggled button to lower volume!`);
+    console.log(`Toggled "Down" button to lower volume!`);
 
     player.getVolume().then((volume) => {
       volume *= 100;
@@ -169,12 +169,12 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   };
 
   /**
-  * Called after mouse clicks or holds down 'Up' button.
+  * Called after mouse clicks 'Up' button.
   *
   * Raises volume & displays new volume value.
   */
   const raiseVolume = () => {
-    console.log(`Toggled button to raise volume!`);
+    console.log(`Toggled "Up" button to raise volume!`);
 
     player.getVolume().then((volume) => {
       volume *= 100;
