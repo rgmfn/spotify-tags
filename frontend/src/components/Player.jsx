@@ -13,16 +13,17 @@ import {theme} from './Theme.js';
 /**
  * @param {string} accessToken
  * @param {string} clickedTrackID
+ * @param {string} playingTrackID
  * @param {function} setPlayingTrackID
  * @param {array} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackID, setPlayingTrackID,
-  updatedLib}) {
+function Player({accessToken, clickedTrackID, playingTrackID, 
+  setPlayingTrackID, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
-
+  const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
   /**
    * Sets up web player to stream music.
    */
@@ -50,6 +51,13 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       player.addListener('ready', ({device_id}) => {
         setDeviceID(device_id);
         console.log('Ready with deviceID', device_id);
+        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${device_id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
       });
 
       // eslint-disable-next-line camelcase
@@ -130,6 +138,36 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       });
     }
   }, [clickedTrackID]);
+
+  React.useEffect(() => {
+  if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
+    console.log(`Player: update playlist`);
+
+    // creates list of uris (playlist) from list of songs (updatedLib)
+    let playlist = [];
+    updatedLib.forEach((song) => {
+      playlist = [...playlist, song.uri];
+    });
+
+    // HTTP request to update music
+    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        uris: playlist,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    setLibraryHasUpdated(false);
+  }
+}, [playingTrackID]);
+
+  React.useEffect(() => {
+    setLibraryHasUpdated(true);
+    console.log('library is updating');
+  }, [updatedLib]);
 
   return (
     <>
