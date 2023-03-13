@@ -50,13 +50,13 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       player.addListener('ready', ({device_id}) => {
         setDeviceID(device_id);
         console.log('Ready with deviceID', device_id);
-        // fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${device_id}`, {
-        //   method: 'PUT',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${accessToken}`,
-        //   },
-        // });
+        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${device_id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
       });
 
       // eslint-disable-next-line camelcase
