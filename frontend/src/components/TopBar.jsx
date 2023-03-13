@@ -42,8 +42,8 @@ function TopBar(props) {
       { (props.accessToken !== '') && <Player
         accessToken={props.accessToken}
         clickedTrackID={props.clickedTrackID}
-        setPlayingTrackID={props.setPlayingTrackID}
         playingTrackID={props.playingTrackID}
+        setPlayingTrackID={props.setPlayingTrackID}
         updatedLib={props.updatedLib}/> }
       <ExpressionTagAdder
         isOpen={isBuildingExpression}
