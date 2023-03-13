@@ -7,6 +7,8 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
+import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
 
@@ -191,6 +193,39 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   return (
     <>
       <ThemeProvider theme={theme}>
+        <div className="volume-control-container">
+          <IconButton
+            id='down-button'
+            className='down-button'
+            color='secondary'
+            type='button'
+            onClick={lowerVolume}
+          >
+            <VolumeDownIcon
+              style={{fontSize: 30}}
+              color='secondary'/>
+          </IconButton>
+
+          <p
+            id="volume-display"
+            className="volume-display"
+          >
+            Volume: 50%
+          </p>
+
+          <IconButton
+            id='up-button'
+            className='up-button'
+            color='secondary'
+            type='button'
+            onClick={raiseVolume}
+          >
+            <VolumeUpIcon
+              style={{fontSize: 30}}
+              color='secondary'/>
+          </IconButton>
+        </div>
+
         <div className="stream-buttons-container">
           <IconButton
             id="prev-button"
@@ -202,7 +237,9 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
                 console.log('Set to previous track!');
               });
             }}>
-            <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
+            <SkipPreviousIcon
+              style={{fontSize: 50}}
+              color='secondary'/>
           </IconButton>
 
           <IconButton
@@ -236,38 +273,10 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
                 console.log('Skipped to next track!');
               });
             }}>
-            <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
+            <SkipNextIcon
+              style={{fontSize: 50}}
+              color='secondary'/>
           </IconButton>
-        </div>
-
-        <div className="volume-control-container">
-          <button
-            id='down-button'
-            className='down-button'
-            color='secondary'
-            type='button'
-            onClick={lowerVolume}
-          >
-            Down
-          </button>
-
-          <p
-            id="volume-display"
-            className="volume-display"
-            color='secondary'
-          >
-            Volume: 50%
-          </p>
-
-          <button
-            id='up-button'
-            className='up-button'
-            color='secondary'
-            type='button'
-            onClick={raiseVolume}
-          >
-            Up
-          </button>
         </div>
       </ThemeProvider>
     </>
