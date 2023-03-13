@@ -258,10 +258,10 @@ function Home() {
         setExpression={setExpression}
         accessToken={accessToken}
         clickedTrackID={clickedTrackID}
+        playingTrackID={playingTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
         library={library}
-        playingTrackID={playingTrackID}
       />
       <div className="searchbar">
         <SearchBar
