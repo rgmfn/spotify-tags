@@ -261,6 +261,7 @@ function Home() {
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
         library={library}
+        playingTrackID={playingTrackID}
       />
       <div className="searchbar">
         <SearchBar
