@@ -11,7 +11,11 @@ const pool = new Pool({
 //ensures that there is only one unique combination pair with userid, spotifyid
 //in other words, only one song with that given spotifyid for that user
 (async () => {
-  await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid)');
+  // await pool.query('ALTER TABLE songs DROP CONSTRAINT IF EXISTS unique_user_spotify');
+  // await pool.query('ALTER TABLE songs DROP INDEX IF EXISTS songs_idx');
+  // await pool.query('CREATE UNIQUE INDEX CONCURRENTLY songs_idx ON songs (userid, spotifyid)');
+  // await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE USING INDEX songs_idx');
+  // await pool.query('ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid)');
 })();
 
 
@@ -69,7 +73,7 @@ exports.allTags = async (userid) => {
 
 //inserts a new song object into the database
 exports.insertTags = async (userid, spotifyid, tags) => {
-  const select = 'INSERT INTO songs(userid, spotifyid, tags) VALUES ($1, $2, $3)';
+  const select = 'INSERT INTO songs(userid, spotifyid, tags) VALUES ($1, $2, $3) ON CONFLICT (userid, spotifyid) DO UPDATE SET tags = EXCLUDED.tags';
   const query = {
       text: select,
       values: [userid, spotifyid, {tags: tags}]

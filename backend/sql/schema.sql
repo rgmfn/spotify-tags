@@ -8,3 +8,4 @@
 
 DROP TABLE IF EXISTS songs;
 CREATE TABLE songs(userid VARCHAR(32), spotifyid VARCHAR(32), tags jsonb);
+ALTER TABLE songs ADD CONSTRAINT unique_user_spotify UNIQUE (userid, spotifyid);
