@@ -199,6 +199,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             className='down-button'
             color='secondary'
             type='button'
+            title='Lower volume'
             onClick={lowerVolume}
           >
             <VolumeDownIcon
@@ -218,6 +219,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             className='up-button'
             color='secondary'
             type='button'
+            title='Raise volume'
             onClick={raiseVolume}
           >
             <VolumeUpIcon
