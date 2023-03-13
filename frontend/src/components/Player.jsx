@@ -13,12 +13,13 @@ import {theme} from './Theme.js';
 /**
  * @param {string} accessToken
  * @param {string} clickedTrackID
+ * @param {string} playingTrackID
  * @param {function} setPlayingTrackID
  * @param {array} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackID, setPlayingTrackID,
-  playingTrackID, updatedLib}) {
+function Player({accessToken, clickedTrackID, playingTrackID, 
+  setPlayingTrackID, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
