@@ -360,11 +360,13 @@ function Home() {
         playingTrackID={playingTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
+        setUpdatedLib={setUpdatedLib}
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
         setSearchQuery={setSearchQuery}
         library={library}
+        setLibrary={setLibrary}
       />
       <div className="searchbar">
         <SearchBar
