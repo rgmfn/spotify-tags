@@ -24,9 +24,11 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
+  const [playerVolume, setPlayerVolume] = React.useState(50);
 
   /**
-   * Sets up web player to stream music.
+   * Sets up web player to stream music & updates states 
+   * related to the player.
    */
   React.useEffect(() => {
     const script = document.createElement('script');
@@ -46,6 +48,11 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
       });
 
       setPlayer(player);
+
+      // sets initial volume of player
+      player.getVolume().then((volume) => {
+        setPlayerVolume(volume * 100);
+      });
 
       // connects web player to listening device
       // eslint-disable-next-line camelcase
@@ -99,6 +106,15 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   }, [accessToken]);
 
   /**
+   * Displays player's volume when initialized & changed.
+   */
+  React.useEffect(() => {
+    document.getElementById('volume-display').innerHTML =
+    'Volume: '.concat((playerVolume).toString())
+      .concat('%');
+  }, [playerVolume]);
+
+  /**
    * If web player is connected to device & song is clicked on,
    * an array of track uris from all library songs is passed to
    * play on device. The first song that is played is the
@@ -134,22 +150,9 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   }, [clickedTrackID]);
 
   /**
-   * Called after volume is changed.
-   *
-   * Displays new volume value.
-   *
-   * @param {float} volume
-   */
-  const displayVolume = (volume) => {
-    document.getElementById('volume-display').innerHTML =
-    'Volume: '.concat((volume).toString())
-      .concat('%');
-  };
-
-  /**
    * Called after mouse clicks 'Down' button.
    *
-   * Lowers volume & displays new volume value.
+   * Lowers volume.
    */
   const lowerVolume = () => {
     console.log(`Toggled "Down" button to lower volume!`);
@@ -160,7 +163,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
 
       if (pVolume >= 0) {
         player.setVolume(pVolume/100);
-        displayVolume(pVolume);
+        setPlayerVolume(pVolume);
       } else {
         console.log(` Volume is already at minimum level; ` +
           `cannot go any lower!`);
@@ -171,7 +174,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
   /**
   * Called after mouse clicks 'Up' button.
   *
-  * Raises volume & displays new volume value.
+  * Raises volume.
   */
   const raiseVolume = () => {
     console.log(`Toggled "Up" button to raise volume!`);
@@ -182,7 +185,7 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
 
       if (pVolume <= 100) {
         player.setVolume(pVolume/100);
-        displayVolume(pVolume);
+        setPlayerVolume(pVolume);
       } else {
         console.log(` Volume is already at maximum level; ` +
           `cannot go any higher!`);
@@ -211,7 +214,6 @@ function Player({accessToken, clickedTrackID, setPlayingTrackID,
             id="volume-display"
             className="volume-display"
           >
-            Volume: 50%
           </p>
 
           <IconButton
