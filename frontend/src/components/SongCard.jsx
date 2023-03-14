@@ -103,7 +103,7 @@ function SongCard({songToView, setSongToView, library,
           <div id="bottom-half"
             onClick={clickedOnTagContainer}
             // eslint-disable-next-line max-len
-            title={`Add tag to ${songToView.name} by ${songToView.artists[0].name}`}
+            title={`Add tags to ${songToView.name} by ${songToView.artists[0].name}`}
           >
             <div id="tags-container">
               {!Boolean(songToView && songToView.tags) ?

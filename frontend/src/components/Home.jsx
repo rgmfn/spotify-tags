@@ -138,13 +138,9 @@ function Home() {
    * the database.
    */
   React.useEffect(() => {
-    getUserInfo();
-    getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
-      (result) => {
-        setLibrary(result.tracks.items);
-      });
-
     if (accessToken) {
+      getUserInfo();
+
       /**
        */
       async function fillLibrary() {
@@ -341,17 +337,12 @@ function Home() {
     setUpdatedLib([]);
 
     // get current user info
-    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + accessToken},
-    })).json();
-    const userid = userInfo.id;
-    // TODO in sprint4: make userID into state
-
-    // store each song in the library to db
-    for (const song of library) {
-      storeSong(userid, song);
-    }
+    getUserID().then((userid) => {
+      // store each song in the library to db
+      for (const song of library) {
+        storeSong(userid, song);
+      }
+    });
 
     window.localStorage.removeItem('accessToken');
   };
