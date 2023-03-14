@@ -2,7 +2,7 @@ import React from 'react';
 
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import RefreshIcon from '@mui/icons-material/Refresh';
+// import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
@@ -45,31 +45,31 @@ function TopBar(props) {
       <div id="top-left-buttons">
         <ThemeProvider theme={theme}>
           {!props.accessToken ?
-            <IconButton 
+            <IconButton
               href='http://localhost:3010/login'
               color= 'secondary'
               title='Log in'
             >
               <LoginIcon color= 'secondary'/></IconButton>:
-            <IconButton 
+            <IconButton
               onClick={props.logout}
               color= 'secondary'
               title='Log out'
             >
               <LogoutIcon color= 'secondary'/></IconButton>}
-          <IconButton 
-            onClick={props.refreshList}
-            color= 'secondary'
-            title='Refresh list'
-           >
-            <RefreshIcon color= 'secondary'/></IconButton>
+          {/* <IconButton */}
+          {/*   onClick={props.refreshList} */}
+          {/*   color= 'secondary' */}
+          {/*   title='Refresh list' */}
+          {/* > */}
+          {/*   <RefreshIcon color= 'secondary'/></IconButton> */}
           {Boolean(props.selectedTag) ?
             null :
             <IconButton
               onClick={() => props.setIsPickingTag(true)}
+              title='Click to select a tag to add to songs'
             >
               <AddBoxIcon color='secondary'
-                title='Click to select a tag'
               />
             </IconButton>
           }
