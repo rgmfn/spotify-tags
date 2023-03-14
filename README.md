@@ -35,10 +35,10 @@ Quick Start Guide
 </h1>
 
 * Adding a song to your library (and creating a tag)
-    - Your library is full of all of the songs you have added tags to, so we will add a tag to the song we want to add for it to appear in the library
+    > Your library is full of all of the songs you have added tags to, so we will add a tag to the song we want to add for it to appear in the library
     - Click the search bar
     - Enter the name of a song
-    - In the right column ('Songs on Spotify'), click on the song you want to add
+    - In the right column ('Songs On Spotify'), click on the song you want to add
     - Click on the bottom half of the popup
     - In the new side popup, type the name of a tag to add into the search bar
     - Click 'CREATE NEW TAG' button
@@ -49,7 +49,7 @@ Quick Start Guide
 </h1>
 
 * Building an expression
-    - **NOTE**: This requires you to have created a tag. If there are no songs in your library (and therefore no tags), there will be no tags to choose from.
+    > **NOTE**: This requires you to have created a tag. If there are no songs in your library (and therefore no tags), there will be no tags to choose from.
     - Click 'Click to build expression...'
     - Select a tag from the list of possible tags
     - Use gray boolean operation tags to combine other tags together
