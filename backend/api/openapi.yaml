@@ -120,6 +120,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error' 
+  /song:
+    delete:
+      parameters:
+      - name: spotifyid
+        in: query
+        description: song
+        schema:
+          type: string
+        required: true
+      - name: userid
+        in: query
+        description: user
+        schema:
+          type: string
+        required: true
+      description: Removes the specified song+userid combo
+      responses: 
+        200:
+          description: Completed deletion
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 
 components:

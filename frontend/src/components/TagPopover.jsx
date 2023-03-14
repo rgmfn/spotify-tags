@@ -36,11 +36,14 @@ const tagIsInList = (toFind, list) => {
  * @param {array} preRows - any extra rows to include before the standard tags
  * @param {object} positioning - provides information on where to display the
  *                               popover (declared in SongTagAdder.jsx)
+ * @param {function} updateSongToViewInDB - updates the song in the SongCard
+ *                                          in the database, adding its new tags
+ *                                          into the database as well
  * @return {JSX} thing
  */
 function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   targetsTags, setTargetsTags, setIsAddingTags,
-  preRows, positioning}) {
+  preRows, positioning, updateSongToViewInDB}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
   // ^ string used to query the tagsToSelect
   const [filteredTags, setFilteredTags] = React.useState([]);
@@ -111,7 +114,8 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
     newTag.name = newTag.name.toLowerCase();
     setTagsToSelect([...tagsToSelect, newTag]);
     addTagToTarget(newTag); // add to target
-    // TODO put tag in database
+    // store song in DB
+    updateSongToViewInDB();
   });
 
   /**
@@ -197,7 +201,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
         anchorEl={
           positioning.anchorEl === 'songcard' ?
             document.getElementById('songcard-container') :
-            'none'
+            null
         }
         anchorReference={positioning.anchorReference}
         anchorOrigin={positioning.anchorOrigin}
@@ -229,6 +233,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
                   <tr
+                    key={tag.name}
                     onClick={(event) => {
                       event.stopPropagation();
                       addTagToTarget(tag);

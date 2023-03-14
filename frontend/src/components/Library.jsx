@@ -49,7 +49,7 @@ function Library({library, updatedLib, setUpdatedLib,
               // render 'No match found.' if the new library is now empty
               <tr
                 // tr = table row
-                onClick={clickedOnSong}
+                onClick={() => clickedOnSong(song.id)}
                 id={song.id} // sets row id to Spotify ID of song
                 key={song.id}
                 title={`Play ${song.name} by ${song.artists[0].name}`}
@@ -94,6 +94,7 @@ function Library({library, updatedLib, setUpdatedLib,
                     [] :
                     song.tags.map((tag) => (
                       <div
+                        key={`${song.name}:${tag.name}`}
                         style={{backgroundColor: tag.color}}
                         className="tagName"
                       >

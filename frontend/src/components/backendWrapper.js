@@ -28,4 +28,37 @@ export async function retrieveAllSongs(userid) {
   return data;
 }
 
+/**
+ * @param {string} userid - spotify user id to remove song from
+ * @param {object} song - song object to remove from user
+ */
+export async function removeSong(userid, song) {
+  await fetch(`http://localhost:3010/v0/song?${new URLSearchParams({userid: userid,
+    spotifyid: song.id})}`, {
+    // http get request to api.spotify.com/v1/search
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+}
 
+/**
+ * @param {string} userid - spotify user id to remove song from
+ * @param {object} song - song object to remove from user
+ */
+export async function updateSong(userid, song) {
+  await fetch(`http://localhost:3010/v0/postUpdate`, {
+    // http get request to api.spotify.com/v1/search
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(
+      {
+        spotifyid: song.id,
+        userid: userid,
+        tags: song.tags,
+      }),
+  });
+}

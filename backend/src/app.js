@@ -46,6 +46,7 @@ app.get('/v0/songs', songs.getAll);
 app.get('/v0/single', songs.getTags);
 app.post('/v0/tagsPost', songs.postTags);
 app.get('/v0/tagList', songs.getAllTags);
+app.delete('/v0/song', songs.deleteSong);
 app.post('/v0/postUpdate', songs.postUpdate);
 
 app.use((err, req, res, next) => {
