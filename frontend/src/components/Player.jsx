@@ -18,7 +18,7 @@ import {theme} from './Theme.js';
  * @param {array} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackID, playingTrackID, 
+function Player({accessToken, clickedTrackID, playingTrackID,
   setPlayingTrackID, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
@@ -47,11 +47,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
       setPlayer(player);
 
       // connects web player to listening device
-      // eslint-disable-next-line camelcase
-      player.addListener('ready', ({device_id}) => {
-        setDeviceID(device_id);
-        console.log('Ready with deviceID', device_id);
-        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${device_id}`, {
+      player.addListener('ready', ({device_id: theDeviceID}) => {
+        setDeviceID(theDeviceID);
+        console.log('Ready with deviceID', theDeviceID);
+        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${theDeviceID}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -60,9 +59,8 @@ function Player({accessToken, clickedTrackID, playingTrackID,
         });
       });
 
-      // eslint-disable-next-line camelcase
-      player.addListener('not_ready', ({device_id}) => {
-        console.log('deviceID has gone offline', device_id);
+      player.addListener('not_ready', ({device_id: theDeviceID}) => {
+        console.log('deviceID has gone offline', theDeviceID);
       });
 
       player.addListener('initialization_error', ({message}) => {
@@ -85,9 +83,7 @@ function Player({accessToken, clickedTrackID, playingTrackID,
           return;
         }
 
-        // eslint-disable-next-line camelcase
         setPlayingTrackID(state.track_window.current_track.id);
-        // eslint-disable-next-line camelcase
         console.log(`Current playing song: ` +
                     `${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
