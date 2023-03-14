@@ -38,7 +38,7 @@ Quick Start Guide
     - Your library is full of all of the songs you have added tags to, so we will add a tag to the song we want to add for it to appear in the library
     - Click the search bar
     - Enter the name of a song
-    - In the right column ('Spotify Results'), click on the song you want to add
+    - In the right column ('Songs on Spotify'), click on the song you want to add
     - Click on the bottom half of the popup
     - In the new side popup, type the name of a tag to add into the search bar
     - Click 'CREATE NEW TAG' button
