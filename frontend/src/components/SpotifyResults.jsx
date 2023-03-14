@@ -1,13 +1,21 @@
 import React from 'react';
 
 import {emptySong} from './emptySong.js';
-import {getSong, getSearchByURL, getSearch} from './httpCalls.js';
+import {getSearchByURL, getSearch} from './httpCalls.js';
+
+const noResults = (
+  <tr>
+    <td></td>
+    <td>No query to search</td>
+    <td></td>
+  </tr>
+);
 
 /**
  * @return {object} JSX
  */
-function SpotifyResults({searchQuery, accessToken,
-  setAccessToken, refreshToken, refreshTokenFunc, setSongToView}) {
+function SpotifyResults({searchQuery, accessToken, setAccessToken,
+  refreshToken, refreshTokenFunc, clickedOnSong}) {
   const [songList, setSongList] = React.useState([emptySong]);
   const [nextSongsURL, setNextSongsURL] = React.useState([]);
   // nextSongsURL used for tracking the next group of songs when clicking
@@ -18,30 +26,15 @@ function SpotifyResults({searchQuery, accessToken,
    * results from spotify fitting the new searchQuery.
    */
   React.useEffect(() => {
-    getSearch(accessToken, refreshToken, setAccessToken,
-      refreshTokenFunc, searchQuery).then((results) => {
-      setSongList(results.tracks.items);
-      setNextSongsURL(results.tracks.next);
-    });
-  }, [searchQuery, accessToken, setAccessToken,
-    refreshToken, refreshTokenFunc]);
-
-  /**
-   * Called when clicking on a <tr> representing a song.
-   *
-   * Gets the song object corresponding to that row/song and sets it to
-   * display in a SongCard (by setting songToView).
-   *
-   * @param {object} event
-   */
-  const clickedOnSong = ((event) => {
-    if (event.currentTarget.id) {
-      getSong(accessToken, refreshToken, setAccessToken,
-        refreshTokenFunc, event.currentTarget.id).then((song) => {
-        setSongToView(song);
+    if (searchQuery) {
+      getSearch(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, searchQuery).then((results) => {
+        setSongList(results.tracks.items);
+        setNextSongsURL(results.tracks.next);
       });
     }
-  });
+  }, [searchQuery, accessToken, setAccessToken,
+    refreshToken, refreshTokenFunc]);
 
   /**
    * Called when clicking 'More results...' at the bottom of the results.
@@ -67,11 +60,12 @@ function SpotifyResults({searchQuery, accessToken,
       </div>
       <table>
         <tbody>
-          {songList.map(
+          {!Boolean(searchQuery) ? noResults : songList.map(
             (result) => (
               <tr
                 id={result.id}
-                onClick={clickedOnSong}
+                key={result.id}
+                onClick={() => clickedOnSong(result.id)}
                 // eslint-disable-next-line max-len
                 title={`View song details about ${result.name} by ${result.artists[0].name}`}
               >
@@ -95,12 +89,14 @@ function SpotifyResults({searchQuery, accessToken,
                 </td>
               </tr>
             ))}
-          <tr id="more-results" onClick={clickedMoreResults}>
-            <td/>
-            <td/>
-            <td>More results...</td>
-            <td/>
-          </tr>
+          {!Boolean(searchQuery) ? null :
+            <tr id="more-results" onClick={clickedMoreResults}>
+              <td/>
+              <td/>
+              <td>More results...</td>
+              <td/>
+            </tr>
+          }
         </tbody>
       </table>
     </div>

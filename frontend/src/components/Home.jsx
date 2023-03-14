@@ -5,19 +5,13 @@ import TopBar from './TopBar.jsx';
 import Library from './Library.jsx';
 import SongCard from './SongCard.jsx';
 import SearchResults from './SearchResults.jsx';
-import SortModal from './SortModal.jsx';
 import SearchBar from './SearchBar.js';
-
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import IconButton from '@mui/material/IconButton';
+import TagSelector from './TagSelector';
 
 import {emptySong} from './emptySong.js';
 import {fakeTags} from './fakeTags.js';
-import {ThemeProvider} from '@mui/material/styles';
-import {theme} from './Theme.js';
-import {storeSong, retrieveAllSongs} from './backendWrapper.js';
+import {getSong} from './httpCalls';
+import {storeSong, retrieveAllSongs, removeSong} from './backendWrapper.js';
 import getTrack from './getTrack.js';
 
 /**
@@ -104,12 +98,15 @@ function Home() {
   const [songToView, setSongToView] = React.useState(emptySong);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [expression, setExpression] = React.useState([]);
+  const [isPickingTag, setIsPickingTag] = React.useState(false);
+  const [selectedTag, setSelectedTag] = React.useState(null);
 
   /**
    * TODO
    */
   React.useEffect(() => {
     const hash = window.location.hash;
+    console.log(`hash: ${hash}`);
     let accessToken = window.localStorage.getItem('accessToken');
     let refreshToken = window.localStorage.getItem('refreshToken');
     console.log('hash:', hash);
@@ -118,6 +115,7 @@ function Home() {
       refreshToken = hash.substring(1).split('&').find((elem) =>
         elem.startsWith('refresh_token')).split('=')[1];
     }
+    console.log(`refreshToken: ${refreshToken}`);
 
     setRefreshToken(refreshToken);
 
@@ -144,15 +142,15 @@ function Home() {
       (result) => {
         setLibrary(result.tracks.items);
       });
-      
+
     if (accessToken) {
       /**
        */
       async function fillLibrary() {
-        const userid = 'TEST_USER_ID_1';
+        const userid = 'musicrag';
+        // const userid = 'TEST_USER_ID_1';
         const tmpLib = [];
         const data = await retrieveAllSongs(userid);
-        console.log('wat', data.songs);
         for (const song of data.songs) {
           const track = await getTrack(song.spotifyid, accessToken);
           if (track === null) {
@@ -171,12 +169,6 @@ function Home() {
     }
   }, [refreshToken, accessToken]);
 
-  React.useEffect(() => {
-    console.log('library', library);
-  }, [library]);
-  // get getSearch finishes (async), sets library to those search results
-  // called twice, once at page startup, another when we get the token
-
   /**
    * Async function that sets the user ID
    */
@@ -192,14 +184,12 @@ function Home() {
   /**
    * Called when clicking on a <tr> representing a song in the library.
    *
-   * @param {object} event - contains things like the element that was
-   *                         clicked on
+   * @param {object} songID - spotify id of song clicked on
    */
-  const clickedOnSong = ((event) => {
+  const clickedOnSong = ((songID) => {
     console.log(`Home: clicked on track`);
-    console.log(`   clickedTrackID: ${event.currentTarget.id}`);
-    setClickedTrackID(event.currentTarget.id);
-    // event.currentTarget is the thing with the onClick (the tr for the song)
+    console.log(`   clickedTrackID: ${songID}`);
+    setClickedTrackID(songID);
   });
 
   /**
@@ -223,11 +213,33 @@ function Home() {
   });
 
   /**
+   * TODO Temporary until userID implemented.
+   *
+   * @return {string}
+   */
+  const getUserID = async () => {
+    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + accessToken},
+    })).json();
+    return userInfo.id;
+  };
+
+  /**
    * Called when clicking outside of the SongCard.
    *
    * Sets songToView to an empty song object (makes the SongCard go away).
    */
   const closeCard = () => {
+    if (songToView.tags.length <= 0) {
+      setLibrary(library.filter((libSong) => (
+        libSong.id !== songToView.id
+      )));
+      // TODO use userID state
+      getUserID().then((userid) => {
+        removeSong(userid, songToView);
+      });
+    }
     setSongToView(emptySong);
   };
 
@@ -242,6 +254,79 @@ function Home() {
       (result) => {
         setLibrary(result.tracks.items);
       });
+  };
+
+  /**
+   * Removes the selectedTag state from the current song in library.
+   *
+   * @param {object} song - song object to remove selected tag from
+   */
+  const removeSelectedTagFromSong = (song) => {
+    const newSong = {...song};
+    newSong.tags = song.tags.filter((tag) =>
+      tag.name !== selectedTag.name);
+    setLibrary(library.map((libSong) => (
+      libSong.id === newSong.id ?
+        newSong : libSong
+    )));
+  };
+
+  /**
+   * Called when clicking on a song in either SearchResults and there is a
+   * selectedTag.
+   *
+   * On click of a song, adds selectedTag to that song's list of tags.
+   * If it was not already in it, add it to the library. If it was already
+   * in it, it removes it from the song.
+   *
+   * @param {string} id - the spotify ID of the song to display
+   */
+  const addRemoveTagToSong = (id) => {
+    const songInLib = library.find((song) => (
+      song.id === id
+    ));
+
+    if (songInLib) {
+      // if song doesn't already have this tag
+      if (!songInLib.tags.some((tag) => tag.name === selectedTag.name)) {
+        // populate tags with new tag.
+        songInLib.tags = [...songInLib.tags, selectedTag];
+        setLibrary([...library]);
+      } else {
+        removeSelectedTagFromSong(songInLib);
+      }
+    } else {
+      getSong(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, id).then((song) => {
+        song.tags = [selectedTag];
+        library.push(song);
+        setLibrary([...library]);
+      });
+    }
+  };
+
+  /**
+   * Called when clicking on a song in either SearchResults and there is no
+   * selectedTag.
+   *
+   * If the song is in the library, it displays that song, otherwise it gets
+   * the song object off of spotify and displays that (in a SongCard).
+   *
+   * @param {string} id - the spotify ID of the song to display
+   */
+  const displaySong = (id) => {
+    const songInLib = library.find((song) => (
+      song.id === id
+    ));
+
+    if (songInLib) {
+      setSongToView(songInLib);
+    } else {
+      getSong(accessToken, refreshToken, setAccessToken,
+        refreshTokenFunc, id).then((song) => {
+        setSongToView(song);
+      });
+    }
   };
 
   const logout = async () => {
@@ -276,10 +361,17 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
+        refreshList={refreshList}
+        logout={logout}
         clickedTrackID={clickedTrackID}
         playingTrackID={playingTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
+        selectedTag={selectedTag}
+        setSelectedTag={setSelectedTag}
+        setIsPickingTag={setIsPickingTag}
+        setSearchQuery={setSearchQuery}
+        clickedTrackID={clickedTrackID}
         library={library}
       />
       <div className="searchbar">
@@ -289,28 +381,7 @@ function Home() {
           placeholder="Search a Song"
         />
       </div>
-      <ThemeProvider theme={theme}>
-        {!accessToken ?
-          <IconButton
-            href='http://localhost:3010/login'
-            color='secondary'
-            title='Log in'>
-            <LoginIcon color='secondary'/>
-          </IconButton>:
-          <IconButton
-            onClick={logout}
-            color='secondary'
-            title='Log out'>
-            <LogoutIcon color='secondary'/>
-          </IconButton>}
-        <IconButton
-          onClick={refreshList}
-          color= 'secondary'
-          title='Refresh list'>
-          <RefreshIcon color='secondary'/>
-        </IconButton>
-      </ThemeProvider>
-      {!Boolean(searchQuery) && <Library
+      {!Boolean(searchQuery || selectedTag) && <Library
         // ^ displays library if there is no searchQuery
         library={library}
         updatedLib={updatedLib}
@@ -327,7 +398,7 @@ function Home() {
         setLibrary={setLibrary}
         closeCard={closeCard}
       />
-      {Boolean(searchQuery) && <SearchResults
+      {Boolean(searchQuery || selectedTag) && <SearchResults
         // ^ displays library if there is a searchQuery
         searchQuery={searchQuery}
         accessToken={accessToken}
@@ -335,11 +406,16 @@ function Home() {
         refreshToken={refreshToken}
         refreshTokenFunc={refreshTokenFunc}
         library={library}
-        setSongToView={setSongToView}
+        setIsPickingTag={setIsPickingTag}
+        clickedOnSong={selectedTag ?
+          addRemoveTagToSong : displaySong
+        }
+        selectedTag={selectedTag}
       />}
-      <SortModal
-        library={library}
-        setLibrary={setLibrary}
+      <TagSelector
+        isOpen={isPickingTag}
+        setSelectedTag={setSelectedTag}
+        setIsPickingTag={setIsPickingTag}
       />
     </div>
   );

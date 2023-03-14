@@ -12,7 +12,11 @@ import validateExpression from './ValidateExpression';
  * @return {object} JSX
  */
 function Expression({expression, setExpression, clickedOnExpression}) {
-  const isValidExpression = validateExpression(expression);
+  const [isValidExpression, setIsValidExpression] = React.useState(true);
+
+  React.useEffect(() => {
+    setIsValidExpression(validateExpression(expression));
+  }, [expression]);
 
   // TODO can only put 1 AND or OR
 

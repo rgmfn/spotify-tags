@@ -36,11 +36,14 @@ const tagIsInList = (toFind, list) => {
  * @param {array} preRows - any extra rows to include before the standard tags
  * @param {object} positioning - provides information on where to display the
  *                               popover (declared in SongTagAdder.jsx)
+ * @param {function} updateSongToViewInDB - updates the song in the SongCard
+ *                                          in the database, adding its new tags
+ *                                          into the database as well
  * @return {JSX} thing
  */
 function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   targetsTags, setTargetsTags, setIsAddingTags,
-  preRows, positioning}) {
+  preRows, positioning, updateSongToViewInDB}) {
   const [tagSearchQuery, setTagSearchQuery] = React.useState('');
   // ^ string used to query the tagsToSelect
   const [filteredTags, setFilteredTags] = React.useState([]);
@@ -48,6 +51,24 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   const [boolOpID, setBoolOpID] = React.useState(1);
   // ^ id assigned to the new boolean opererator added to the expression
   //   needed so that boolean op tags with same name can be distinguished
+
+  /**
+   * Returns tag with id given by boolOpID if the tag is a boolOp.
+   * Returns the tag as is if not a boolOp.
+   *
+   * @param {object} tag - the tag to (possibly) add a boolOp to
+   * @return {object} tag with or without id attrib added
+   */
+  const addIDIfBoolOp = (tag) => {
+    if (tag.color === boolOpColor) {
+      const tagWithId = {...tag};
+      tagWithId.id = boolOpID;
+      setBoolOpID(boolOpID+1);
+      return tagWithId;
+    } else {
+      return tag;
+    }
+  };
 
   /*
    * Filtered out all tags in the targets tags. If the tagSearchQuery is not
@@ -75,11 +96,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
    * @param {object} tag
    */
   const addTagToTarget = ((tag) => {
-    const tagToAdd = {...tag};
-    if (tagToAdd.color === boolOpColor) {
-      tagToAdd.id = boolOpID;
-      setBoolOpID(boolOpID+1);
-    }
+    const tagToAdd = addIDIfBoolOp(tag);
 
     if (!tagIsInList(tagToAdd, targetsTags)) {
       setTargetsTags([...targetsTags, tagToAdd]);
@@ -97,7 +114,8 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
     newTag.name = newTag.name.toLowerCase();
     setTagsToSelect([...tagsToSelect, newTag]);
     addTagToTarget(newTag); // add to target
-    // TODO put tag in database
+    // store song in DB
+    updateSongToViewInDB();
   });
 
   /**
@@ -164,7 +182,8 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
    */
   function handleKeyDown(e) {
     if (e.key === 'Enter' && filteredTags.length > 0) {
-      setTargetsTags([...targetsTags, filteredTags[0]]);
+      const tagToAdd = addIDIfBoolOp(filteredTags[0]);
+      setTargetsTags([...targetsTags, tagToAdd]);
       setTagSearchQuery('');
     } else if (e.key === 'Delete' && e.ctrlKey) {
       const tempTargetsTags = [...targetsTags];
@@ -182,7 +201,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
         anchorEl={
           positioning.anchorEl === 'songcard' ?
             document.getElementById('songcard-container') :
-            'none'
+            null
         }
         anchorReference={positioning.anchorReference}
         anchorOrigin={positioning.anchorOrigin}
@@ -214,6 +233,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
                 <tr><td>No tags match your search</td></tr> :
                 filteredTags.map((tag) => (
                   <tr
+                    key={tag.name}
                     onClick={(event) => {
                       event.stopPropagation();
                       addTagToTarget(tag);

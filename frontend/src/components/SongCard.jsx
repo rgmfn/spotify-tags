@@ -40,6 +40,7 @@ function SongCard({songToView, setSongToView, library,
    * Removes the tag clicked from the song and from that song in the library.
    */
   const clickedOnTag = ((event) => {
+    // TODO remove tag from database
     event.stopPropagation();
     const newTags = songToView.tags.filter((tag) =>
       tag.name !== event.currentTarget.textContent,
@@ -94,7 +95,7 @@ function SongCard({songToView, setSongToView, library,
               <img
                 src={songToView.album.images[0].url}
                 alt={'[' + songToView.album.name + ' img]'}
-                id="songImg"
+                className="song-card-song-img"
               />
             </div>
           </div>
@@ -105,23 +106,27 @@ function SongCard({songToView, setSongToView, library,
             title={`Add tag to ${songToView.name} by ${songToView.artists[0].name}`}
           >
             <div id="tags-container">
-              {songToView.tags.map((tag) => (
-                <div
-                  style={{backgroundColor: tag.color}}
-                  className="tagName"
-                  onClick={clickedOnTag}
-                  // eslint-disable-next-line max-len
-                  title={`Remove '${tag.name}' tag from ${songToView.name} by ${songToView.artists[0].name}`}
-                >
-                  {tag.name}
-                </div>
-              ))}
+              {!Boolean(songToView && songToView.tags) ?
+                null :
+                songToView.tags.map((tag) => (
+                  <div
+                    key={tag.name}
+                    style={{backgroundColor: tag.color}}
+                    className="tagName"
+                    onClick={clickedOnTag}
+                    // eslint-disable-next-line max-len
+                    title={`Remove '${tag.name}' tag from ${songToView.name} by ${songToView.artists[0].name}`}
+                  >
+                    {tag.name}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
         <SongTagAdder
           isOpen={isAddingTags}
-          userID={'this will be state passed in'}
+          userID={'musicrag'}
+          // userID={'TEST_USER_ID_1'}
           songToView={songToView}
           setSongToView={setSongToView}
           library={library}
