@@ -11,6 +11,7 @@ const songs = require('./songs');
 const db = require('./db');
 const ryanSongs = require('./testData/ryanSongs');
 const dustinSongs = require('./testData/dustinSongs');
+const dianaSongs = require('./testData/dianaSongs');
 
 const app = express();
 app.use(cors());
@@ -31,14 +32,17 @@ app.use(
   }),
 );
 
-
+// loading test data
 for(const song of ryanSongs.ryanSongs.songs){
   db.insertTags(ryanSongs.ryanSongs.userid, song.spotifyid, song.tags);
 }
-
 for(const song of dustinSongs.dustinSongs.songs){
   db.insertTags(dustinSongs.dustinSongs.userid, song.spotifyid, song.tags);
 }
+for(const song of dianaSongs.dianaSongs.songs){
+  db.insertTags(dianaSongs.dianaSongs.userid, song.spotifyid, song.tags);
+}
+
 
 // routes go here
 // e.g: app.get('/v0/mail', mail.getAll);

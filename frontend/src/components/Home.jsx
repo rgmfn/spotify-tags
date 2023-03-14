@@ -371,7 +371,6 @@ function Home() {
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
         setSearchQuery={setSearchQuery}
-        clickedTrackID={clickedTrackID}
         library={library}
       />
       <div className="searchbar">
