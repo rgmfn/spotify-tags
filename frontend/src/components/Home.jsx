@@ -360,7 +360,6 @@ function Home() {
         playingTrackID={playingTrackID}
         setPlayingTrackID={setPlayingTrackID}
         updatedLib={updatedLib}
-        setUpdatedLib={setUpdatedLib}
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
