@@ -92,6 +92,7 @@ function Home() {
   const [library, setLibrary] = React.useState([]);
   // list of songs (spotify song objs) that the user has added tags to
   const [updatedLib, setUpdatedLib] = React.useState([]);
+  // eslint-disable-next-line
   const [userid, setUserid] = React.useState('');
   const [clickedTrackID, setClickedTrackID] = React.useState('');
   const [playingTrackID, setPlayingTrackID] = React.useState('');
@@ -167,6 +168,7 @@ function Home() {
 
       fillLibrary();
     }
+    // eslint-disable-next-line
   }, [refreshToken, accessToken]);
 
   /**
@@ -371,7 +373,6 @@ function Home() {
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}
         setSearchQuery={setSearchQuery}
-        clickedTrackID={clickedTrackID}
         library={library}
       />
       <div className="searchbar">
