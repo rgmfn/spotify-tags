@@ -52,6 +52,24 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
   // ^ id assigned to the new boolean opererator added to the expression
   //   needed so that boolean op tags with same name can be distinguished
 
+  /**
+   * Returns tag with id given by boolOpID if the tag is a boolOp.
+   * Returns the tag as is if not a boolOp.
+   *
+   * @param {object} tag - the tag to (possibly) add a boolOp to
+   * @return {object} tag with or without id attrib added
+   */
+  const addIDIfBoolOp = (tag) => {
+    if (tag.color === boolOpColor) {
+      const tagWithId = {...tag};
+      tagWithId.id = boolOpID;
+      setBoolOpID(boolOpID+1);
+      return tagWithId;
+    } else {
+      return tag;
+    }
+  };
+
   /*
    * Filtered out all tags in the targets tags. If the tagSearchQuery is not
    * empty, also filters out all tags that doesn't fit the tagSearchQuery.
@@ -78,11 +96,7 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
    * @param {object} tag
    */
   const addTagToTarget = ((tag) => {
-    const tagToAdd = {...tag};
-    if (tagToAdd.color === boolOpColor) {
-      tagToAdd.id = boolOpID;
-      setBoolOpID(boolOpID+1);
-    }
+    const tagToAdd = addIDIfBoolOp(tag);
 
     if (!tagIsInList(tagToAdd, targetsTags)) {
       setTargetsTags([...targetsTags, tagToAdd]);
@@ -168,7 +182,8 @@ function TagPopover({isOpen, tagsToSelect, setTagsToSelect, targetTitle,
    */
   function handleKeyDown(e) {
     if (e.key === 'Enter' && filteredTags.length > 0) {
-      setTargetsTags([...targetsTags, filteredTags[0]]);
+      const tagToAdd = addIDIfBoolOp(filteredTags[0]);
+      setTargetsTags([...targetsTags, tagToAdd]);
       setTagSearchQuery('');
     } else if (e.key === 'Delete' && e.ctrlKey) {
       const tempTargetsTags = [...targetsTags];

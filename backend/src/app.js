@@ -8,6 +8,9 @@ const OpenApiValidator = require('express-openapi-validator');
 
 const auth = require('./auth');
 const songs = require('./songs');
+const db = require('./db');
+const ryanSongs = require('./testData/ryanSongs');
+const dustinSongs = require('./testData/dustinSongs');
 
 const app = express();
 app.use(cors());
@@ -27,6 +30,15 @@ app.use(
     validateResponses: true,
   }),
 );
+
+
+for(const song of ryanSongs.ryanSongs.songs){
+  db.insertTags(ryanSongs.ryanSongs.userid, song.spotifyid, song.tags);
+}
+
+for(const song of dustinSongs.dustinSongs.songs){
+  db.insertTags(dustinSongs.dustinSongs.userid, song.spotifyid, song.tags);
+}
 
 // routes go here
 // e.g: app.get('/v0/mail', mail.getAll);
