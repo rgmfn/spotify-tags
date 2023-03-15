@@ -7,10 +7,22 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
+import {styled} from '@mui/material/styles';
+
+const TinyText = styled(Typography)({
+  // Style of the fonts used under the bar
+  fontSize: '0.75rem',
+  opacity: 0.60,
+  fontWeight: 500,
+  letterSpacing: 0.2,
+});
 
 /**
  * @param {string} accessToken
@@ -24,6 +36,21 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   setPlayingTrackID, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
+  const [isPaused, setIsPaused] = React.useState(true);
+  const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
+  const [duration, setDuration] = React.useState(0); // seconds
+  const [position, setPosition] = React.useState(0);
+  /**
+   *
+   * @param {*} value
+   * @return {object}
+   */
+  function formatDuration(value) {
+    // Make sure it looks like minutes:seconds for the time
+    const minute = Math.floor(value / 60);
+    const secondLeft = value - minute * 60;
+    return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+  }
   const [isPaused, setIsPaused] = React.useState(false);
   const [playerVolume, setPlayerVolume] = React.useState(50);
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
@@ -102,6 +129,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
           return;
         }
 
+        setPosition(Math.floor(state.position/1000));
+        setDuration(Math.floor(state.duration/1000));
+        // eslint-disable-next-line camelcase
+
         setPlayingTrackID(state.track_window.current_track.id);
         console.log(`Current playing song: ` +
                     `${state.track_window.current_track.name}`);
@@ -109,6 +140,19 @@ function Player({accessToken, clickedTrackID, playingTrackID,
       }));
     };
   }, [accessToken]);
+
+  /**
+   * An interval that updated the position of the progress
+   * bar every second unless the song is paused.
+   */
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isPaused) {
+        setPosition((prevPosition) => prevPosition + 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   /**
    * If web player is connected to device & song is clicked on,
@@ -146,6 +190,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   }, [clickedTrackID]);
 
   /**
+   * Makes sure when the library is updated the playlist
+   * being played is automatically updated to the new one.
+   * Works very similarly to clicking on a song.
+   */
    * Called after mouse clicks 'Down' button.
    *
    * Lowers volume.
@@ -190,29 +238,29 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   };
 
   React.useEffect(() => {
-  if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
-    console.log(`Player: update playlist`);
+    if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
+      console.log(`Player: update playlist`);
 
-    // creates list of uris (playlist) from list of songs (updatedLib)
-    let playlist = [];
-    updatedLib.forEach((song) => {
-      playlist = [...playlist, song.uri];
-    });
+      // creates list of uris (playlist) from list of songs (updatedLib)
+      let playlist = [];
+      updatedLib.forEach((song) => {
+        playlist = [...playlist, song.uri];
+      });
 
-    // HTTP request to update music
-    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        uris: playlist,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    });
-    setLibraryHasUpdated(false);
-  }
-}, [playingTrackID]);
+      // HTTP request to update music
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          uris: playlist,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      setLibraryHasUpdated(false);
+    }
+  }, [playingTrackID]);
 
   React.useEffect(() => {
     setLibraryHasUpdated(true);
@@ -309,6 +357,41 @@ function Player({accessToken, clickedTrackID, playingTrackID,
               color='secondary'/>
           </IconButton>
         </div>
+        <Box sx={{width: 300}}>
+          <Slider
+            aria-label="song-slider"
+            size="small"
+            value={position}
+            min={0}
+            step={1}
+            max={duration}
+            color='secondary'
+            onChange={(_, value) => fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${value*1000}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+              },
+            })}
+            sx={{
+              'height': 3,
+              '& .MuiSlider-rail': {
+                opacity: 0.28,
+              },
+            }}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mt: -2,
+            }}
+          >
+            <TinyText>{formatDuration(position)}</TinyText>
+            <TinyText>-{formatDuration(duration - position)}</TinyText>
+          </Box>
+        </Box>
       </ThemeProvider>
     </>
   );
