@@ -164,6 +164,11 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     }
   }, [clickedTrackID]);
 
+  /**
+   * Makes sure when the library is updated the playlist
+   * being played is automatically updated to the new one.
+   * Works very similarly to clicking on a song.
+   */
   React.useEffect(() => {
     if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
       console.log(`Player: update playlist`);

@@ -82,7 +82,10 @@ function TopBar(props) {
           accessToken={props.accessToken}
           clickedTrackID={props.clickedTrackID}
           setPlayingTrackID={props.setPlayingTrackID}
+          player={player}
           setPlayer={setPlayer}
+          playerVolume={playerVolume}
+          setPlayerVolume={setPlayerVolume}
           updatedLib={props.updatedLib}/> }
       </div>
       <div id="top-right-container">

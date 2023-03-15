@@ -30,7 +30,7 @@ function ProgressBar({position, duration, accessToken}) {
   return (
     <Box
       // sx={{width: 300}}
-      sx={{width: '50vw'}}
+      sx={{width: '40vw'}}
     >
       <Slider
         aria-label="song-slider"
