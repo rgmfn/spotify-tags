@@ -7,8 +7,6 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
-import VolumeDownIcon from '@mui/icons-material/VolumeDown';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
 
@@ -18,14 +16,14 @@ import {theme} from './Theme.js';
  * @param {string} playingTrackID
  * @param {function} setPlayingTrackID
  * @param {array} updatedLib
+ * @param {array} setPlayer
+ * @param {array} setPlayerVolume
  * @return {object} JSX
  */
 function Player({accessToken, clickedTrackID, playingTrackID,
-  setPlayingTrackID, updatedLib}) {
-  const [player, setPlayer] = React.useState(undefined);
+  setPlayingTrackID, updatedLib, player, setPlayer, setPlayerVolume}) {
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
-  const [playerVolume, setPlayerVolume] = React.useState(50);
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
 
   /**
@@ -145,73 +143,29 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     }
   }, [clickedTrackID]);
 
-  /**
-   * Called after mouse clicks 'Down' button.
-   *
-   * Lowers volume.
-   */
-  const lowerVolume = () => {
-    console.log(`Toggled "Down" button to lower volume!`);
-
-    player.getVolume().then((volume) => {
-      volume *= 100;
-      const pVolume = Math.round(volume - 5);
-
-      if (pVolume >= 0) {
-        player.setVolume(pVolume/100);
-        setPlayerVolume(pVolume);
-      } else {
-        console.log(` Volume is already at minimum level; ` +
-          `cannot go any lower!`);
-      }
-    });
-  };
-
-  /**
-  * Called after mouse clicks 'Up' button.
-  *
-  * Raises volume.
-  */
-  const raiseVolume = () => {
-    console.log(`Toggled "Up" button to raise volume!`);
-
-    player.getVolume().then((volume) => {
-      volume *= 100;
-      const pVolume = Math.round(volume + 5);
-
-      if (pVolume <= 100) {
-        player.setVolume(pVolume/100);
-        setPlayerVolume(pVolume);
-      } else {
-        console.log(` Volume is already at maximum level; ` +
-          `cannot go any higher!`);
-      }
-    });
-  };
-
   React.useEffect(() => {
-  if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
-    console.log(`Player: update playlist`);
+    if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
+      console.log(`Player: update playlist`);
 
-    // creates list of uris (playlist) from list of songs (updatedLib)
-    let playlist = [];
-    updatedLib.forEach((song) => {
-      playlist = [...playlist, song.uri];
-    });
+      // creates list of uris (playlist) from list of songs (updatedLib)
+      let playlist = [];
+      updatedLib.forEach((song) => {
+        playlist = [...playlist, song.uri];
+      });
 
-    // HTTP request to update music
-    fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        uris: playlist,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    });
-    setLibraryHasUpdated(false);
-  }
+      // HTTP request to update music
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          uris: playlist,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      setLibraryHasUpdated(false);
+    }
 }, [playingTrackID]);
 
   React.useEffect(() => {
@@ -222,41 +176,6 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   return (
     <>
       <ThemeProvider theme={theme}>
-        <div className="volume-control-container">
-          <IconButton
-            id='down-button'
-            className='down-button'
-            color='secondary'
-            type='button'
-            title='Lower volume'
-            onClick={lowerVolume}
-          >
-            <VolumeDownIcon
-              style={{fontSize: 30}}
-              color='secondary'/>
-          </IconButton>
-
-          <p
-            id="volume-display"
-            className="volume-display"
-          >
-            Volume: {playerVolume}%
-          </p>
-
-          <IconButton
-            id='up-button'
-            className='up-button'
-            color='secondary'
-            type='button'
-            title='Raise volume'
-            onClick={raiseVolume}
-          >
-            <VolumeUpIcon
-              style={{fontSize: 30}}
-              color='secondary'/>
-          </IconButton>
-        </div>
-
         <div className="stream-buttons-container">
           <IconButton
             id="prev-button"

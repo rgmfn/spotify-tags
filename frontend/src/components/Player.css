@@ -4,5 +4,8 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.stream-buttons-container {
     width: 25%;
 }
