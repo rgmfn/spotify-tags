@@ -83,14 +83,15 @@ function Home() {
    */
   React.useEffect(() => {
     if (accessToken) {
-      getUserInfo();
+      //getUserInfo();
 
       /**
        * Fills the library with the tracks gotten from the database under user
        * id userid.
+       * @param {string} userid
        */
-      async function fillLibrary() {
-        const userid = 'musicrag';
+      async function fillLibrary(userid) {
+        //const userid = 'musicrag';
         // const userid = 'TEST_USER_ID_1';
         const tmpLib = [];
         const data = await retrieveAllSongs(userid);
@@ -108,22 +109,13 @@ function Home() {
         }
       }
 
-      fillLibrary();
+      getUserID().then( (userid) => {
+        setUserid(userid);
+        fillLibrary(userid);
+      });
     }
     // eslint-disable-next-line
   }, [refreshToken, accessToken]);
-
-  /**
-   * Async function that sets the user ID
-   */
-  const getUserInfo = async () => {
-    // get current user info
-    const userInfo = await (await fetch('https://api.spotify.com/v1/me', {
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + accessToken},
-    })).json();
-    setUserid(userInfo.id);
-  };
 
   /**
    * Called when clicking on a <tr> representing a song in the library.
@@ -273,12 +265,12 @@ function Home() {
     setUpdatedLib([]);
 
     // get current user info
-    getUserID().then((userid) => {
+    //getUserID().then((userid) => {
       // store each song in the library to db
       for (const song of library) {
         storeSong(userid, song);
       }
-    });
+    //});
 
     window.localStorage.removeItem('accessToken');
   };
@@ -319,6 +311,7 @@ function Home() {
         expression={expression}
       />}
       <SongCard
+        userid={userid}
         songToView={songToView}
         setSongToView={setSongToView}
         library={library}
