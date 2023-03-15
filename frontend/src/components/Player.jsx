@@ -15,6 +15,7 @@ import {theme} from './Theme.js';
 import {styled} from '@mui/material/styles';
 
 const TinyText = styled(Typography)({
+  // Style of the fonts used under the bar
   fontSize: '0.75rem',
   opacity: 0.60,
   fontWeight: 500,
@@ -43,6 +44,7 @@ function Player({accessToken, clickedTrackID, playingTrackID,
    * @return {object}
    */
   function formatDuration(value) {
+    // Make sure it looks like minutes:seconds for the time
     const minute = Math.floor(value / 60);
     const secondLeft = value - minute * 60;
     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
@@ -128,6 +130,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     };
   }, [accessToken]);
 
+  /**
+   * An interval that updated the position of the progress
+   * bar every second unless the song is paused.
+   */
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (!isPaused) {
@@ -172,6 +178,11 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     }
   }, [clickedTrackID]);
 
+  /**
+   * Makes sure when the library is updated the playlist
+   * being played is automatically updated to the new one.
+   * Works very similarly to clicking on a song.
+   */
   React.useEffect(() => {
     if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
       console.log(`Player: update playlist`);
