@@ -1,4 +1,4 @@
-.stream-buttons-container {
+.stream-buttons-container, .volume-control-container  {
     background-color: var(--bg-color);
     display: flex;
     flex-direction: row;

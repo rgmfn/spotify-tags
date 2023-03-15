@@ -8,6 +8,10 @@ const OpenApiValidator = require('express-openapi-validator');
 
 const auth = require('./auth');
 const songs = require('./songs');
+const db = require('./db');
+const ryanSongs = require('./testData/ryanSongs');
+const dustinSongs = require('./testData/dustinSongs');
+const dianaSongs = require('./testData/dianaSongs');
 
 const app = express();
 app.use(cors());
@@ -28,12 +32,25 @@ app.use(
   }),
 );
 
+// loading test data
+for(const song of ryanSongs.ryanSongs.songs){
+  db.insertTags(ryanSongs.ryanSongs.userid, song.spotifyid, song.tags);
+}
+for(const song of dustinSongs.dustinSongs.songs){
+  db.insertTags(dustinSongs.dustinSongs.userid, song.spotifyid, song.tags);
+}
+for(const song of dianaSongs.dianaSongs.songs){
+  db.insertTags(dianaSongs.dianaSongs.userid, song.spotifyid, song.tags);
+}
+
+
 // routes go here
 // e.g: app.get('/v0/mail', mail.getAll);
 app.get('/v0/songs', songs.getAll);
 app.get('/v0/single', songs.getTags);
 app.post('/v0/tagsPost', songs.postTags);
 app.get('/v0/tagList', songs.getAllTags);
+app.delete('/v0/song', songs.deleteSong);
 app.post('/v0/postUpdate', songs.postUpdate);
 
 app.use((err, req, res, next) => {

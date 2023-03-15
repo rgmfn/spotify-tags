@@ -1,18 +1,19 @@
 import React from 'react';
 
+const selectedTagInSong = (selectedTag, result) => {
+  return selectedTag && result.tags.some((tag) =>
+    selectedTag.name === tag.name);
+};
+
 /**
  * @return {object} JSX
  */
-function LibraryResults({searchQuery, library, setSongToView}) {
+function LibraryResults({searchQuery, library, clickedOnSong, selectedTag}) {
   const filteredLibrary = library.filter((song) =>
-    song.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    song.name.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+      .toLowerCase().includes(searchQuery.toLowerCase()),
   );
-  const clickedOnSong = ((event) => {
-    if (event.currentTarget.id) {
-      const foundSong=library.find((song)=>song.id===event.currentTarget.id);
-      setSongToView(foundSong);
-    };
-  });
+
   return (
     <div className="search-results">
       <div className="results-title">
@@ -26,9 +27,21 @@ function LibraryResults({searchQuery, library, setSongToView}) {
               (result) => (
                 <tr
                   id={result.id}
-                  onClick={clickedOnSong}
-                  // eslint-disable-next-line max-len
-                  title={`View song details about ${result.name} by ${result.artists[0].name}`}
+                  key={result.id}
+                  onClick={() => clickedOnSong(result.id)}
+                  title={!selectedTag ?
+                    // eslint-disable-next-line max-len
+                    `View song details about ${result.name} by ${result.artists[0].name}` :
+                    selectedTagInSong(selectedTag, result) ?
+                      // eslint-disable-next-line max-len
+                      `Remove '${selectedTag.name}' tag from ${result.name} by ${result.artists[0].name}` :
+                      // eslint-disable-next-line max-len
+                      `Add '${selectedTag.name}' tag to ${result.name} by ${result.artists[0].name}`
+                  }
+                  style={{
+                    color: selectedTagInSong(selectedTag, result) ?
+                      '#81b29a' : '',
+                  }}
                 >
                   <td className="search-img-col">
                     <div className="imgContainer">

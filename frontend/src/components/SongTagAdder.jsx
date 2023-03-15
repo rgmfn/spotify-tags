@@ -6,6 +6,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import TagPopover from './TagPopover';
 import {theme} from './Theme.js';
 import {getAllTags} from './httpCalls.js';
+import {storeSong} from './backendWrapper.js';
 
 const positioning = {
   anchorEl: 'songcard',
@@ -64,20 +65,16 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
    */
   React.useEffect(() => {
     if (isOpen) {
-      getAllTags('TEST_USER_ID_1').then((obj) => {
+      getAllTags(userID).then((obj) => {
         setTagsToSelect([...obj.tags]);
       });
     }
-  }, [isOpen, songToView]);
+  }, [isOpen, songToView, userID]);
 
   /**
-   * Called when clicking on a tag to add to the target.
-   *
-   * Sets the tags of songToView and songToView inside library to newTags.
-   *
-   * @param {array} newTags - list of tags to set the viewed songs tags to
+   * @param {array} newTags -
    */
-  const setSongsTags = (newTags) => {
+  const addTagToSongInLibrary = (newTags) => {
     const newLibrary = library.map((newSong) => {
       if (newSong.id === songToView.id) {
         newSong.tags = newTags;
@@ -88,6 +85,40 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
       }
     });
     setLibrary(newLibrary);
+  };
+
+  /**
+   * @param {array} newTags -
+   */
+  const addTagToSongFromSpotify = (newTags) => {
+    const newSongToView = {...songToView, tags: newTags};
+    setSongToView(newSongToView);
+    setLibrary([...library, newSongToView]);
+  };
+
+  /**
+   * Called when clicking on a tag to add to the target.
+   *
+   * Sets the tags of songToView and songToView inside library to newTags.
+   *
+   * @param {array} newTags - list of tags to set the viewed songs tags to
+   */
+  const setSongsTags = (newTags) => {
+    const songInLibrary = library.find((song) => song.id === songToView.id);
+    if (songInLibrary) {
+      // console.log('addTagToSongInLibrary');
+      addTagToSongInLibrary(newTags);
+    } else {
+      // console.log('addTagToSongFromSpotify');
+      addTagToSongFromSpotify(newTags);
+    }
+  };
+
+  /**
+   *
+   */
+  const updateSongToViewInDB = () => {
+    storeSong(userID, songToView);
   };
 
   return (
@@ -101,6 +132,7 @@ function SongTagAdder({isOpen, userID, songToView, setSongToView,
       setIsAddingTags={setIsAddingTags}
       preRows={preRows}
       positioning={positioning}
+      updateSongToViewInDB={updateSongToViewInDB}
     />
   );
 }

@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
 import {styled} from '@mui/material/styles';
@@ -49,8 +51,13 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     const secondLeft = value - minute * 60;
     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
   }
+  const [isPaused, setIsPaused] = React.useState(false);
+  const [playerVolume, setPlayerVolume] = React.useState(50);
+  const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
+
   /**
-   * Sets up web player to stream music.
+   * Sets up web player to stream music &
+   * updates states related to the player.
    */
   React.useEffect(() => {
     const script = document.createElement('script');
@@ -71,12 +78,16 @@ function Player({accessToken, clickedTrackID, playingTrackID,
 
       setPlayer(player);
 
+      // sets initial volume of player
+      player.getVolume().then((volume) => {
+        setPlayerVolume(volume * 100);
+      });
+
       // connects web player to listening device
-      // eslint-disable-next-line camelcase
-      player.addListener('ready', ({device_id}) => {
-        setDeviceID(device_id);
-        console.log('Ready with deviceID', device_id);
-        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${device_id}`, {
+      player.addListener('ready', ({device_id: theDeviceID}) => {
+        setDeviceID(theDeviceID);
+        console.log('Ready with deviceID', theDeviceID);
+        fetch(`https://api.spotify.com/v1/me/player/repeat?state=off&device_id=${theDeviceID}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -85,9 +96,8 @@ function Player({accessToken, clickedTrackID, playingTrackID,
         });
       });
 
-      // eslint-disable-next-line camelcase
-      player.addListener('not_ready', ({device_id}) => {
-        console.log('deviceID has gone offline', device_id);
+      player.addListener('not_ready', ({device_id: theDeviceID}) => {
+        console.log('deviceID has gone offline', theDeviceID);
       });
 
       player.addListener('initialization_error', ({message}) => {
@@ -102,6 +112,15 @@ function Player({accessToken, clickedTrackID, playingTrackID,
         console.error(message);
       });
 
+      // connects web player instance to Spotify w/ credentials given
+      // during initialization above
+      player.connect().then((success) => {
+        if (success) {
+          console.log('The Web Playback SDK successfully ' +
+            'connected to Spotify!');
+        }
+      });
+
       // runs when state of the local playback has changed (i.e.
       // current playing track changes, current track pauses,
       // current track resumes playing)
@@ -109,24 +128,16 @@ function Player({accessToken, clickedTrackID, playingTrackID,
         if (!state) {
           return;
         }
+
         setPosition(Math.floor(state.position/1000));
         setDuration(Math.floor(state.duration/1000));
         // eslint-disable-next-line camelcase
+
         setPlayingTrackID(state.track_window.current_track.id);
-        // eslint-disable-next-line camelcase
         console.log(`Current playing song: ` +
                     `${state.track_window.current_track.name}`);
         setIsPaused(state.paused);
       }));
-
-      // connects web player instance to Spotify w/ credentials given
-      // during initialization above
-      player.connect().then((success) => {
-        if (success) {
-          console.log('The Web Playback SDK successfully ' +
-                      'connected to Spotify!');
-        }
-      });
     };
   }, [accessToken]);
 
@@ -183,6 +194,49 @@ function Player({accessToken, clickedTrackID, playingTrackID,
    * being played is automatically updated to the new one.
    * Works very similarly to clicking on a song.
    */
+   * Called after mouse clicks 'Down' button.
+   *
+   * Lowers volume.
+   */
+  const lowerVolume = () => {
+    console.log(`Toggled "Down" button to lower volume!`);
+
+    player.getVolume().then((volume) => {
+      volume *= 100;
+      const pVolume = Math.round(volume - 5);
+
+      if (pVolume >= 0) {
+        player.setVolume(pVolume/100);
+        setPlayerVolume(pVolume);
+      } else {
+        console.log(` Volume is already at minimum level; ` +
+          `cannot go any lower!`);
+      }
+    });
+  };
+
+  /**
+  * Called after mouse clicks 'Up' button.
+  *
+  * Raises volume.
+  */
+  const raiseVolume = () => {
+    console.log(`Toggled "Up" button to raise volume!`);
+
+    player.getVolume().then((volume) => {
+      volume *= 100;
+      const pVolume = Math.round(volume + 5);
+
+      if (pVolume <= 100) {
+        player.setVolume(pVolume/100);
+        setPlayerVolume(pVolume);
+      } else {
+        console.log(` Volume is already at maximum level; ` +
+          `cannot go any higher!`);
+      }
+    });
+  };
+
   React.useEffect(() => {
     if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
       console.log(`Player: update playlist`);
@@ -216,6 +270,41 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   return (
     <>
       <ThemeProvider theme={theme}>
+        <div className="volume-control-container">
+          <IconButton
+            id='down-button'
+            className='down-button'
+            color='secondary'
+            type='button'
+            title='Lower volume'
+            onClick={lowerVolume}
+          >
+            <VolumeDownIcon
+              style={{fontSize: 30}}
+              color='secondary'/>
+          </IconButton>
+
+          <p
+            id="volume-display"
+            className="volume-display"
+          >
+            Volume: {playerVolume}%
+          </p>
+
+          <IconButton
+            id='up-button'
+            className='up-button'
+            color='secondary'
+            type='button'
+            title='Raise volume'
+            onClick={raiseVolume}
+          >
+            <VolumeUpIcon
+              style={{fontSize: 30}}
+              color='secondary'/>
+          </IconButton>
+        </div>
+
         <div className="stream-buttons-container">
           <IconButton
             id="prev-button"
@@ -227,7 +316,9 @@ function Player({accessToken, clickedTrackID, playingTrackID,
                 console.log('Set to previous track!');
               });
             }}>
-            <SkipPreviousIcon style={{fontSize: 50}} color='secondary'/>
+            <SkipPreviousIcon
+              style={{fontSize: 50}}
+              color='secondary'/>
           </IconButton>
 
           <IconButton
@@ -261,7 +352,9 @@ function Player({accessToken, clickedTrackID, playingTrackID,
                 console.log('Skipped to next track!');
               });
             }}>
-            <SkipNextIcon style={{fontSize: 50}} color='secondary'/>
+            <SkipNextIcon
+              style={{fontSize: 50}}
+              color='secondary'/>
           </IconButton>
         </div>
         <Box sx={{width: 300}}>
