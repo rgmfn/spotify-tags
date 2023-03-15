@@ -300,6 +300,7 @@ function Home() {
         setIsPickingTag={setIsPickingTag}
         setSearchQuery={setSearchQuery}
         library={library}
+        setLibrary={setLibrary}
       />
       <div className="searchbar">
         <SearchBar

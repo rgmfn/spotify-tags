@@ -5,9 +5,6 @@
  * @param {*} reverse
  * @param {*} primary
  * @param {*} secondary
- * @param {*} library
- * @param {*} mapped
- * @param {*} setLibrary
  *
  * @return {Number}
  */
