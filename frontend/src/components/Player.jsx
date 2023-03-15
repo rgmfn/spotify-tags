@@ -7,22 +7,10 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box';
-import VolumeDownIcon from '@mui/icons-material/VolumeDown';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
-import {styled} from '@mui/material/styles';
 
-const TinyText = styled(Typography)({
-  // Style of the fonts used under the bar
-  fontSize: '0.75rem',
-  opacity: 0.60,
-  fontWeight: 500,
-  letterSpacing: 0.2,
-});
+import ProgressBar from './ProgressBar.jsx';
 
 /**
  * @param {string} accessToken
@@ -30,28 +18,17 @@ const TinyText = styled(Typography)({
  * @param {string} playingTrackID
  * @param {function} setPlayingTrackID
  * @param {array} updatedLib
+ * @param {array} setPlayer
+ * @param {array} setPlayerVolume
  * @return {object} JSX
  */
 function Player({accessToken, clickedTrackID, playingTrackID,
-  setPlayingTrackID, updatedLib}) {
-  const [player, setPlayer] = React.useState(undefined);
+  setPlayingTrackID, updatedLib, player, setPlayer, setPlayerVolume}) {
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(true);
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
   const [duration, setDuration] = React.useState(0); // seconds
   const [position, setPosition] = React.useState(0);
-  const [playerVolume, setPlayerVolume] = React.useState(50);
-  /**
-   *
-   * @param {*} value
-   * @return {object}
-   */
-  function formatDuration(value) {
-    // Make sure it looks like minutes:seconds for the time
-    const minute = Math.floor(value / 60);
-    const secondLeft = value - minute * 60;
-    return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
-  }
 
   /**
    * Sets up web player to stream music &
@@ -188,50 +165,6 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   }, [clickedTrackID]);
 
   /**
-  * Called after mouse clicks 'Down' button.
-  *
-  * Lowers volume.
-  */
-  const lowerVolume = () => {
-    console.log(`Toggled "Down" button to lower volume!`);
-
-    player.getVolume().then((volume) => {
-      volume *= 100;
-      const pVolume = Math.round(volume - 5);
-
-      if (pVolume >= 0) {
-        player.setVolume(pVolume/100);
-        setPlayerVolume(pVolume);
-      } else {
-        console.log(` Volume is already at minimum level; ` +
-          `cannot go any lower!`);
-      }
-    });
-  };
-
-  /**
-   * Called after mouse clicks 'Up' button.
-   *
-   * Raises volume.
-   */
-  const raiseVolume = () => {
-    console.log(`Toggled "Up" button to raise volume!`);
-
-    player.getVolume().then((volume) => {
-      volume *= 100;
-      const pVolume = Math.round(volume + 5);
-
-      if (pVolume <= 100) {
-        player.setVolume(pVolume/100);
-        setPlayerVolume(pVolume);
-      } else {
-        console.log(` Volume is already at maximum level; ` +
-          `cannot go any higher!`);
-      }
-    });
-  };
-
-  /**
    * Makes sure when the library is updated the playlist
    * being played is automatically updated to the new one.
    * Works very similarly to clicking on a song.
@@ -269,128 +202,65 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   return (
     <>
       <ThemeProvider theme={theme}>
-        <div className="volume-control-container">
-          <IconButton
-            id='down-button'
-            className='down-button'
-            color='secondary'
-            type='button'
-            title='Lower volume'
-            onClick={lowerVolume}
-          >
-            <VolumeDownIcon
-              style={{fontSize: 30}}
-              color='secondary'/>
-          </IconButton>
+        <div id="player-container">
+          <div className="stream-buttons-container">
+            <IconButton
+              id="prev-button"
+              className="prev-button"
+              color='secondary'
+              title='Previous'
+              onClick={() => {
+                player.previousTrack().then(() => {
+                  console.log('Set to previous track!');
+                });
+              }}>
+              <SkipPreviousIcon
+                style={{fontSize: 30}}
+                color='secondary'/>
+            </IconButton>
 
-          <p
-            id="volume-display"
-            className="volume-display"
-          >
-            Volume: {playerVolume}%
-          </p>
+            <IconButton
+              id="play-button"
+              className="play-button"
+              color='secondary'
+              title={!isPaused ? 'Pause' : 'Play'}
+              onClick={() => {
+                player.togglePlay().then(() => {
+                  console.log('Toggled play button!');
+                });
+              }}>
+              {!isPaused ?
+                <PauseCircleIcon
+                  style={{fontSize: 50}}
+                  color='secondary'
+                />:
+                <PlayCircleIcon
+                  style={{fontSize: 50}}
+                  color='secondary'
+                />}
+            </IconButton>
 
-          <IconButton
-            id='up-button'
-            className='up-button'
-            color='secondary'
-            type='button'
-            title='Raise volume'
-            onClick={raiseVolume}
-          >
-            <VolumeUpIcon
-              style={{fontSize: 30}}
-              color='secondary'/>
-          </IconButton>
-        </div>
-
-        <div className="stream-buttons-container">
-          <IconButton
-            id="prev-button"
-            className="prev-button"
-            color='secondary'
-            title='Previous'
-            onClick={() => {
-              player.previousTrack().then(() => {
-                console.log('Set to previous track!');
-              });
-            }}>
-            <SkipPreviousIcon
-              style={{fontSize: 50}}
-              color='secondary'/>
-          </IconButton>
-
-          <IconButton
-            id="play-button"
-            className="play-button"
-            color='secondary'
-            title={!isPaused ? 'Pause' : 'Play'}
-            onClick={() => {
-              player.togglePlay().then(() => {
-                console.log('Toggled play button!');
-              });
-            }}>
-            {!isPaused ?
-              <PauseCircleIcon
-                style={{fontSize: 70}}
-                color='secondary'
-              />:
-              <PlayCircleIcon
-                style={{fontSize: 70}}
-                color='secondary'
-              />}
-          </IconButton>
-
-          <IconButton
-            id="next-button"
-            className="next-button"
-            color='secondary'
-            title='Next'
-            onClick={() => {
-              player.nextTrack().then(() => {
-                console.log('Skipped to next track!');
-              });
-            }}>
-            <SkipNextIcon
-              style={{fontSize: 50}}
-              color='secondary'/>
-          </IconButton>
-        </div>
-        <Box sx={{width: 300}}>
-          <Slider
-            aria-label="song-slider"
-            size="small"
-            value={position}
-            min={0}
-            step={1}
-            max={duration}
-            color='secondary'
-            onChange={(_, value) => fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${value*1000}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
-              },
-            })}
-            sx={{
-              'height': 3,
-              '& .MuiSlider-rail': {
-                opacity: 0.28,
-              },
-            }}
+            <IconButton
+              id="next-button"
+              className="next-button"
+              color='secondary'
+              title='Next'
+              onClick={() => {
+                player.nextTrack().then(() => {
+                  console.log('Skipped to next track!');
+                });
+              }}>
+              <SkipNextIcon
+                style={{fontSize: 30}}
+                color='secondary'/>
+            </IconButton>
+          </div>
+          <ProgressBar
+            position={position}
+            duration={duration}
+            accessToken={accessToken}
           />
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              mt: -2,
-            }}
-          >
-            <TinyText>{formatDuration(position)}</TinyText>
-            <TinyText>-{formatDuration(duration - position)}</TinyText>
-          </Box>
-        </Box>
+        </div>
       </ThemeProvider>
     </>
   );

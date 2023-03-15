@@ -2,11 +2,11 @@ import React from 'react';
 
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-// import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 import ExpressionTagAdder from './ExpressionTagAdder.jsx';
+import VolumeControl from './VolumeControl';
 import Expression from './Expression.jsx';
 import SortModal from './SortModal.jsx';
 import Player from './Player.jsx';
@@ -24,6 +24,8 @@ import './TopBar.css';
 function TopBar(props) {
   const [isBuildingExpression, setIsBuildingExpression] = React.useState(false);
   // ^ sets if the expression is being built (aka if the popover is open or not)
+  const [playerVolume, setPlayerVolume] = React.useState(50);
+  const [player, setPlayer] = React.useState(undefined);
 
   /**
    * Called when expression in clicked (but not the tags of the expression).
@@ -69,6 +71,11 @@ function TopBar(props) {
               />
             </IconButton>
           }
+          <VolumeControl
+            playerVolume={playerVolume}
+            setPlayerVolume={setPlayerVolume}
+            player={player}
+          />
         </ThemeProvider>
         <SortModal library={props.library} setLibrary={props.setLibrary}/>
       </div>
@@ -77,6 +84,10 @@ function TopBar(props) {
           accessToken={props.accessToken}
           clickedTrackID={props.clickedTrackID}
           setPlayingTrackID={props.setPlayingTrackID}
+          player={player}
+          setPlayer={setPlayer}
+          playerVolume={playerVolume}
+          setPlayerVolume={setPlayerVolume}
           updatedLib={props.updatedLib}/> }
       </div>
       <div id="top-right-container">

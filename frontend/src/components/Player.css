@@ -4,5 +4,15 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.stream-buttons-container {
     width: 25%;
+}
+
+#player-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
