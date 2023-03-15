@@ -40,6 +40,7 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
   const [duration, setDuration] = React.useState(0); // seconds
   const [position, setPosition] = React.useState(0);
+  const [playerVolume, setPlayerVolume] = React.useState(50);
   /**
    *
    * @param {*} value
@@ -51,9 +52,6 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     const secondLeft = value - minute * 60;
     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
   }
-  const [isPaused, setIsPaused] = React.useState(false);
-  const [playerVolume, setPlayerVolume] = React.useState(50);
-  const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
 
   /**
    * Sets up web player to stream music &
@@ -190,14 +188,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   }, [clickedTrackID]);
 
   /**
-   * Makes sure when the library is updated the playlist
-   * being played is automatically updated to the new one.
-   * Works very similarly to clicking on a song.
-   */
-   * Called after mouse clicks 'Down' button.
-   *
-   * Lowers volume.
-   */
+  * Called after mouse clicks 'Down' button.
+  *
+  * Lowers volume.
+  */
   const lowerVolume = () => {
     console.log(`Toggled "Down" button to lower volume!`);
 
@@ -216,10 +210,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   };
 
   /**
-  * Called after mouse clicks 'Up' button.
-  *
-  * Raises volume.
-  */
+   * Called after mouse clicks 'Up' button.
+   *
+   * Raises volume.
+   */
   const raiseVolume = () => {
     console.log(`Toggled "Up" button to raise volume!`);
 
@@ -237,6 +231,11 @@ function Player({accessToken, clickedTrackID, playingTrackID,
     });
   };
 
+  /**
+   * Makes sure when the library is updated the playlist
+   * being played is automatically updated to the new one.
+   * Works very similarly to clicking on a song.
+   */
   React.useEffect(() => {
     if (player && deviceID && updatedLib.length > 0 && libraryHasUpdated) {
       console.log(`Player: update playlist`);
