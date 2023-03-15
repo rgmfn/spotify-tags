@@ -50,19 +50,15 @@ function TopBar(props) {
               color= 'secondary'
               title='Log in'
             >
-              <LoginIcon color= 'secondary'/></IconButton>:
+              <LoginIcon color= 'secondary'/>
+            </IconButton>:
             <IconButton
               onClick={props.logout}
               color= 'secondary'
               title='Log out'
             >
-              <LogoutIcon color= 'secondary'/></IconButton>}
-          {/* <IconButton */}
-          {/*   onClick={props.refreshList} */}
-          {/*   color= 'secondary' */}
-          {/*   title='Refresh list' */}
-          {/* > */}
-          {/*   <RefreshIcon color= 'secondary'/></IconButton> */}
+              <LogoutIcon color= 'secondary'/>
+            </IconButton>}
           {Boolean(props.selectedTag) ?
             null :
             <IconButton

@@ -9,7 +9,6 @@ import SearchBar from './SearchBar.js';
 import TagSelector from './TagSelector';
 
 import {emptySong} from './emptySong.js';
-import {fakeTags} from './fakeTags.js';
 import {getSong} from './httpCalls';
 import {storeSong, retrieveAllSongs, removeSong} from './backendWrapper.js';
 import getTrack from './getTrack.js';
@@ -26,61 +25,6 @@ const refreshTokenFunc = async (refreshToken, setAccessToken) => {
   const refreshJson = await refresh.json();
   setAccessToken(refreshJson.access_token);
   return refreshJson.access_token;
-};
-
-/**
- * Inserts the testing tags from './fakeTags.js' into the given list of
- * songs (spotify song objects). Returns the new array of tagged songs.
- *
- * Used for testing purposes until we can get the tags for songs from the
- * database.
- *
- * @param {array} songs
- * @return {array}
- */
-const insertTestingTags = (songs) => {
-  for (const song of songs.tracks.items) {
-    song.tags = fakeTags;
-    // song.tags = [];
-  }
-
-  return songs;
-};
-
-/**
- * Gets a list of songs from spotify that fits the given query.
- *
- * If the fetch fails, it gets a new access token and tries again.
- *
- * Used for testing to generate a fake library until we can get the library
- * from the database.
- *
- * @param {string} accessToken
- * @param {string} refreshToken
- * @param {function} setAccessToken
- * @param {string} query
- */
-const getSearch = async (accessToken, refreshToken, setAccessToken, query) => {
-  let result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
-    // http get request to api.spotify.com/v1/search
-    method: 'GET',
-    headers: {'Authorization': 'Bearer ' + accessToken},
-  });
-
-  if (!result.ok) {
-    accessToken = refreshTokenFunc(refreshToken, setAccessToken);
-    result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=20`, {
-    // http get request to api.spotify.com/v1/search
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + accessToken},
-    });
-  }
-
-  // console.log(`accessToken: ${accessToken}`);
-
-  let data = await result.json();
-  data = insertTestingTags(data);
-  return data;
 };
 
 /**
@@ -102,8 +46,8 @@ function Home() {
   const [isPickingTag, setIsPickingTag] = React.useState(false);
   const [selectedTag, setSelectedTag] = React.useState(null);
 
-  /**
-   * TODO
+  /*
+   * Initialization of tokens
    */
   React.useEffect(() => {
     const hash = window.location.hash;
@@ -133,7 +77,7 @@ function Home() {
     setAccessToken(accessToken);
   }, []);
 
-  /**
+  /*
    * When the refreshToken or accessToken change, get the library from
    * the database.
    */
@@ -142,6 +86,8 @@ function Home() {
       getUserInfo();
 
       /**
+       * Fills the library with the tracks gotten from the database under user
+       * id userid.
        */
       async function fillLibrary() {
         const userid = 'musicrag';
@@ -242,19 +188,6 @@ function Home() {
   };
 
   /**
-   * Called when clicking on the 'Refresh List' button.
-   *
-   * Refreshes the library of songs displayed using the temporary getSearch
-   * method.
-   */
-  const refreshList = () => {
-    getSearch(accessToken, refreshToken, setAccessToken, 'cool').then(
-      (result) => {
-        setLibrary(result.tracks.items);
-      });
-  };
-
-  /**
    * Removes the selectedTag state from the current song in library.
    *
    * @param {object} song - song object to remove selected tag from
@@ -327,6 +260,9 @@ function Home() {
     }
   };
 
+  /**
+   * Saves library to database. Saves token information to 
+   */
   const logout = async () => {
     // tokens
     setAccessToken('');
@@ -354,7 +290,6 @@ function Home() {
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
-        refreshList={refreshList}
         logout={logout}
         clickedTrackID={clickedTrackID}
         playingTrackID={playingTrackID}
