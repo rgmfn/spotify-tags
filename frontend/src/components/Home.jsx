@@ -278,6 +278,7 @@ function Home() {
   return (
     <div className="App">
       <TopBar
+        userid={userid}
         expression={expression}
         setExpression={setExpression}
         accessToken={accessToken}
@@ -333,6 +334,7 @@ function Home() {
         selectedTag={selectedTag}
       />}
       <TagSelector
+        userid={userid}
         isOpen={isPickingTag}
         setSelectedTag={setSelectedTag}
         setIsPickingTag={setIsPickingTag}

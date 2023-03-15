@@ -10,10 +10,11 @@ const positioning = {
 };
 
 /**
+ * @param {string} userid - spotify ID of current user
  * @param {boolean} isOpen -
  * @return {JSX}
  */
-function TagSelector({isOpen, setSelectedTag, setIsPickingTag}) {
+function TagSelector({userid, isOpen, setSelectedTag, setIsPickingTag}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
   // ^ list of tags available to select in TagPopover
 
@@ -25,7 +26,7 @@ function TagSelector({isOpen, setSelectedTag, setIsPickingTag}) {
   React.useEffect(() => {
     if (isOpen) {
       // getAllTags('TEST_USER_ID_1').then((obj) => {
-      getAllTags('musicrag').then((obj) => {
+      getAllTags(userid).then((obj) => {
         setTagsToSelect(obj.tags); // gets all tags in DB
       });
     }

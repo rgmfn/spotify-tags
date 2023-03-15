@@ -110,6 +110,7 @@ function TopBar(props) {
         }
       </div>
       <ExpressionTagAdder
+        userid={props.userid}
         isOpen={isBuildingExpression}
         expression={props.expression}
         setExpression={props.setExpression}
