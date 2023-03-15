@@ -15,6 +15,7 @@ const booleanOps = [
 ];
 
 /**
+ * @param {string} userid - spotify ID of current user
  * @param {boolean} isOpen - if the popover is open or not
  * @param {array} expression - list of tag objects used to filter library
  * @param {function} setExpression - sets the expression
@@ -24,7 +25,7 @@ const booleanOps = [
  * @param {array} library - list of song objects in library
  * @return {JSX} thing
  */
-function ExpressionTagAdder({isOpen, expression, setExpression,
+function ExpressionTagAdder({userid, isOpen, expression, setExpression,
   setIsAddingTags, library}) {
   const [tagsToSelect, setTagsToSelect] = React.useState([]);
   const targetTitle = 'expression';
@@ -39,7 +40,7 @@ function ExpressionTagAdder({isOpen, expression, setExpression,
     if (isOpen) {
       let tags = booleanOps.map((op) => ({name: op, color: '#888888'}));
       // getAllTags('TEST_USER_ID_1').then((obj) => {
-      getAllTags('musicrag').then((obj) => {
+      getAllTags(userid).then((obj) => {
         tags = tags.concat(obj.tags); // gets all tags in DB
         tags = tags.concat(artistAlbumTags(library));
         setTagsToSelect(tags);

@@ -9,6 +9,7 @@ import SongTagAdder from './SongTagAdder.jsx';
 import {darkTheme} from './darkTheme.js';
 
 /**
+ * @param {string} userid - spotify ID of current user
  * @param {object} songToView - the song being viewed in the SongCard, if
  *                              there is none, the SongCard does not show up
  * @param {function} setSongToView - sets the song being viewed in the SongCard,
@@ -20,7 +21,7 @@ import {darkTheme} from './darkTheme.js';
  * @param {function} setExpression - used inside SongTagAdder
  * @return {object} JSX
  */
-function SongCard({songToView, setSongToView, library,
+function SongCard({ userid, songToView, setSongToView, library,
   setLibrary, closeCard}) {
   const [isAddingTags, setIsAddingTags] = React.useState(false);
 
@@ -125,7 +126,7 @@ function SongCard({songToView, setSongToView, library,
         </div>
         <SongTagAdder
           isOpen={isAddingTags}
-          userID={'musicrag'}
+          userID={userid}
           // userID={'TEST_USER_ID_1'}
           songToView={songToView}
           setSongToView={setSongToView}
