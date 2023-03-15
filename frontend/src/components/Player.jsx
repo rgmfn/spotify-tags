@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from './Theme.js';
 
+import ProgressBar from './ProgressBar.jsx';
+
 /**
  * @param {string} accessToken
  * @param {string} clickedTrackID
@@ -23,8 +25,10 @@ import {theme} from './Theme.js';
 function Player({accessToken, clickedTrackID, playingTrackID,
   setPlayingTrackID, updatedLib, player, setPlayer, setPlayerVolume}) {
   const [deviceID, setDeviceID] = React.useState(undefined);
-  const [isPaused, setIsPaused] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(true);
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
+  const [duration, setDuration] = React.useState(0); // seconds
+  const [position, setPosition] = React.useState(0);
 
   /**
    * Sets up web player to stream music &
@@ -100,6 +104,10 @@ function Player({accessToken, clickedTrackID, playingTrackID,
           return;
         }
 
+        setPosition(Math.floor(state.position/1000));
+        setDuration(Math.floor(state.duration/1000));
+        // eslint-disable-next-line camelcase
+
         setPlayingTrackID(state.track_window.current_track.id);
         console.log(`Current playing song: ` +
                     `${state.track_window.current_track.name}`);
@@ -107,6 +115,19 @@ function Player({accessToken, clickedTrackID, playingTrackID,
       }));
     };
   }, [accessToken]);
+
+  /**
+   * An interval that updated the position of the progress
+   * bar every second unless the song is paused.
+   */
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isPaused) {
+        setPosition((prevPosition) => prevPosition + 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   /**
    * If web player is connected to device & song is clicked on,
@@ -166,7 +187,7 @@ function Player({accessToken, clickedTrackID, playingTrackID,
       });
       setLibraryHasUpdated(false);
     }
-}, [playingTrackID]);
+  }, [playingTrackID]);
 
   React.useEffect(() => {
     setLibraryHasUpdated(true);
@@ -176,57 +197,64 @@ function Player({accessToken, clickedTrackID, playingTrackID,
   return (
     <>
       <ThemeProvider theme={theme}>
-        <div className="stream-buttons-container">
-          <IconButton
-            id="prev-button"
-            className="prev-button"
-            color='secondary'
-            title='Previous'
-            onClick={() => {
-              player.previousTrack().then(() => {
-                console.log('Set to previous track!');
-              });
-            }}>
-            <SkipPreviousIcon
-              style={{fontSize: 50}}
-              color='secondary'/>
-          </IconButton>
+        <div id="player-container">
+          <div className="stream-buttons-container">
+            <IconButton
+              id="prev-button"
+              className="prev-button"
+              color='secondary'
+              title='Previous'
+              onClick={() => {
+                player.previousTrack().then(() => {
+                  console.log('Set to previous track!');
+                });
+              }}>
+              <SkipPreviousIcon
+                style={{fontSize: 30}}
+                color='secondary'/>
+            </IconButton>
 
-          <IconButton
-            id="play-button"
-            className="play-button"
-            color='secondary'
-            title={!isPaused ? 'Pause' : 'Play'}
-            onClick={() => {
-              player.togglePlay().then(() => {
-                console.log('Toggled play button!');
-              });
-            }}>
-            {!isPaused ?
-              <PauseCircleIcon
-                style={{fontSize: 70}}
-                color='secondary'
-              />:
-              <PlayCircleIcon
-                style={{fontSize: 70}}
-                color='secondary'
-              />}
-          </IconButton>
+            <IconButton
+              id="play-button"
+              className="play-button"
+              color='secondary'
+              title={!isPaused ? 'Pause' : 'Play'}
+              onClick={() => {
+                player.togglePlay().then(() => {
+                  console.log('Toggled play button!');
+                });
+              }}>
+              {!isPaused ?
+                <PauseCircleIcon
+                  style={{fontSize: 50}}
+                  color='secondary'
+                />:
+                <PlayCircleIcon
+                  style={{fontSize: 50}}
+                  color='secondary'
+                />}
+            </IconButton>
 
-          <IconButton
-            id="next-button"
-            className="next-button"
-            color='secondary'
-            title='Next'
-            onClick={() => {
-              player.nextTrack().then(() => {
-                console.log('Skipped to next track!');
-              });
-            }}>
-            <SkipNextIcon
-              style={{fontSize: 50}}
-              color='secondary'/>
-          </IconButton>
+            <IconButton
+              id="next-button"
+              className="next-button"
+              color='secondary'
+              title='Next'
+              onClick={() => {
+                player.nextTrack().then(() => {
+                  console.log('Skipped to next track!');
+                });
+              }}>
+              <SkipNextIcon
+                style={{fontSize: 30}}
+                color='secondary'/>
+            </IconButton>
+          </div>
+          <ProgressBar
+            position={position}
+            duration={duration}
+            accessToken={accessToken}
+          />
         </div>
       </ThemeProvider>
     </>

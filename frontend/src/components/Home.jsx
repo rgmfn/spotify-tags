@@ -349,7 +349,6 @@ function Home() {
 
   return (
     <div className="App">
-
       <TopBar
         expression={expression}
         setExpression={setExpression}
