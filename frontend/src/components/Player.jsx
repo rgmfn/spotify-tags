@@ -20,17 +20,17 @@ import {theme} from './Theme.js';
  * @param {array} updatedLib
  * @return {object} JSX
  */
-function Player({accessToken, clickedTrackID, playingTrackID, 
+function Player({accessToken, clickedTrackID, playingTrackID,
   setPlayingTrackID, updatedLib}) {
   const [player, setPlayer] = React.useState(undefined);
   const [deviceID, setDeviceID] = React.useState(undefined);
   const [isPaused, setIsPaused] = React.useState(false);
   const [playerVolume, setPlayerVolume] = React.useState(50);
   const [libraryHasUpdated, setLibraryHasUpdated] = React.useState(false);
-  
+
   /**
-   * Sets up web player to stream music & updates states 
-   * related to the player.
+   * Sets up web player to stream music &
+   * updates states related to the player.
    */
   React.useEffect(() => {
     const script = document.createElement('script');
@@ -113,15 +113,6 @@ function Player({accessToken, clickedTrackID, playingTrackID,
       }));
     };
   }, [accessToken]);
-
-  /**
-   * Displays player's volume when initialized & changed.
-   */
-  React.useEffect(() => {
-    document.getElementById('volume-display').innerHTML =
-    'Volume: '.concat((playerVolume).toString())
-      .concat('%');
-  }, [playerVolume]);
 
   /**
    * If web player is connected to device & song is clicked on,
@@ -253,6 +244,7 @@ function Player({accessToken, clickedTrackID, playingTrackID,
             id="volume-display"
             className="volume-display"
           >
+            Volume: {playerVolume}%
           </p>
 
           <IconButton
