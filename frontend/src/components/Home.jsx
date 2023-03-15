@@ -261,7 +261,7 @@ function Home() {
   };
 
   /**
-   * Saves library to database. Saves token information to 
+   * Saves library to database. Saves token information to browser.
    */
   const logout = async () => {
     // tokens
