@@ -83,7 +83,7 @@ function Home() {
    */
   React.useEffect(() => {
     if (accessToken) {
-      //getUserInfo();
+      // getUserInfo();
 
       /**
        * Fills the library with the tracks gotten from the database under user
@@ -91,7 +91,7 @@ function Home() {
        * @param {string} userid
        */
       async function fillLibrary(userid) {
-        //const userid = 'musicrag';
+        // const userid = 'musicrag';
         // const userid = 'TEST_USER_ID_1';
         const tmpLib = [];
         const data = await retrieveAllSongs(userid);
@@ -265,12 +265,12 @@ function Home() {
     setUpdatedLib([]);
 
     // get current user info
-    //getUserID().then((userid) => {
-      // store each song in the library to db
-      for (const song of library) {
-        storeSong(userid, song);
-      }
-    //});
+    // getUserID().then((userid) => {
+    // store each song in the library to db
+    for (const song of library) {
+      storeSong(userid, song);
+    }
+    // });
 
     window.localStorage.removeItem('accessToken');
   };
