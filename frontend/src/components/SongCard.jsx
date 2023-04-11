@@ -21,7 +21,7 @@ import {darkTheme} from './darkTheme.js';
  * @param {function} setExpression - used inside SongTagAdder
  * @return {object} JSX
  */
-function SongCard({ userid, songToView, setSongToView, library,
+function SongCard({userid, songToView, setSongToView, library,
   setLibrary, closeCard}) {
   const [isAddingTags, setIsAddingTags] = React.useState(false);
 
